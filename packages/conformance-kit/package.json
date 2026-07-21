@@ -1,0 +1,39 @@
+{
+  "name": "@openagentsinc/conformance-kit",
+  "version": "0.2.0-rc.1",
+  "private": false,
+  "license": "Apache-2.0",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./adapter": "./src/adapter-laws.ts",
+    "./event-log": "./src/event-log-laws.ts",
+    "./reducer": "./src/reducer-laws.ts",
+    "./recall": "./src/recall-laws.ts",
+    "./rlm": "./src/rlm-cap-laws.ts",
+    "./fixtures": "./src/fixtures.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vp test --run packages/conformance-kit/src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@openagentsinc/agent-harness-contract": "workspace:*",
+    "@openagentsinc/agent-runtime-schema": "workspace:*",
+    "@openagentsinc/history-corpus": "workspace:*",
+    "@openagentsinc/rlm": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/vite-plus-matchers": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
