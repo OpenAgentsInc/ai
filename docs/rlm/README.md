@@ -8,7 +8,7 @@ ships and the compatibility work still required.
 **Decision date:** 2026-07-21  
 **SDK home:** `OpenAgentsInc/ai`  
 **Canonical public entry point:** `@openagentsinc/ai/rlm`  
-**Implementation package for v1:** `@openagentsinc/history-corpus`
+**Granular implementation package:** `@openagentsinc/rlm`
 
 ## Product contract
 
@@ -18,16 +18,20 @@ It consists of:
 
 1. a deterministic, immutable, redaction-aware corpus;
 2. zero-model-call deterministic traversal;
-3. an Effect-native recursive semantic engine;
-4. one typed service and one progress stream;
-5. global budgets, exact-usage honesty, and citation validation;
-6. an Effect `Tool` adapter for agent and harness consumption.
+3. a scoped symbolic environment with opaque value handles;
+4. an Effect-native engine for declarative programmatic model/RLM recursion;
+5. bounded inline output and host-admitted artifact output;
+6. one typed service and one progress stream;
+7. global budgets, exact-usage honesty, and citation validation;
+8. an Effect `Tool` adapter for agent and harness consumption.
 
-The corpus remains outside the root model's context. The model receives
-constant-size corpus metadata and bounded observations produced by typed
-operations. It may ask for a bounded recursive subcall over an explicit corpus
-span. It cannot execute arbitrary code, dereference private refs, widen the
-corpus policy, select credentials, or escape the global run budgets.
+The corpus and full intermediate values remain outside the root model's
+context. The model receives constant-size metadata and bounded previews. It
+may emit a finite declarative program that partitions values, maps one-shot
+model calls or recursive RLM calls over a collection, reduces/combines their
+outputs, and commits a stored value. It cannot execute arbitrary code,
+dereference private refs, widen the corpus policy, select credentials, or
+escape the global run budgets.
 
 An RLM result is evidence, not authority. A completed result is still a cited
 candidate. It cannot independently authorize a route, accept work, verify a
@@ -47,6 +51,8 @@ claim, release software, spend funds, or change settlement state.
    interruption, and evaluation gates.
 6. [`CURRENT-SURFACE.md`](./CURRENT-SURFACE.md) — shipped seed implementation,
    gaps, compatibility, and the ordered delivery plan.
+7. [`PAPER-AUDIT.md`](./PAPER-AUDIT.md) — fidelity audit against the complete
+   arXiv v3 source, appendices, figures, and trajectories.
 
 ## Normative language
 
@@ -58,17 +64,23 @@ internal implementation.
 
 - RLM is a first-class L6 SDK feature, not desktop-only wiring.
 - The public discoverability path is `@openagentsinc/ai/rlm`.
-- V1 remains implemented in `@openagentsinc/history-corpus`; a new package is
-  not justified while history/evidence is the only proven corpus family.
+- The generic engine lives in `@openagentsinc/rlm`.
+  `@openagentsinc/history-corpus` supplies the history adapter and compatibility
+  surfaces; the generic engine does not depend on history types.
 - `@openagentsinc/ai/recall` remains as a compatibility alias through the
   pre-stable migration.
 - The engine is Effect-native. There is no Python runtime, REPL, `eval`,
   arbitrary shell, or dependency on the upstream `rlms` package.
 - Effect AI's `LanguageModel` is the model substrate. The SDK does not fork or
   duplicate `effect/unstable/ai`.
-- The model emits operations through `LanguageModel.generateObject` and an
-  Effect Schema. Free-form JSON parsing is compatibility code, not the target
-  execution path.
+- The model emits bounded declarative program graphs through
+  `LanguageModel.generateObject` and an Effect Schema. Free-form JSON parsing
+  is compatibility code, not the target execution path.
+- The normative engine includes persistent opaque values and programmatic
+  `ModelMap`/`RlmMap`; a one-subcall-per-root-turn loop alone is recursive
+  recall, not first-class RLM.
+- Final semantic output commits an existing value. It does not rely on brittle
+  free-form `FINAL` versus `FINAL_VAR` conventions.
 - The recursive engine is not an `AgentHarness`. It is a typed query service
   that harnesses can expose as a host tool.
 - Deterministic recall is always separable from semantic recursion and always
@@ -90,24 +102,28 @@ internal implementation.
 ## Scope of v1
 
 V1 is optimized for durable conversation, agent-run, receipt, and evidence
-history. It supports:
+history, while its core corpus/value contracts remain source-agnostic. It
+supports:
 
-- immutable cursor-addressed corpora;
+- immutable generic corpus handles with inline and out-of-core adapters;
 - one thread, one run, or an explicitly authorized thread set;
 - deterministic grep, cursor/time slices, key-turn extraction, and structural
   turn summaries;
-- recursive semantic traversal with a single root model and an optional,
-  separately supplied leaf model;
+- a scoped persistent symbolic value environment;
+- bounded partition, pure transform, model-map, recursive-RLM-map,
+  reduce/compose, and commit operations;
+- a single root model and an optional, separately supplied leaf model;
 - depth 0 or 1 by default;
-- sequential subcalls for deterministic behavior;
+- bounded structured concurrency with deterministic result order;
 - streamed progress and one terminal result;
+- bounded inline results and policy-admitted artifact results;
 - exact token usage when the provider reports it;
 - citation-safe host-tool integration.
 
 V1 does not promise:
 
 - arbitrary source-code execution;
-- arbitrary document ingestion or a general vector database;
+- an unrestricted REPL, shell, filesystem, or general vector database;
 - an autonomous provider/account router;
 - automatic semantic escalation;
 - dollar-cost calculation without an application price catalog;
@@ -121,7 +137,7 @@ V1 does not promise:
 authorized durable sources
         |
         v
-RlmCorpusSource -----> immutable corpus + digest + coverage/exclusions
+RlmCorpusSource -----> immutable corpus handle + digest + coverage
         |                                  |
         |                                  +--> deterministic traversal
         |                                           |
@@ -133,9 +149,16 @@ RlmCorpusSource -----> immutable corpus + digest + coverage/exclusions
                            Effect AI LanguageModel -+
                                                     |
                                                     v
+                             typed program DAG + scoped value environment
+                                                    |
+                         CorpusOp / MapModel / MapRlm / Reduce / Commit
+                                                    |
+                                                    v
                                       Stream<RlmEvent, RlmError>
                                                     |
                                       exactly one terminal event
+                                                    |
+                                      inline value or artifact ref
                                                     |
                                                     v
                                  completed / partial / refused
@@ -149,7 +172,10 @@ runtime-event vocabulary.
 
 This specification reconciles:
 
-- the RLM paper and reference implementation analysis retained in
+- the complete RLM arXiv v3 paper package, including its algorithms, methods,
+  negative results, figures, and trajectories, as recorded in
+  [`PAPER-AUDIT.md`](./PAPER-AUDIT.md);
+- the prior paper and reference implementation analysis retained in
   `OpenAgentsInc/openagents/docs/rlm/`;
 - the shipped Effect-native engine in this repository;
 - Effect `4.0.0-beta.94`, especially `effect/unstable/ai` `LanguageModel`,

@@ -13,11 +13,11 @@ The canonical consumer import is:
 import { Rlm } from "@openagentsinc/ai/rlm";
 ```
 
-The v1 implementation remains in `@openagentsinc/history-corpus` and exports
-the same symbols from a new `./rlm` subpath:
+The generic implementation lives in the granular `@openagentsinc/rlm`
+package:
 
 ```ts
-import { Rlm } from "@openagentsinc/history-corpus/rlm";
+import { Rlm } from "@openagentsinc/rlm";
 ```
 
 Required umbrella exports:
@@ -25,9 +25,10 @@ Required umbrella exports:
 | Path                                             | Contract                                               |
 | ------------------------------------------------ | ------------------------------------------------------ |
 | `@openagentsinc/ai/rlm`                          | canonical first-class RLM API                          |
+| `@openagentsinc/rlm`                             | direct generic implementation package                  |
 | `@openagentsinc/ai/recall`                       | compatibility alias during pre-stable migration        |
 | `@openagentsinc/ai`                              | selected stable RLM symbols, not every internal helper |
-| `@openagentsinc/history-corpus/rlm`              | direct granular-package entry                          |
+| `@openagentsinc/history-corpus/rlm`              | history adapter and compatibility re-export            |
 | `@openagentsinc/history-corpus/recall`           | current Tier D compatibility path                      |
 | `@openagentsinc/history-corpus/recursive-recall` | current engine compatibility path                      |
 
@@ -35,9 +36,10 @@ The canonical subpath exports only deliberate public contracts. Internal prompt
 builders, mutable budget implementation, observation renderers, and raw parsing
 compatibility helpers are not exported from `./rlm`.
 
-No new `@openagentsinc/rlm` package is created for v1. A package split requires
-a proven second corpus family and a stable interface that no longer imports
-history-specific entry/citation types.
+`@openagentsinc/rlm` MUST NOT import history-specific scope, event-log, turn,
+or renderer types. `@openagentsinc/history-corpus` depends on the generic
+package to provide the authorized history corpus adapter and migration
+wrappers; the dependency never points back into the adapter.
 
 ## 2. Public schemas
 
@@ -55,18 +57,41 @@ const RlmCorpusIdentity = Schema.Struct({
 });
 
 const RlmCorpusInput = Schema.Union([
-  Schema.TaggedStruct("Scope", {
-    scope: HistoryCorpusScope,
+  Schema.TaggedStruct("Source", {
+    sourceRef: RlmCorpusSourceRef,
   }),
-  Schema.TaggedStruct("Corpus", {
+  Schema.TaggedStruct("Inline", {
     manifest: RlmCorpusManifest,
     entries: Schema.Array(RlmCorpusEntry),
   }),
 ]);
 ```
 
-`Scope` resolution goes through `RlmCorpusSource`. Inline corpora are decoded,
-canonicalized, and digest-checked.
+`Source` resolution goes through `RlmCorpusSource` and returns an immutable
+`RlmCorpusHandle` with bounded range/scan methods. Inline corpora are decoded,
+canonicalized, digest-checked, and limited to a conservative byte ceiling.
+`HistoryCorpusScope` is adapted to an application-authorized source ref by the
+history helper; it is not embedded in the generic core request.
+
+The in-process source service returns a capability, not a wire value:
+
+```ts
+interface RlmCorpusHandle {
+  readonly identity: RlmCorpusIdentity;
+  readonly manifest: RlmCorpusManifest;
+  readonly read: (
+    range: RlmOrdinalRange,
+    limits: RlmReadLimits,
+  ) => Effect.Effect<ReadonlyArray<RlmCorpusEntry>, RlmCorpusError>;
+  readonly scan: (request: RlmScanRequest) => Stream.Stream<RlmCorpusEntry, RlmCorpusError>;
+  readonly validateSourceAddress: (
+    address: RlmSourceAddress,
+  ) => Effect.Effect<RlmValidatedSourceAddress, RlmCorpusError>;
+}
+```
+
+Every method is bounded. The handle is immutable for the run identity and
+fails `corpus_changed` if the source no longer matches its resolved digest.
 
 ### Deterministic request
 
@@ -75,12 +100,14 @@ const RlmDeterministicRequest = Schema.TaggedStruct("Deterministic", {
   schemaId: Schema.Literal("openagents.ai.rlm_request.v1"),
   runRef: RlmRunRef,
   corpus: RlmCorpusInput,
-  operation: HistoryRecallQuestion,
+  operation: RlmDeterministicOperation,
   limits: RlmDeterministicLimits,
 });
 ```
 
 This path is zero-spend and does not require a `LanguageModel` Layer.
+`@openagentsinc/history-corpus` exports the history operation extensions and
+compatibility mapping from `HistoryRecallQuestion`.
 
 ### Semantic request
 
@@ -115,6 +142,19 @@ const RlmBudget = Schema.Struct({
   maxOutputTokens: RlmPositiveCount,
   maxTotalTokens: RlmPositiveCount,
   maxSubcalls: RlmNonNegativeCount,
+  maxProgramNodesPerIteration: RlmPositiveCount,
+  maxProgramNodes: RlmPositiveCount,
+  maxFanOut: RlmPositiveCount,
+  maxFanIn: RlmPositiveCount,
+  maxConcurrentCalls: RlmPositiveCount,
+  maxValues: RlmPositiveCount,
+  maxCollectionItems: RlmPositiveCount,
+  maxValueBytes: RlmPositiveCount,
+  maxEnvironmentBytes: RlmPositiveCount,
+  maxInlineOutputBytes: RlmPositiveCount,
+  maxArtifactOutputBytes: RlmNonNegativeCount,
+  maxPromptTokensPerCall: RlmPositiveCount,
+  maxOutputTokensPerCall: RlmPositiveCount,
   maxObservationChars: RlmPositiveCount,
   maxTranscriptChars: RlmPositiveCount,
   maxEntriesScannedPerOperation: RlmPositiveCount,
@@ -142,6 +182,49 @@ const RlmEvidencePolicy = Schema.Struct({
 OpenAgents uses required citations, at least one citation for a non-empty
 answer, and `invalidCitation: "partial"`.
 
+### Symbolic values and programs
+
+```ts
+const RlmValueDescriptor = Schema.Struct({
+  valueRef: RlmValueRef,
+  kind: RlmValueKind,
+  schemaRef: Schema.optionalKey(RlmSchemaRef),
+  digest: RlmDigest,
+  encodedBytes: RlmNonNegativeCount,
+  itemCount: Schema.optionalKey(RlmNonNegativeCount),
+  parentRefs: Schema.Array(RlmValueRef),
+  lineage: RlmValueLineage,
+  preview: Schema.optionalKey(RlmBoundedText),
+});
+
+const RlmProgramNode = Schema.Union([
+  RlmCorpusOpNode,
+  RlmPartitionNode,
+  RlmTransformNode,
+  RlmModelMapNode,
+  RlmMapNode,
+  RlmModelReduceNode,
+  RlmCommitNode,
+]);
+
+const RlmProgram = Schema.Struct({
+  schemaId: Schema.Literal("openagents.ai.rlm_program.v1"),
+  nodes: Schema.Array(RlmProgramNode),
+});
+```
+
+Every node has a stable `nodeRef`, explicit input refs, and declared output
+refs. The decoder plus graph validator rejects cycles, missing refs, duplicate
+outputs, excessive graph size, and fan-out that cannot fit the remaining
+budget before execution.
+
+`RlmModelMapNode` runs one-shot leaf calls and does not increase RLM depth.
+`RlmMapNode` runs child RLM loops and does increase depth. Both publish an
+ordered collection value independent of fiber completion order.
+
+`RlmCommitNode` references an existing value. It does not contain newly
+generated free-form final prose.
+
 ### Usage
 
 ```ts
@@ -165,18 +248,22 @@ const RlmCitation = Schema.Struct({
   corpusRef: RlmCorpusRef,
   contentDigest: RlmCorpusDigest,
   scopeRef: RlmScopeRef,
-  sourceKind: RlmSourceKind,
-  turnId: Schema.optionalKey(RlmTurnRef),
-  sequenceStart: Schema.optionalKey(RlmCursor),
-  sequenceEnd: Schema.optionalKey(RlmCursor),
-  entryRef: Schema.optionalKey(RlmEntryRef),
+  sourceAddress: RlmSourceAddress,
+  entryRefStart: RlmEntryRef,
+  entryRefEnd: Schema.optionalKey(RlmEntryRef),
   excerpt: Schema.optionalKey(RlmBoundedText),
   excerptDigest: Schema.optionalKey(RlmDigest),
 });
 ```
 
-At least one valid source-address form is required by a Schema refinement.
-`sequenceStart <= sequenceEnd` is also refined at decode time.
+`RlmSourceAddress` contains a bounded address-schema id and canonical encoded
+address validated by the resolved corpus handle. The history adapter exports a
+`HistoryRlmSourceAddress` Schema containing thread/turn and inclusive sequence
+range fields. Generic core code does not import those history types.
+
+Entry-ref ranges are validated against corpus order and source lineage. A
+history sequence start greater than end fails in the adapter Schema before
+citation validation.
 
 ## 3. Terminal result
 
@@ -188,8 +275,14 @@ const RlmOutput = Schema.Union([
   Schema.TaggedStruct("DeterministicFindings", {
     findings: Schema.Array(RlmFinding),
   }),
-  Schema.TaggedStruct("SemanticAnswer", {
-    answer: RlmBoundedAnswer,
+  Schema.TaggedStruct("InlineValue", {
+    value: RlmBoundedOutput,
+    valueRef: RlmValueRef,
+    digest: RlmDigest,
+  }),
+  Schema.TaggedStruct("Artifact", {
+    artifact: RlmArtifactDescriptor,
+    valueRef: RlmValueRef,
   }),
 ]);
 ```
@@ -226,8 +319,9 @@ const RlmTerminalResult = Schema.Union([RlmCompleted, RlmPartial, RlmRefused]);
 ```
 
 `RlmHonesty` includes corpus coverage/exclusion summaries, hit caps,
-transcript and observation truncation, usage completeness, operations
-performed, and citation-validation counts.
+transcript and observation truncation, usage completeness, program nodes and
+values produced, model/RLM map counts, environment/artifact bytes, the
+strategy ref, and citation-validation counts.
 
 ## 4. Errors
 
@@ -244,7 +338,11 @@ class RlmError extends Schema.TaggedErrorClass<RlmError>()("Rlm.Error", {
     "model_quota_exhausted",
     "model_rate_limited",
     "model_unavailable",
+    "program_contract_violation",
     "operation_contract_violation",
+    "value_unavailable",
+    "artifact_unavailable",
+    "per_call_limit_exceeded",
     "usage_required_but_unavailable",
     "invariant_violation",
   ]),
@@ -265,11 +363,19 @@ type RlmEvent =
   | RlmRunStarted
   | RlmCorpusResolved
   | RlmIterationStarted
-  | RlmOperationSelected
+  | RlmProgramSelected
+  | RlmProgramNodeStarted
+  | RlmProgramNodeCompleted
   | RlmObservationCompleted
+  | RlmValuePublished
+  | RlmValueEvicted
+  | RlmMapStarted
+  | RlmMapCompleted
   | RlmSubcallStarted
   | RlmSubcallCompleted
   | RlmModelCallCompleted
+  | RlmArtifactWriteStarted
+  | RlmArtifactWriteCompleted
   | RlmBudgetChanged
   | RlmContractRetry
   | RlmTerminalEvent;
@@ -293,22 +399,43 @@ export class RlmCorpusSource extends Context.Service<RlmCorpusSource, RlmCorpusS
   "@openagentsinc/ai/RlmCorpusSource",
 ) {}
 
+export class RlmOperatorRegistry extends Context.Service<
+  RlmOperatorRegistry,
+  RlmOperatorRegistryShape
+>()("@openagentsinc/ai/RlmOperatorRegistry") {}
+
+export class RlmArtifactSink extends Context.Service<RlmArtifactSink, RlmArtifactSinkShape>()(
+  "@openagentsinc/ai/RlmArtifactSink",
+) {}
+
+export interface RlmArtifactSinkShape {
+  readonly write: (
+    request: RlmArtifactWriteRequest,
+  ) => Effect.Effect<RlmArtifactDescriptor, RlmArtifactError>;
+}
+
 export interface RlmShape {
   readonly stream: (request: RlmRequest) => Stream.Stream<RlmEvent, RlmError>;
 
   readonly run: (request: RlmRequest) => Effect.Effect<RlmTerminalResult, RlmError>;
 }
 
-export const makeRlm: (options: MakeRlmOptions) => Effect.Effect<RlmShape, never, RlmCorpusSource>;
+export const makeRlm: (
+  options: MakeRlmOptions,
+) => Effect.Effect<RlmShape, never, RlmCorpusSource | RlmOperatorRegistry>;
 
-export const rlmLayer: (options: RlmLayerOptions) => Layer.Layer<Rlm, never, RlmCorpusSource>;
+export const rlmLayer: (
+  options: RlmLayerOptions,
+) => Layer.Layer<Rlm, never, RlmCorpusSource | RlmOperatorRegistry>;
 
 export const rlmDeterministicLayer: Layer.Layer<Rlm, never, RlmCorpusSource>;
 ```
 
-`RlmLayerOptions` contains trusted model Layers, safe model refs, SDK policy,
-and default budgets. It does not contain source-store authorization, pricing,
-or application authority.
+`RlmLayerOptions` contains trusted model Layers, safe model refs, a versioned
+`strategyRef`/prompt profile, per-call root/leaf limits, the admitted operator
+catalog, SDK policy, default budgets, and optionally an artifact sink Layer.
+It does not contain source-store authorization, pricing, or application
+authority.
 
 Convenience accessors mirror Effect AI:
 
@@ -344,11 +471,18 @@ digestRlmManifest(manifest);
 validateRlmCorpus(corpus);
 validateRlmCitation(corpus, citation);
 validateRlmCitations(corpus, citations);
+makeInlineRlmCorpusHandle(corpus);
+RlmCorpusHandle;
+RlmCorpusSourceRef;
 ```
 
 The builder will add stable ordinals, entry refs, schema identity, and content
 digest without removing existing fields during the pre-stable compatibility
 window.
+
+The generic handle supports bounded metadata, range reads, and streaming scan
+operations. History-specific builders adapt their authorized scope to this
+handle; callers do not receive an unrestricted store reader.
 
 ## 8. Deterministic use
 
@@ -364,8 +498,8 @@ const program = Effect.gen(function* () {
     schemaId: "openagents.ai.rlm_request.v1",
     runRef: "rlm.run.deploy-search",
     corpus: {
-      _tag: "Scope",
-      scope: { _tag: "Thread", threadId: "thread-1" },
+      _tag: "Source",
+      sourceRef: "openagents.current-thread",
     },
     operation: {
       _tag: "Grep",
@@ -396,8 +530,8 @@ const program = Effect.gen(function* () {
     schemaId: "openagents.ai.rlm_request.v1",
     runRef: "rlm.run.architecture-decision",
     corpus: {
-      _tag: "Scope",
-      scope: { _tag: "Thread", threadId: "thread-1" },
+      _tag: "Source",
+      sourceRef: "openagents.current-thread",
     },
     question: "What did we decide about the deployment boundary, and why?",
     budget: conservativeRlmBudget,
@@ -415,6 +549,10 @@ const program = Effect.gen(function* () {
       leafModel: myCheaperLeafLanguageModelLayer,
       rootModelRef: "provider/root-policy-v1",
       leafModelRef: "provider/leaf-policy-v1",
+      strategyRef: "openagents.history-rlm.v1",
+      promptProfile: openAgentsHistoryPromptProfile,
+      rootLimits: rootPerCallLimits,
+      leafLimits: leafPerCallLimits,
     }),
   ),
   Effect.provide(myAuthorizedCorpusSourceLayer),

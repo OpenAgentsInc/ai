@@ -20,23 +20,36 @@ The implementation follows these Effect rules:
    cancellation.
 8. The injected `effect/unstable/ai` `LanguageModel` remains the model
    abstraction. The SDK does not define a competing provider interface.
-9. Model operations are generated with `LanguageModel.generateObject` and an
+9. Model programs are generated with `LanguageModel.generateObject` and an
    Effect Schema.
 10. Retry/fallback is supplied by the model Layer or `ExecutionPlan`; the RLM
     engine does not hide provider retries.
+11. Symbolic values are immutable, digest-addressed, run-scoped, and accessed
+    through refs rather than copied into model history.
+12. Programmatic fan-out uses scoped Effect fibers, atomic reservations, and a
+    global semaphore. No detached promise/fiber owns RLM work.
+13. Deterministic extension operators are pure capabilities with explicit
+    Schemas and cost declarations; arbitrary model-authored code is forbidden.
 
 ## 2. Service graph
 
 ```text
 RlmCorpusSource ───────────────┐
                               │
+RlmOperatorRegistry ──────────┤
+                              │
 LanguageModel root Layer ─────┼──> RlmLive Layer ──> Rlm service
                               │                        run
 LanguageModel leaf Layer? ────┤                        stream
                               │
-RlmPolicy ────────────────────┤
+RlmPolicy / strategy profile ─┤
+                              │
+RlmArtifactSink? ─────────────┤
                               │
 Clock / Tracer / Logger ──────┘
+
+Per-run internals allocated inside RlmLive:
+  RlmEnvironment, value store, budget Ref, Semaphore, queues, Scope
 
 Optional consumer-side services, deliberately outside RlmLive:
   price catalog, exact-usage ledger, app authorization, durable event writer,
@@ -45,18 +58,45 @@ Optional consumer-side services, deliberately outside RlmLive:
 
 ### `RlmCorpusSource`
 
-`RlmCorpusSource` resolves an authorized scope into an immutable corpus. Its
-Layer captures store access and caller authority. The request does not carry a
-visibility allowlist that can widen access.
+`RlmCorpusSource` resolves an authorized logical source ref or small inline
+input into an immutable corpus handle. Its Layer captures store access and
+caller authority. The request does not carry a visibility allowlist that can
+widen access.
 
 ```ts
 interface RlmCorpusSourceShape {
-  readonly resolve: (input: RlmCorpusInput) => Effect.Effect<RlmCorpus, RlmCorpusError>;
+  readonly resolve: (input: RlmCorpusInput) => Effect.Effect<RlmCorpusHandle, RlmCorpusError>;
 }
 ```
 
 Inline corpora remain supported for hermetic tests and already-authorized
-callers. They are decoded and their digest is verified before execution.
+small callers. They are decoded and their digest is verified before execution.
+Large inputs use handles with bounded ordinal/range reads and streaming scans;
+the engine does not require a second full materialization.
+
+### `RlmEnvironment`
+
+`RlmEnvironment` is a private per-run capability. It publishes immutable
+values, ordered collections, lineage, digests, and bounded previews. Public
+programs can name refs but cannot obtain an ambient mutable store. The
+environment is finalized with the run and is non-durable unless an admitted
+artifact sink receives the committed output.
+
+### `RlmOperatorRegistry`
+
+The registry is trusted construction-time configuration. It contains the core
+deterministic corpus/value operators and MAY contain application-supplied pure
+operators. Each entry supplies a parameter Schema, an implementation over a
+narrow value-reader/writer capability, and declared cost dimensions. It cannot
+access provider credentials, arbitrary Layers, application Tools, or the
+filesystem.
+
+### `RlmArtifactSink`
+
+The optional sink accepts only the committed value stream and returns a safe
+artifact descriptor. It owns storage authorization, retention, and fetch
+policy. The default SDK Layer has no durable sink; an oversized inline result
+therefore becomes an honest partial outcome.
 
 ### `Rlm`
 
@@ -90,6 +130,9 @@ Layer wiring:
 - `Rlm.layer(...)` or `rlmLayer(...)` captures policies and model plans and
   provides the `Rlm` service.
 - `RlmCorpusSource.layer(...)` is supplied by the application/store adapter.
+- `RlmOperatorRegistry.layer(...)` provides the core pure operator catalog and
+  any admitted application extensions.
+- `RlmArtifactSink.layer(...)` is optional and host-owned.
 - `Rlm.layerDeterministic(...)` provides a zero-model-call implementation and
   must not require `LanguageModel`.
 - `Rlm.layerSemantic(...)` requires a root model plan and optionally a leaf
@@ -105,6 +148,12 @@ The model plan is trusted construction-time configuration, not request data:
 interface RlmModelPlan {
   readonly root: Layer.Layer<LanguageModel.LanguageModel>;
   readonly leaf?: Layer.Layer<LanguageModel.LanguageModel>;
+  readonly rootModelRef: RlmModelRef;
+  readonly leafModelRef?: RlmModelRef;
+  readonly strategyRef: RlmStrategyRef;
+  readonly promptProfile: RlmPromptProfile;
+  readonly rootLimits: RlmPerCallLimits;
+  readonly leafLimits: RlmPerCallLimits;
 }
 ```
 
@@ -116,6 +165,12 @@ and provider options never enter results or progress events.
 OpenAgents chooses these Layers through its existing provider/account policy
 before calling the SDK. The RLM request cannot rotate accounts or bypass
 account health.
+
+The strategy/profile is versioned because the paper shows that one fixed RLM
+prompt can produce materially different decomposition and runaway-subcall
+behavior across models. Per-call limits reserve provider context and output
+headroom before invocation; the global run budget is not a substitute for
+model-specific fit checks.
 
 ## 4. Schema design
 
@@ -143,7 +198,7 @@ Decoding happens at every untrusted boundary:
 Internal functions MAY accept decoded values and avoid redundant decoding, but
 public helpers MUST make the boundary explicit.
 
-## 5. Structured model output
+## 5. Structured program output
 
 The current seed engine calls `generateText`, strips fences, parses JSON, and
 decodes the result. The target engine replaces that sequence with:
@@ -153,35 +208,43 @@ const response =
   yield *
   LanguageModel.generateObject({
     prompt,
-    objectName: "rlm_operation",
-    schema: RlmOperation,
+    objectName: "rlm_program",
+    schema: RlmProgram,
     toolChoice: "none",
   });
 
-const operation = response.value;
+const program = response.value;
 ```
 
 This uses Effect AI's provider-compatible codec transformation and typed error
 channel. Provider structured-output failures are still bounded contract
 failures and may consume the configured contract-retry allowance.
 
-The engine MUST NOT model corpus operations as externally executable provider
-tools. Operations are pure local commands interpreted by the RLM engine. This
-prevents a provider from turning RLM traversal into side effects and avoids
-confusing Effect AI's intra-call tool-resolution loop with RLM recursion.
+The engine validates the complete graph, resolves refs, derives worst-case
+fan-out, and reserves budgets before executing its first node. Programs are
+finite DAGs rather than arbitrary code or one explicit subcall action.
+
+The engine MUST NOT model corpus/value operations as externally executable
+provider tools. Nodes are pure local commands interpreted by the RLM engine.
+This prevents a provider from turning RLM traversal into side effects and
+avoids confusing Effect AI's intra-call tool-resolution loop with RLM
+recursion.
 
 ## 6. Budget state
 
-### V1 sequential implementation
+### Per-run state
 
-V1 runs subcalls sequentially. A per-run `Ref` or `SynchronizedRef` holds the
-global budget state:
+A per-run `Ref` or `SynchronizedRef` holds the global budget state:
 
 ```ts
 interface RlmBudgetState {
   readonly modelCallsReserved: number;
   readonly modelCallsCompleted: number;
   readonly subcallsReserved: number;
+  readonly programNodesReserved: number;
+  readonly valuesPublished: number;
+  readonly liveValueBytes: number;
+  readonly artifactBytes: number;
   readonly inputTokens: number | undefined;
   readonly outputTokens: number | undefined;
   readonly usageCompleteness: "complete" | "partial" | "unavailable";
@@ -192,14 +255,14 @@ interface RlmBudgetState {
 ```
 
 State transitions are centralized. Root and child loops MUST NOT directly
-mutate a shared JavaScript object. This makes TestClock, interruption, and a
-future concurrent engine mechanically safe.
+mutate a shared JavaScript object.
 
-### Future concurrency
+### Structured map concurrency
 
-Concurrent subcalls are outside v1. If admitted later:
+Programmatic map nodes support bounded concurrency:
 
-- call and subcall capacity is reserved atomically;
+- whole-node fan-out, call/subcall, per-call estimate, value-byte, and artifact
+  capacity is reserved atomically;
 - a `Semaphore` enforces global concurrency;
 - child work is forked with scoped/structured combinators;
 - first failure interrupts only the policy-defined siblings;
@@ -209,6 +272,11 @@ Concurrent subcalls are outside v1. If admitted later:
 
 No use of `Promise.all`, detached `Effect.runFork`, or unscoped queues is
 permitted inside the engine.
+
+The implementation MUST pass the same ordering and accounting suite at
+concurrency `1` and greater than `1`. Applications may clamp concurrency to
+`1`, but the first-class engine cannot require one new root-model iteration per
+mapped child.
 
 ## 7. Time and interruption
 
@@ -236,6 +304,8 @@ composition. Whichever implementation is used:
 - queue shutdown is a finalizer;
 - backpressure is bounded;
 - the terminal event is enqueued once;
+- program-node, value-publication, map-batch, and artifact events expose refs
+  and sizes only;
 - raw model or corpus content is not placed in progress events;
 - `run` and `stream` observe identical terminal semantics.
 
@@ -256,7 +326,7 @@ The Effect channel separation is:
 | External fiber interruption             | interruption cause                        |
 | Corpus store unavailable                | `RlmError`                                |
 | Model auth/quota/rate limit/unavailable | `RlmError` with safe reason               |
-| Repeated invalid structured operation   | `RlmError`                                |
+| Repeated invalid structured program     | `RlmError`                                |
 | SDK invariant violation                 | `RlmError` plus defect capture internally |
 
 The engine SHOULD avoid `Effect.catchDefect` around the entire run as a way to
@@ -283,7 +353,7 @@ persists each call with an idempotency key derived from `(rlmRunRef, callRef)`.
 
 Retries supplied by a model `ExecutionPlan` are model-layer behavior. The
 caller must ensure its Layer exposes correct per-attempt usage if retry spend
-must be ledgered. RLM contract retries caused by invalid operations are visible
+must be ledgered. RLM contract retries caused by invalid programs are visible
 separate calls and always count against RLM budgets.
 
 ## 11. Tracing, logs, and metrics
@@ -293,12 +363,16 @@ The live implementation wraps work in spans:
 - `openagents.rlm.run`;
 - `openagents.rlm.corpus.resolve`;
 - `openagents.rlm.iteration`;
-- `openagents.rlm.operation`;
+- `openagents.rlm.program`;
+- `openagents.rlm.program_node`;
+- `openagents.rlm.value`;
 - `openagents.rlm.model_call`;
-- `openagents.rlm.subcall`.
+- `openagents.rlm.subcall`;
+- `openagents.rlm.artifact`.
 
 Safe span attributes include run ref, corpus digest prefix, mode, operation
-kind, depth, iteration, counts, cap names, duration, and usage completeness.
+kind, strategy ref, depth, iteration, counts, encoded byte sizes, cap names,
+duration, and usage completeness.
 
 Forbidden default attributes and log fields include corpus text, question
 text, answer text, model raw output, reasoning, credentials, account refs that

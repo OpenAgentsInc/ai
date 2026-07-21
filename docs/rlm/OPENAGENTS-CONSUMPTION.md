@@ -54,10 +54,11 @@ does not import OpenAgents app modules.
 
 ## 3. Dependency cutover
 
-The monorepo first completes its existing SDK npm-consumer swap. The package
-catalog pins one coherent rc train, including:
+The monorepo completed its SDK npm-consumer swap at SHA `314a14da78`. The
+package catalog pins one coherent rc train, including:
 
 - `@openagentsinc/ai`;
+- `@openagentsinc/rlm`;
 - `@openagentsinc/history-corpus`;
 - `@openagentsinc/agent-harness-contract`;
 - `@openagentsinc/agent-runtime-schema`;
@@ -90,6 +91,11 @@ The Layer owns authorization. Its `resolve` implementation receives a logical
 scope and derives the effective policy from the current owner/session context.
 It does not accept a model-provided visibility or redaction allowlist.
 
+The Layer returns the SDK's generic immutable `RlmCorpusHandle`. It SHOULD use
+bounded range reads and streaming scans over the durable stores rather than
+materializing a second complete copy of a very large run. History-specific
+scope and source-address details remain in this adapter.
+
 For a thread scope it:
 
 1. proves the current owner can access the thread;
@@ -118,6 +124,8 @@ Rules:
 - authentication and quota exhaustion remain distinguishable;
 - root and leaf model refs are safe policy refs, not secrets;
 - leaf calls may use a cheaper admitted model;
+- the model plan pins a versioned `strategyRef`, prompt profile, and trusted
+  per-call context/output headroom;
 - semantic recall is unavailable when no healthy admitted model Layer exists;
 - a recall outage does not make an unrelated agent turn or Full Auto run
   falsely successful.
@@ -180,6 +188,10 @@ observations, and subcall transcripts do not enter the durable neutral log.
 The final tool result includes answer/candidate text, validated citations,
 honesty, coverage, and usage summary. The UI labels it as recalled/cited, never
 verified.
+
+The initial desktop tool admits only bounded inline output. The SDK's artifact
+output capability is not permission for `history_recall` to create or expose a
+durable artifact; that requires a separate application policy and UI contract.
 
 ## 7. Renderer contract
 
@@ -284,7 +296,7 @@ consumed by version bump rather than patched in both repositories.
 - publish one coherent rc train;
 - ship conformance fixtures and migration notes.
 
-### Phase B — monorepo npm cutover
+### Phase B — monorepo npm cutover (landed)
 
 - replace workspace SDK dependencies with the published train;
 - delete duplicate SDK packages;
@@ -302,9 +314,11 @@ consumed by version bump rather than patched in both repositories.
 
 ### Phase D — semantic tool
 
-- provide admitted root/leaf model Layers;
+- provide admitted root/leaf model Layers plus a pinned strategy profile and
+  per-call context/output headroom;
 - provide exact-usage sink integration;
 - enable semantic mode behind explicit admission;
+- clamp program nodes, fan-out, concurrency, values, and inline output;
 - prove interruption, caps, account failures, and missing usage behavior.
 
 ### Phase E — Full Auto
@@ -316,8 +330,12 @@ consumed by version bump rather than patched in both repositories.
 ### Phase F — evidence gate
 
 - run the dense-recall suite against OpenAgents transcript shapes;
-- compare deterministic, semantic, bounded-window, and provider-compaction
-  baselines;
+- compare deterministic, direct-model, semantic depth 0/1/higher,
+  bounded-window, and provider-compaction baselines;
+- include O(1), O(n), O(n^2), long-output, and million/10M+-token out-of-core
+  fixtures where applicable;
+- report success-stratified p50/p75/p90/p95/p99 calls, latency, tokens, and
+  cost for each pinned strategy profile;
 - decide separately whether automatic semantic escalation or depth above one
   is justified.
 
@@ -329,6 +347,10 @@ consumed by version bump rather than patched in both repositories.
 - [ ] Visibility/redaction cannot be widened through tool arguments.
 - [ ] Deterministic mode makes zero model calls.
 - [ ] Semantic mode is explicit and globally capped.
+- [ ] Program nodes, fan-out, concurrency, environment bytes, and inline
+      output are application-clamped.
+- [ ] The initial desktop tool cannot create artifact output.
+- [ ] Strategy profile and per-call model headroom are pinned and recorded.
 - [ ] Provider/account selection remains OpenAgents-owned.
 - [ ] Exact usage is idempotently recorded per model call.
 - [ ] Unknown usage is never zero.

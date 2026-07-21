@@ -46,7 +46,8 @@ The seed is useful but does not yet satisfy the specification.
 ### Discovery and packaging
 
 - There is no `@openagentsinc/ai/rlm` subpath.
-- There is no granular `@openagentsinc/history-corpus/rlm` subpath.
+- There is no generic `@openagentsinc/rlm` implementation package.
+- There is no history-adapter `@openagentsinc/history-corpus/rlm` subpath.
 - The public product is described as recall rather than an explicit RLM
   service.
 - The `HistoryRecall` and recursive surfaces are separate rather than composed
@@ -76,6 +77,24 @@ The seed is useful but does not yet satisfy the specification.
 - The target uses `LanguageModel.generateObject` directly.
 - Deterministic operation implementations are duplicated between Tier D and
   recursive helpers in places instead of sharing one interpreter.
+- The seed emits one explicit operation/subcall per root iteration. The RLM
+  paper identifies that shape as the poor alternative because a sub-LM cannot
+  be invoked programmatically over a collection inside persistent symbolic
+  state.
+- There is no run-scoped value environment, declarative program graph,
+  `ModelMap`/`RlmMap`, reduce/compose, or commit-by-value-ref contract.
+- Root and leaf prompts have no versioned strategy profile or trusted per-call
+  context/output headroom.
+
+### Generality and scale
+
+- The public request is coupled to `HistoryCorpusScope`; the core source
+  contract is not generic.
+- Corpus resolution materializes entry arrays rather than exposing an
+  out-of-core immutable handle.
+- There is no inline-input byte ceiling or multi-million-token handle smoke.
+- Semantic output is one bounded answer string. There is no artifact-backed
+  committed output for exact results larger than one model output window.
 
 ### Results and errors
 
@@ -116,13 +135,14 @@ The seed is useful but does not yet satisfy the specification.
   model-supplied scope is never trusted directly.
 - The deterministic host-tool path has no semantic progress stream or
   preliminary root/leaf call progress to project through the harness bridge.
-- OpenAgents has not yet completed its npm dependency swap and still contains
-  the extracted package copies at the time of this document.
+- OpenAgents completed its SDK npm dependency swap at monorepo SHA
+  `314a14da78`; future first-class RLM work must arrive through a pinned SDK
+  release rather than restoring extracted package copies.
 
 ## 3. Compatibility posture
 
-The current package train is pre-stable, but the OpenAgents npm cutover is in
-flight. Implementation SHOULD be additive until that consumer swap lands:
+The current package train is pre-stable and the OpenAgents npm cutover has
+landed. Implementation SHOULD remain additive through the first-class RLM rc:
 
 - add new schemas, services, exports, and fields through versioned v1
   contracts;
@@ -148,6 +168,8 @@ Deliver:
 - explicit chronological ordering descriptor;
 - full citation shape and deterministic validator;
 - compatibility decoding for the current manifest/entries.
+- generic logical source refs and an immutable out-of-core `RlmCorpusHandle`;
+- inline-input byte ceilings and incremental canonical digest equivalence.
 
 Verify:
 
@@ -174,17 +196,40 @@ Deliver:
 - `Rlm`, `RlmCorpusSource`, request, result, error, honesty, and usage Schemas;
 - deterministic `Rlm` Layer;
 - canonical `run` derived from `stream`;
-- `@openagentsinc/ai/rlm` and granular `./rlm` exports;
+- generic `@openagentsinc/rlm` package, canonical `@openagentsinc/ai/rlm`
+  export, and history-adapter `./rlm` compatibility export;
+- one-way package dependency from history adapter to the generic engine;
 - umbrella export identity tests.
+- public value, program, strategy-profile, and artifact descriptors/services.
+
+### SDK-RLM-04A — typed symbolic environment and programmatic recursion
+
+Deliver:
+
+- a scoped immutable value environment with refs, digests, lineage, previews,
+  collection cardinality, and deterministic finalization;
+- Schema-decoded finite program DAGs with static ref/fan-out validation;
+- pure registered corpus/value operators;
+- `Partition`, `Transform`, `ModelMap`, `RlmMap`, `ModelReduce`, and `Commit`;
+- atomic whole-node budget reservation and bounded structured concurrency;
+- deterministic output order independent of fiber completion order;
+- inline commit plus optional host-owned artifact sink for large output;
+- paper-fidelity sentinel proving multiple child calls from one root program.
+
+Verify environment/value limits, concurrency `1` and greater than `1`, child
+failure/interruption cleanup, stored output, and 10M+-token out-of-core input.
 
 ### SDK-RLM-04 — structured semantic engine
 
 Deliver:
 
-- `LanguageModel.generateObject` operation production;
+- `LanguageModel.generateObject` program production;
 - per-run Effect budget Ref;
-- global model-call/token/subcall/deadline enforcement;
-- root/leaf model Layers;
+- global program-node/model-call/token/subcall/value/artifact/deadline
+  enforcement;
+- root/leaf model Layers with versioned strategy profiles and per-call
+  prompt/output headroom;
+- distinct one-shot model-map and recursive RLM-map depth/accounting;
 - typed error mapping rather than catch-all success values;
 - required citation validation;
 - usage completeness and exact-usage policy.
@@ -197,6 +242,7 @@ Deliver:
 
 - canonical `RlmEvent` Stream;
 - stable call/subcall refs and monotonic event sequence;
+- program/node/value/map/artifact refs and events;
 - bounded backpressure behavior;
 - Effect spans with safe attributes;
 - terminal uniqueness and scope-finalization tests.
@@ -219,6 +265,10 @@ Deliver:
 - conformance runner or exported fixture suite;
 - typechecked deterministic, semantic, streaming, and tool examples;
 - dense-history fixture generator and scoring contracts;
+- paper-fidelity programmatic recursion, persistent-value, generic/out-of-core,
+  and long-output suites;
+- O(1)/O(n)/O(n^2) scaling, depth 0/1/higher comparisons, strategy profiles,
+  and success-stratified p50/p75/p90/p95/p99 cost/runtime/call distributions;
 - migration guide from current exports.
 
 ### SDK-RLM-08 — rc release
@@ -238,14 +288,13 @@ does not itself authorize a package release.
 
 After an SDK rc contains the first-class surface:
 
-1. complete the monorepo npm swap;
-2. remove duplicate SDK packages;
-3. implement only the authorized store/model/ledger/UI adapters described in
+1. pin the coherent first-class SDK rc train;
+2. implement only the authorized store/model/ledger/UI adapters described in
    [`OPENAGENTS-CONSUMPTION.md`](./OPENAGENTS-CONSUMPTION.md);
-4. land deterministic host-tool support first;
-5. add semantic recall under explicit admission;
-6. add the Full Auto consumer;
-7. run dense-recall evaluation before automatic escalation.
+3. migrate the landed deterministic host tool to the canonical service;
+4. add semantic recall under explicit admission;
+5. add the Full Auto consumer;
+6. run dense-recall evaluation before automatic escalation.
 
 The existing OpenAgents issue order remains useful, but implementation bugs in
 the SDK surface belong in this repository after cutover.
@@ -259,7 +308,11 @@ RLM support is first-class only when all of the following are true:
 - schemas cover every public request/result/event/error;
 - corpus identity and citations are independently verifiable;
 - semantic work is explicit and globally budgeted;
-- model operations are structured output;
+- model programs are structured output;
+- one root program can launch bounded programmatic child calls over a
+  collection;
+- intermediate and final values can remain symbolic and be committed by ref;
+- generic/out-of-core input and exact large-output assembly pass conformance;
 - interruption and timeout are distinct;
 - progress streams without leaking raw history;
 - exact usage remains exact and unknown remains unknown;
