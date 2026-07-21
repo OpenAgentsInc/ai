@@ -30,7 +30,7 @@ export default defineConfig({
       {
         test: {
           name: { label: "node", color: "green" },
-          include: ["packages/*/src/**/*.test.ts"],
+          include: ["packages/*/src/**/*.test.ts", "scripts/**/*.test.ts"],
           setupFiles: [setupFile],
         },
       },

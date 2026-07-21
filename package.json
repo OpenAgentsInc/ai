@@ -3,13 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "pnpm run fmt:check && vp lint --quiet && pnpm run typecheck && pnpm test && pnpm run audit:exports",
+    "check": "pnpm run fmt:check && vp lint --quiet && pnpm run typecheck && pnpm test && pnpm run audit:exports && pnpm run audit:surface",
     "test": "vp test --run",
     "typecheck": "vp run --concurrency-limit 2 --filter './**' typecheck",
     "lint": "vp lint --report-unused-disable-directives",
     "fmt": "vp fmt",
     "fmt:check": "vp fmt --check",
     "audit:exports": "node scripts/audit-export-map.mjs",
+    "audit:surface": "node scripts/audit-export-surface.mjs",
+    "audit:surface:update": "node scripts/audit-export-surface.mjs --update",
     "hooks:install": "git config core.hooksPath .githooks && echo 'core.hooksPath=.githooks'"
   },
   "devDependencies": {
