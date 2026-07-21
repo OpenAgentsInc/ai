@@ -39,6 +39,12 @@ cursor.
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                    |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                    |
 
+## Roadmap
+
+The proposed engine roadmap is [`docs/ROADMAP.md`](./docs/ROADMAP.md) —
+conformance-as-product, Programs (the DSPy of Effect), RLM deepening,
+generative UI, transport productization, provider gateway, harness breadth.
+
 ## Development
 
 Node 24, pnpm, Vite Plus — the same toolchain contract as the openagents monorepo.
