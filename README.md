@@ -39,6 +39,23 @@ cursor.
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                    |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                    |
 
+## Train policy
+
+The roster ships as one **train**: every publishable package carries the same
+`version`, and every inter-package dependency inside the workspace points at
+that one train through `workspace:*` (rewritten to the concrete version at pack
+time). Converge the whole roster to one train in a single command:
+
+```sh
+node scripts/set-train-version.ts 0.2.0-rc.2         # bump every package + fix inter-package ranges
+node scripts/set-train-version.ts 0.2.0-rc.2 --check # verify convergence, no writes
+pnpm run audit:surface:update                        # record the new train's API-surface baseline
+```
+
+Pre-stable trains publish under dist-tag **`rc` only** — never `latest`.
+Publish leaf packages first and the `@openagentsinc/ai` umbrella last, all at
+the one converged version.
+
 ## Roadmap
 
 The proposed engine roadmap is [`docs/ROADMAP.md`](./docs/ROADMAP.md) —

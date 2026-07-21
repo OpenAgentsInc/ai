@@ -12,6 +12,7 @@
     "audit:exports": "node scripts/audit-export-map.mjs",
     "audit:surface": "node scripts/audit-export-surface.mjs",
     "audit:surface:update": "node scripts/audit-export-surface.mjs --update",
+    "set-train": "node scripts/set-train-version.ts",
     "hooks:install": "git config core.hooksPath .githooks && echo 'core.hooksPath=.githooks'"
   },
   "devDependencies": {
