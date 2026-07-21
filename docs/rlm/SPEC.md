@@ -89,8 +89,9 @@ Every corpus MUST carry:
 
 - a schema identifier and version;
 - a `corpusRef` unique in the consumer's authority domain;
-- a canonical `contentDigest` over the encoded entries and policy-relevant
-  manifest fields;
+- a canonical `contentDigest` over the encoded entries, ordering descriptor,
+  scope, and effective inclusion policy;
+- a canonical `manifestDigest` over the full honesty-bearing manifest;
 - its authorized scope;
 - its deterministic ordering rule;
 - entry and byte counts;
@@ -100,12 +101,16 @@ Every corpus MUST carry:
 Once published to an RLM run, a `(corpusRef, contentDigest)` pair MUST identify
 immutable content. Rebuilding the same logical scope after new events arrive
 MUST produce a new digest. A cache key, run receipt, or citation MUST include
-the digest rather than relying on `corpusRef` alone.
+the content digest rather than relying on `corpusRef` alone. A result cache key
+MUST additionally include `manifestDigest`, because changed coverage or
+exclusion facts can change result honesty without changing model-visible entry
+bytes.
 
-The digest MUST be computed over canonical encoded data. It MUST NOT depend on
-JavaScript object key insertion order, local path names, process identifiers,
+Both digests MUST be computed over canonical encoded data. They MUST NOT depend
+on JavaScript object key insertion order, local path names, process identifiers,
 or a wall clock. A caller-supplied `builtAt` MAY appear in the manifest but MUST
-NOT change the content digest.
+NOT change either digest. Exclusion counts and coverage facts affect
+`manifestDigest`, not `contentDigest`.
 
 ### 3.2 Ordering and addressability
 
@@ -340,10 +345,14 @@ usage into cost in its own exact-usage ledger.
 
 Successful execution yields exactly one of:
 
-- `Completed` — validated answer and citations;
-- `Partial` — declared stop/incompleteness reason, optional best answer, and
+- `Completed` — validated mode-specific output and citations;
+- `Partial` — declared stop/incompleteness reason, optional best output, and
   any validated citations;
 - `Refused` — policy intentionally declined the requested mode or scope.
+
+Deterministic completed output is a set of exact cited findings. It MUST NOT be
+represented as model-synthesized prose. Semantic completed output is bounded
+answer text plus citations.
 
 All terminal values include:
 

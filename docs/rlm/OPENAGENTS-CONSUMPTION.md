@@ -66,11 +66,7 @@ catalog pins one coherent rc train, including:
 OpenAgents application code SHOULD import the canonical umbrella subpath:
 
 ```ts
-import {
-  Rlm,
-  makeRlmTool,
-  rlmLayer,
-} from "@openagentsinc/ai/rlm"
+import { Rlm, makeRlmTool, rlmLayer } from "@openagentsinc/ai/rlm";
 ```
 
 It SHOULD import granular packages only in adapters whose type dependency is
@@ -264,16 +260,16 @@ path.
 
 The existing OpenAgents RLM program maps to the SDK boundary as follows:
 
-| OpenAgents issue | Disposition after SDK first-class support |
-| --- | --- |
-| #9137 RLM-01 corpus | SDK implementation; OpenAgents keeps only source adapter |
-| #9138 RLM-02 Tier D | SDK implementation; OpenAgents consumes it |
-| #9139 RLM-03 host tool | OpenAgents integration using SDK `makeRlmTool` |
-| #9140 RLM-04 recursive engine | SDK implementation and conformance |
-| #9141 RLM-05 Tier S service | SDK `Rlm` service plus OpenAgents model/ledger/UI adapter |
-| #9142 RLM-06 Full Auto | OpenAgents-only consumer |
-| #9143 RLM-07 evaluation | shared SDK fixtures; OpenAgents transcript evaluation/report |
-| #9144 RLM-08 cloud/evidence | deferred OpenAgents admission; SDK contract reused |
+| OpenAgents issue              | Disposition after SDK first-class support                                              |
+| ----------------------------- | -------------------------------------------------------------------------------------- |
+| #9137 RLM-01 corpus           | SDK implementation; OpenAgents keeps only source adapter                               |
+| #9138 RLM-02 Tier D           | SDK implementation; OpenAgents consumes it                                             |
+| #9139 RLM-03 host tool        | Landed for Tier D; migrate the adapter to the first-class SDK `makeRlmTool` for Tier S |
+| #9140 RLM-04 recursive engine | SDK implementation and conformance                                                     |
+| #9141 RLM-05 Tier S service   | SDK `Rlm` service plus OpenAgents model/ledger/UI adapter                              |
+| #9142 RLM-06 Full Auto        | OpenAgents-only consumer                                                               |
+| #9143 RLM-07 evaluation       | shared SDK fixtures; OpenAgents transcript evaluation/report                           |
+| #9144 RLM-08 cloud/evidence   | deferred OpenAgents admission; SDK contract reused                                     |
 
 Completed monorepo implementations are treated as extraction source and
 behavioral evidence. Once the npm cutover lands, future fixes are made here and
@@ -297,6 +293,7 @@ consumed by version bump rather than patched in both repositories.
 
 ### Phase C — deterministic tool
 
+- treat the landed #9139 implementation as the behavior oracle;
 - provide `DesktopHistoryCorpusSource`;
 - wire `history_recall` deterministic mode through Toolkit/harness;
 - persist normal tool call/result events;
@@ -343,4 +340,3 @@ consumed by version bump rather than patched in both repositories.
 - [ ] Full desktop check, build, Electron smoke, and React smoke are green.
 - [ ] No public long-context quality claim is made without the normal promise
       and evidence gate.
-

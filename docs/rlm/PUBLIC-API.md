@@ -51,6 +51,7 @@ const RlmCorpusIdentity = Schema.Struct({
   schemaId: Schema.Literal("openagents.ai.rlm_corpus.v1"),
   corpusRef: RlmCorpusRef,
   contentDigest: RlmCorpusDigest,
+  manifestDigest: RlmManifestDigest,
 });
 
 const RlmCorpusInput = Schema.Union([
@@ -179,10 +180,27 @@ At least one valid source-address form is required by a Schema refinement.
 
 ## 3. Terminal result
 
+The service preserves the distinction between deterministic findings and a
+semantic answer:
+
+```ts
+const RlmOutput = Schema.Union([
+  Schema.TaggedStruct("DeterministicFindings", {
+    findings: Schema.Array(RlmFinding),
+  }),
+  Schema.TaggedStruct("SemanticAnswer", {
+    answer: RlmBoundedAnswer,
+  }),
+]);
+```
+
+An `RlmFinding` is an exact Tier D span/excerpt with its citation. Tier D never
+pretends to synthesize prose.
+
 ```ts
 const RlmCompleted = Schema.TaggedStruct("Completed", {
   run: RlmRunSummary,
-  answer: RlmBoundedAnswer,
+  output: RlmOutput,
   citations: Schema.Array(RlmCitation),
   usage: RlmTokenUsage,
   honesty: RlmHonesty,
@@ -191,7 +209,7 @@ const RlmCompleted = Schema.TaggedStruct("Completed", {
 const RlmPartial = Schema.TaggedStruct("Partial", {
   run: RlmRunSummary,
   reason: RlmPartialReason,
-  bestAnswer: Schema.optionalKey(RlmBoundedAnswer),
+  bestOutput: Schema.optionalKey(RlmOutput),
   citations: Schema.Array(RlmCitation),
   usage: RlmTokenUsage,
   honesty: RlmHonesty,
@@ -322,6 +340,7 @@ The first-class pass adds:
 ```ts
 canonicalizeRlmCorpus(corpus);
 digestRlmCorpus(corpus);
+digestRlmManifest(manifest);
 validateRlmCorpus(corpus);
 validateRlmCitation(corpus, citation);
 validateRlmCitations(corpus, citations);

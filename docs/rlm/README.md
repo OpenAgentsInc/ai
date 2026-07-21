@@ -2,7 +2,7 @@
 
 **Status:** normative design for the first-class RLM surface of the
 OpenAgents AI SDK. The contracts in this folder are the implementation target;
-[`CURRENT-SURFACE.md`](./CURRENT-SURFACE.md) records what `0.1.2-rc.1` already
+[`CURRENT-SURFACE.md`](./CURRENT-SURFACE.md) records what `0.1.3-rc.1` already
 ships and the compatibility work still required.
 
 **Decision date:** 2026-07-21  
