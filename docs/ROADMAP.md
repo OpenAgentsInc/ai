@@ -40,6 +40,38 @@ cursor. New work either speaks it or maps into it at the boundary.
 4. **Docs.** Per-package READMEs to one standard, a getting-started that
    runs, and the layer index mirrored from the monorepo `docs/ai-sdk/`.
 
+## Phase 1B — The harness wave (owner directive 2026-07-21: ASAP, first wave)
+
+Six adapters behind the `AgentHarness` contract, mirroring the Vercel AI SDK
+harness family (a harness is a complete agent runtime — workspace access,
+built-in tools, native session state, compaction, permission flows,
+runtime-specific configuration — behind one surface, sandbox-safe by
+default):
+
+1. **Codex** — the `codex` runtime as a first-class adapter (app-server
+   JSON-RPC preferred, `codex exec --json` fallback). The monorepo lane is
+   the reference implementation to generalize.
+2. **Claude Code** — the `@anthropic-ai/claude-agent-sdk` runtime as an
+   adapter. Host-resident — suspend and continue take the contract-blessed
+   degraded rerun form.
+3. **OpenCode** — promote the existing fixture-tested adapter to a live
+   runtime adapter against a local opencode server.
+4. **Pi** — host-process adapter per the 2026-07-21 Pi teardown scope
+   (injected SessionManager seams, no bridge needed, per-account agent
+   dirs, JSONL session-tree resume).
+5. **Cursor** — productize the ACP factory configuration into a named
+   adapter with its own conformance run.
+6. **Goose** — a new adapter (ACP if Goose speaks it, else its native
+   session surface).
+
+Each adapter ships with: the event projection onto `KhalaRuntimeEvent`,
+capability honesty (which verbs are lossless, degraded, or refused),
+approval routing through `RuntimeInteraction`, a conformance run against
+the reference-adapter laws, and a sandbox posture (owner-local or a
+sandbox-provider seam). A thin `HarnessAgent`-style facade may follow so a
+consumer drives any adapter with one call surface — the session verbs stay
+the contract underneath.
+
 ## Phase 2 — Programs (the DSPy of Effect)
 
 The largest differentiator no upstream ships. Typed prompt-programs over
@@ -86,11 +118,10 @@ this substrate:
    failure classes (`ModelFailureClass`), never laundering an exhausted
    account.
 
-## Phase 5 — Harness breadth
+## Phase 5 — Harness breadth (beyond wave 1)
 
-1. More adapters behind `AgentHarness`: the ACP factory generalizes —
-   candidates include additional ACP peers and non-ACP runtimes that fit
-   the session verbs.
+1. Adapters beyond the Phase 1B six: additional ACP peers and non-ACP
+   runtimes that fit the session verbs.
 2. Sandbox provider breadth: the managed-provider seam
    (`ai-sdk-sandbox-openagents`) tracks the monorepo's managed-sandbox
    substrate as it opens.
