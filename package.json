@@ -3,14 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "pnpm run fmt:check && vp lint --quiet && pnpm run typecheck && pnpm test",
+    "check": "pnpm run fmt:check && vp lint --quiet && pnpm run typecheck && pnpm test && pnpm run audit:exports",
     "test": "vp test --run",
     "typecheck": "vp run --concurrency-limit 2 --filter './**' typecheck",
     "lint": "vp lint --report-unused-disable-directives",
     "fmt": "vp fmt",
-    "fmt:check": "vp fmt --check"
+    "fmt:check": "vp fmt --check",
+    "audit:exports": "node scripts/audit-export-map.mjs",
+    "hooks:install": "git config core.hooksPath .githooks && echo 'core.hooksPath=.githooks'"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/vite-plus-matchers": "workspace:*",
     "typescript": "catalog:",
     "vite-plus": "0.2.4"
   },

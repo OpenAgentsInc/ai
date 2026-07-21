@@ -6,12 +6,16 @@ the model call to the rendered message, suspend and continue that persists,
 coding-agent harnesses, redaction as a schema field, and recall instead of
 compaction.
 
+**License:** Apache-2.0  
+**Registry:** npm scope `@openagentsinc/*` (pre-stable under dist-tag `rc` only)  
+**Gates:** local only — no GitHub Actions (`pnpm run check`, `.githooks/pre-push`)
+
 ## Layers
 
 ```
 L6  RECALL        @openagentsinc/history-corpus
 L5  UI STREAM     agent-harness-contract: ui-message-chunk, reducer,
-                  smooth-stream, partial-object-stream
+                  smooth-stream, partial-object-stream, ChatTransport
 L4  HARNESS       agent-harness-contract: AgentHarness, session verbs,
                   slice runner, readiness, toolkit bridge, ACP + opencode
 L3  SANDBOX       sandbox-provider contract + local + interop providers
@@ -37,17 +41,18 @@ cursor.
 
 ## Development
 
-Node 24, pnpm, Vite Plus — the same toolchain contract as the
-[openagents](https://github.com/OpenAgentsInc/openagents) monorepo this SDK
-was extracted from (2026-07-21).
+Node 24, pnpm, Vite Plus — the same toolchain contract as the openagents monorepo.
 
 ```sh
 pnpm install
-pnpm test
-pnpm typecheck
-pnpm check
+pnpm run check
+pnpm run hooks:install   # enables .githooks/pre-push on this clone
 ```
 
-## License
+Docs index: [`docs/README.md`](docs/README.md).
 
-Apache-2.0
+## Install (consumers)
+
+```sh
+npm install @openagentsinc/ai@rc
+```
