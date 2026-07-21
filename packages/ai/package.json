@@ -1,6 +1,6 @@
 {
   "name": "@openagentsinc/ai",
-  "version": "0.1.3-rc.1",
+  "version": "0.2.0-rc.1",
   "private": false,
   "description": "OpenAgents AI SDK umbrella package. Curated re-exports of the SDK layer entry points.",
   "license": "Apache-2.0",
@@ -18,7 +18,8 @@
     "./sandbox": "./src/sandbox.ts",
     "./harness": "./src/harness.ts",
     "./ui-stream": "./src/ui-stream.ts",
-    "./recall": "./src/recall.ts"
+    "./recall": "./src/recall.ts",
+    "./rlm": "./src/rlm.ts"
   },
   "publishConfig": {
     "access": "public"
@@ -32,6 +33,7 @@
     "@openagentsinc/agent-runtime-schema": "workspace:*",
     "@openagentsinc/ai-model": "workspace:*",
     "@openagentsinc/history-corpus": "workspace:*",
+    "@openagentsinc/rlm": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

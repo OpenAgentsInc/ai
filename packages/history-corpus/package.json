@@ -1,6 +1,6 @@
 {
   "name": "@openagentsinc/history-corpus",
-  "version": "0.1.3-rc.1",
+  "version": "0.2.0-rc.1",
   "private": false,
   "license": "Apache-2.0",
   "files": [
@@ -15,7 +15,8 @@
     "./recall": "./src/recall.ts",
     "./recall-tier-d": "./src/recall-tier-d.ts",
     "./recursive-recall": "./src/recursive-recall.ts",
-    "./host-tool": "./src/host-tool.ts"
+    "./host-tool": "./src/host-tool.ts",
+    "./rlm": "./src/rlm-adapter.ts"
   },
   "publishConfig": {
     "access": "public"
@@ -27,6 +28,7 @@
   "dependencies": {
     "@openagentsinc/agent-harness-contract": "workspace:*",
     "@openagentsinc/agent-runtime-schema": "workspace:*",
+    "@openagentsinc/rlm": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

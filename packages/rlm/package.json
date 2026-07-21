@@ -1,0 +1,39 @@
+{
+  "name": "@openagentsinc/rlm",
+  "version": "0.2.0-rc.1",
+  "private": false,
+  "description": "Effect-native Recursive Language Model engine: symbolic environment, declarative programs, ModelMap/RlmMap, Tier D + Tier S.",
+  "license": "Apache-2.0",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./schemas": "./src/schemas/index.ts",
+    "./corpus": "./src/corpus/index.ts",
+    "./interpreter": "./src/interpreter/index.ts",
+    "./environment": "./src/environment/index.ts",
+    "./program": "./src/program/index.ts",
+    "./engine": "./src/engine/index.ts",
+    "./tool": "./src/tool/index.ts",
+    "./conformance": "./src/conformance/index.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vp test --run packages/rlm/src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/vite-plus-matchers": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

@@ -82,6 +82,9 @@ importers:
       '@openagentsinc/history-corpus':
         specifier: workspace:*
         version: link:../history-corpus
+      '@openagentsinc/rlm':
+        specifier: workspace:*
+        version: link:../rlm
       effect:
         specifier: 4.0.0-beta.94
         version: 4.0.0-beta.94
@@ -170,6 +173,25 @@ importers:
       '@openagentsinc/agent-runtime-schema':
         specifier: workspace:*
         version: link:../agent-runtime-schema
+      '@openagentsinc/rlm':
+        specifier: workspace:*
+        version: link:../rlm
+      effect:
+        specifier: 4.0.0-beta.94
+        version: 4.0.0-beta.94
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.1
+      '@types/vite-plus-matchers':
+        specifier: workspace:*
+        version: link:../../types/vite-plus-matchers
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/rlm:
+    dependencies:
       effect:
         specifier: 4.0.0-beta.94
         version: 4.0.0-beta.94
