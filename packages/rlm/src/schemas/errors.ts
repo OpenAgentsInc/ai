@@ -16,6 +16,7 @@ export const RlmErrorReason = S.Literals([
   "artifact_unavailable",
   "per_call_limit_exceeded",
   "usage_required_but_unavailable",
+  "authority_not_granted",
   "invariant_violation",
 ]);
 export type RlmErrorReason = typeof RlmErrorReason.Type;

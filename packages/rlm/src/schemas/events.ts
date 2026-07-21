@@ -105,6 +105,10 @@ export const RlmModelCallCompleted = S.Struct({
   role: S.Literals(["root", "leaf"]),
   inputTokens: S.optionalKey(RlmNonNegativeCount),
   outputTokens: S.optionalKey(RlmNonNegativeCount),
+  /** Refs of the operation(s) that triggered this model call (root run ref or program node ref). */
+  causalityRefs: S.optionalKey(S.Array(RlmRef)),
+  /** True when the model response carried exact input and output token usage. */
+  usageExact: S.optionalKey(S.Boolean),
 });
 export type RlmModelCallCompleted = typeof RlmModelCallCompleted.Type;
 

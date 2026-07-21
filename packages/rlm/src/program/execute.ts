@@ -24,8 +24,16 @@ export interface ProgramExecutionResult {
   readonly valuesPublished: number;
 }
 
+export interface ModelCallOptions {
+  /** Refs of the program operation(s) that triggered this leaf model call. */
+  readonly causalityRefs?: ReadonlyArray<string>;
+}
+
 export interface LeafModel {
-  readonly complete: (prompt: string) => Effect.Effect<
+  readonly complete: (
+    prompt: string,
+    options?: ModelCallOptions,
+  ) => Effect.Effect<
     {
       readonly text: string;
       readonly inputTokens?: number;
@@ -51,6 +59,7 @@ export interface ProgramRunnerDeps {
     | ((
         question: string,
         slicePayload: unknown,
+        options?: ModelCallOptions,
       ) => Effect.Effect<
         {
           readonly text: string;
@@ -271,7 +280,9 @@ export const executeProgram = (
               const prompt = node.promptTemplate
                 .replaceAll("{{index}}", String(index))
                 .replaceAll("{{item}}", stringifyItem(item));
-              const out = yield* deps.leafModel!.complete(prompt);
+              const out = yield* deps.leafModel!.complete(prompt, {
+                causalityRefs: [node.nodeRef],
+              });
               return { index, text: out.text };
             }),
           );
@@ -338,7 +349,9 @@ export const executeProgram = (
               const question = node.questionTemplate
                 .replaceAll("{{index}}", String(index))
                 .replaceAll("{{item}}", stringifyItem(item));
-              const out = yield* deps.runChildRlm!(question, item);
+              const out = yield* deps.runChildRlm!(question, item, {
+                causalityRefs: [node.nodeRef],
+              });
               return { index, text: out.text, citations: out.citations };
             }),
           );
@@ -375,7 +388,9 @@ export const executeProgram = (
             });
           }
           const prompt = `${node.reducePrompt}\n\n${items.map(stringifyItem).join("\n")}`;
-          const out = yield* deps.leafModel.complete(prompt);
+          const out = yield* deps.leafModel.complete(prompt, {
+            causalityRefs: [node.nodeRef],
+          });
           modelCalls += 1;
           yield* deps.env.publish({
             valueRef: node.outputValueRef,

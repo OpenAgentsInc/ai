@@ -1,4 +1,4 @@
-import { Context, Effect, Layer, Stream } from "effect";
+import { Cause, Context, Effect, Layer, Queue, Stream } from "effect";
 import { Schema as S } from "effect";
 import type { RlmCorpusSourceShape } from "../corpus/source.ts";
 import { RlmCorpusSource } from "../corpus/source.ts";
@@ -55,14 +55,17 @@ export const makeRlm = (
     const stream = (request: RlmRequest): Stream.Stream<RlmEvent, RlmError> =>
       Stream.unwrap(
         Effect.gen(function* () {
-          const events: Array<RlmEvent> = [];
+          // Live event source: the loop offers events onto the queue as it
+          // produces them, so consumers observe recursive progress incrementally
+          // rather than replayed post-hoc at completion.
+          const queue = yield* Queue.unbounded<RlmEvent, RlmError | Cause.Done>();
           let eventSequence = 0;
           let atMs = 0;
           const emit: Emit = (partial) =>
             Effect.sync(() => {
               eventSequence += 1;
               atMs += 1;
-              events.push({ ...partial, eventSequence, atMs } as unknown as RlmEvent);
+              Queue.offerUnsafe(queue, { ...partial, eventSequence, atMs } as unknown as RlmEvent);
             });
 
           yield* runRequest(request, {
@@ -70,8 +73,20 @@ export const makeRlm = (
             ...(options.model !== undefined ? { model: options.model } : {}),
             admitSemantic: options.admitSemantic ?? true,
             emit,
-          });
-          return Stream.fromIterable(events);
+          }).pipe(
+            Effect.onExit((exit) =>
+              Effect.sync(() => {
+                if (exit._tag === "Failure") {
+                  Queue.failCauseUnsafe(queue, exit.cause);
+                } else {
+                  Queue.endUnsafe(queue);
+                }
+              }),
+            ),
+            Effect.forkChild,
+          );
+
+          return Stream.fromQueue(queue);
         }),
       );
 
@@ -202,6 +217,49 @@ const runRequest = (request: RlmRequest, ctx: RunCtx): Effect.Effect<void, RlmEr
     const evidence = request.evidence;
     const env = yield* makeRlmEnvironment(budget);
 
+    // Instrumented model-call boundary: emits exactly one RlmModelCallCompleted
+    // per LanguageModel call and enforces budget.requireExactUsage (issues
+    // #26 and #27). Every root and leaf completion routes through here.
+    let modelCallSeq = 0;
+    const runModelCall = (
+      role: "root" | "leaf",
+      complete: (
+        prompt: string,
+      ) => Effect.Effect<
+        { readonly text: string; readonly inputTokens?: number; readonly outputTokens?: number },
+        RlmError
+      >,
+      prompt: string,
+      causalityRefs?: ReadonlyArray<string>,
+    ): Effect.Effect<
+      { readonly text: string; readonly inputTokens?: number; readonly outputTokens?: number },
+      RlmError
+    > =>
+      Effect.gen(function* () {
+        const out = yield* complete(prompt);
+        const usageExact =
+          typeof out.inputTokens === "number" && typeof out.outputTokens === "number";
+        if (budget.requireExactUsage && !usageExact) {
+          return yield* new RlmError({
+            reason: "usage_required_but_unavailable",
+            retryable: false,
+            detailSafe: `${role} model call returned non-exact usage under requireExactUsage`,
+          });
+        }
+        modelCallSeq += 1;
+        yield* ctx.emit({
+          _tag: "ModelCallCompleted",
+          runRef: request.runRef,
+          callRef: `call.${modelCallSeq}`,
+          role,
+          ...(out.inputTokens !== undefined ? { inputTokens: out.inputTokens } : {}),
+          ...(out.outputTokens !== undefined ? { outputTokens: out.outputTokens } : {}),
+          ...(causalityRefs !== undefined && causalityRefs.length > 0 ? { causalityRefs } : {}),
+          usageExact,
+        });
+        return out;
+      });
+
     yield* ctx.emit({
       _tag: "IterationStarted",
       runRef: request.runRef,
@@ -224,7 +282,7 @@ const runRequest = (request: RlmRequest, ctx: RunCtx): Effect.Effect<void, RlmEr
       `Corpus entries: ${handle.manifest.coverage.entryCount}`,
     ].join("\n");
 
-    const rootOut = yield* rootComplete(rootPrompt);
+    const rootOut = yield* runModelCall("root", rootComplete, rootPrompt, [request.runRef]);
     let program: RlmProgram;
     try {
       program = decodeProgram(JSON.parse(rootOut.text));
@@ -236,12 +294,14 @@ const runRequest = (request: RlmRequest, ctx: RunCtx): Effect.Effect<void, RlmEr
       });
     }
 
+    const rawLeafComplete = ctx.model?.completeLeaf ?? ctx.model?.completeRoot;
     const leafModel: LeafModel | undefined =
-      ctx.model?.completeLeaf !== undefined
-        ? { complete: ctx.model.completeLeaf }
-        : ctx.model?.completeRoot !== undefined
-          ? { complete: ctx.model.completeRoot }
-          : undefined;
+      rawLeafComplete !== undefined
+        ? {
+            complete: (prompt, callOptions) =>
+              runModelCall("leaf", rawLeafComplete, prompt, callOptions?.causalityRefs),
+          }
+        : undefined;
 
     const execution = yield* executeProgram(program, {
       handle,
@@ -252,16 +312,21 @@ const runRequest = (request: RlmRequest, ctx: RunCtx): Effect.Effect<void, RlmEr
       runRef: request.runRef,
       emit: ctx.emit,
       clockMs: () => Effect.succeed(0),
-      runChildRlm: (question) =>
+      runChildRlm: (question, _slicePayload, callOptions) =>
         Effect.gen(function* () {
-          if (leafModel === undefined) {
+          if (rawLeafComplete === undefined) {
             return yield* new RlmError({
               reason: "model_unavailable",
               retryable: false,
               detailSafe: "RlmMap child needs leaf model",
             });
           }
-          const out = yield* leafModel.complete(`Child RLM: ${question}`);
+          const out = yield* runModelCall(
+            "leaf",
+            rawLeafComplete,
+            `Child RLM: ${question}`,
+            callOptions?.causalityRefs,
+          );
           return { text: out.text, citations: [] };
         }),
     });
