@@ -1,10 +1,73 @@
 # @openagentsinc/history-corpus
 
+> **Layer L6 — recall (history adapter)** · part of the [OpenAgents AI SDK](../../docs/README.md)
+
 This package builds a history corpus. A history corpus is a deterministic
 export of durable conversation history for one scope. Each unit in the corpus
 has a cursor address. The export obeys the visibility and redaction rules of
-each source unit. This is RLM-01 of the RLM epic (#9136, issue #9137). The
-design source is `docs/rlm/2026-07-21-rlm-integration-audit-and-roadmap.md`.
+each source unit. It is the L6 recall layer: recall over durable history instead
+of compaction. This is RLM-01 of the RLM epic (#9136, issue #9137). The design
+source is [`docs/rlm/`](../../docs/rlm).
+
+## Install
+
+```sh
+npm install @openagentsinc/history-corpus@rc
+# or via the umbrella:
+npm install @openagentsinc/ai@rc   # re-exported at @openagentsinc/ai/recall
+```
+
+## Primary API
+
+- `buildHistoryCorpus(input)` — export a deterministic, cursor-addressed corpus
+  from a durable event log and/or neutral thread snapshots.
+- `recallTierD(request)` — answer a typed question (`Grep`, `CursorSlice`,
+  `TimeSlice`, `KeyTurns`, `TurnSummary`) over the corpus. Pure, deterministic,
+  zero model calls, with a required honesty record.
+- `HistoryRecall` — the Effect service; `historyRecallTierDLayer` builds the
+  Tier D layer over a corpus provider.
+- The recursive recall engine and the `history_recall` host tool.
+
+```ts
+import { Effect } from "effect";
+import { buildHistoryCorpus, recallTierD } from "@openagentsinc/history-corpus";
+
+const program = Effect.gen(function* () {
+  const corpus = yield* buildHistoryCorpus({
+    scope: { _tag: "Thread", threadId: "thread-1" },
+    threads: [
+      {
+        id: "thread-1",
+        title: "Deploy review",
+        updatedAt: "2026-07-21T00:00:00Z",
+        notes: [
+          {
+            key: "note-1",
+            role: "assistant",
+            text: "The tests passed. The deploy is complete.",
+            timestamp: "2026-07-21T00:05:00Z",
+          },
+        ],
+      },
+    ],
+    policy: {
+      includeVisibilities: ["private"],
+      includeRedactionClasses: ["private_ref"],
+    },
+    builtAt: "2026-07-21T00:10:00Z",
+  });
+
+  return yield* recallTierD({
+    entries: corpus.entries,
+    coverageNote: corpus.manifest.coverage.note,
+    question: { _tag: "Grep", pattern: "deploy" },
+  });
+});
+
+const response = await Effect.runPromise(program);
+console.log(response.honesty.tier); // 'deterministic'
+console.log(response.cost.modelCalls); // 0
+```
 
 ## What it contains
 
@@ -113,3 +176,8 @@ Effect Schema. Caps bound depth, iterations, subcalls, tokens, and time. The
 result is `Completed`, `Partial` with an honest reason, or `Failed` with a
 typed failure class. Partial-answer honesty is mandatory. There is no Python
 runtime and no code execution anywhere.
+
+## More
+
+- [Layer index](../../docs/README.md) · [Packages](../../docs/packages.md) ·
+  [Getting started](../../docs/getting-started.md)

@@ -1,15 +1,63 @@
 # @openagentsinc/agent-harness-contract
 
+> **Layers L2–L5 — durable log, sandbox, harness, UI stream** · part of the [OpenAgents AI SDK](../../docs/README.md)
+
 The Effect-native **agent harness contract**. One versioned adapter contract
 drives a third-party coding-agent runtime (Codex, Claude Code, an ACP peer, a
 managed sandbox) behind a uniform surface with durable, cursor-exact turn
-suspend and continue.
+suspend and continue. It carries the SDK core: the L2 durable event log, the L3
+sandbox contract, the L4 `AgentHarness` adapter contract, and the L5 UI message
+stream. The harness stream event IS the neutral `KhalaRuntimeEvent` — there is
+no new event union.
 
 It is the OpenAgents port of the Vercel AI SDK `HarnessV1` shape. The ideas are
 re-derived. No upstream code is vendored, and there is no runtime dependency on
-`@ai-sdk/harness`. The full harvest analysis is in
-`docs/fable/2026-07-20-ai-sdk-harness-abstraction-harvest-analysis.md`. This
-package is HARN-01 of the HARN epic (#9115).
+`@ai-sdk/harness`. This package is HARN-01 of the HARN epic (#9115).
+
+## Install
+
+```sh
+npm install @openagentsinc/agent-harness-contract@rc
+# or via the umbrella (subpaths ./harness, ./event-log, ./ui-stream, ./sandbox):
+npm install @openagentsinc/ai@rc
+```
+
+## Primary API
+
+- **L4 harness:** `AgentHarness`, `makeReferenceAdapter`, the session verbs
+  (`promptTurn` / `continueTurn` / `suspendTurn` / `compact` / `detach` /
+  `stop` / `destroy`), `projectHarnessReadiness`, and the ACP and opencode
+  adapters.
+- **L2 durable log:** `makeHarnessEventLog`, the `HarnessEventLogStore` port,
+  replay, live attach, and rerun boundaries over a seq-cursor log.
+- **L3 sandbox:** the sandbox-provider contract, `makeLocalSandboxProvider`, and
+  `makeLocalProcessSandboxProvider`.
+- **L5 UI stream:** `khalaEventToUiChunks`, `initialUiMessage`, `applyUiChunk`,
+  `reduceUiMessageStream`, smooth streaming, partial-object streams, and the
+  chat transports.
+
+```ts
+import { Effect, Stream } from "effect";
+import { makeReferenceAdapter } from "@openagentsinc/agent-harness-contract";
+
+// Drive one turn; suspendTurn returns the exact cursor, continueTurn attaches
+// at cursor + 1 with no gap and no duplicate.
+const program = Effect.gen(function* () {
+  const harness = makeReferenceAdapter({ scriptWords: ["plan ", "code ", "verify"] });
+  const session = yield* harness.start({
+    sessionId: "session-1",
+    source: { lane: "test_fixture" },
+  });
+  const control = yield* session.promptTurn({ turnId: "turn-1", prompt: "Say the plan." });
+  return yield* Stream.runCollect(control.events);
+});
+
+const events = await Effect.runPromise(program);
+console.log(events.map((event) => event.sequence)); // [0, 1, 2, 3, 4]
+```
+
+See [Getting started](../../docs/getting-started.md) for the full
+suspend/continue and event → UI chunk flows.
 
 ## What it contains
 
@@ -145,9 +193,7 @@ the desktop provider lanes as adapters. HARN-05 merges readiness under the
 router. HARN-06 implements suspend and continue on every adapter. HARN-07 adds
 the managed sandbox as a harness sandbox provider.
 
-## Further reading
+## More
 
-- The runtime this package serves is mapped in
-  [`docs/desktop/2026-07-21-openagents-desktop-chat-runtime-reference.md`](../../docs/desktop/2026-07-21-openagents-desktop-chat-runtime-reference.md).
-- The next harvest layer (UI-message streaming, transport, SSE) is planned in
-  [`docs/fable/2026-07-21-ai-sdk-and-effect-ai-streaming-harvest-audit.md`](../../docs/fable/2026-07-21-ai-sdk-and-effect-ai-streaming-harvest-audit.md).
+- [Layer index](../../docs/README.md) · [Packages](../../docs/packages.md) ·
+  [Getting started](../../docs/getting-started.md)

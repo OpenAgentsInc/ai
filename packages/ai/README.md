@@ -1,5 +1,7 @@
 # @openagentsinc/ai — the OpenAgents AI SDK
 
+> **All layers (L0–L6) — umbrella** · part of the [OpenAgents AI SDK](../../docs/README.md)
+
 The OpenAgents AI SDK is an Effect-native toolkit for durable agent
 applications. It gives you durable, redaction-aware, cursor-exact agent
 streams with coding-agent harnesses and recall — on Effect.
@@ -7,6 +9,18 @@ streams with coding-agent harnesses and recall — on Effect.
 This package is the SDK front door. It holds no logic. It re-exports the
 entry points of the SDK layer packages, so one install gives the full
 surface. You can also install each layer package directly.
+
+## Install
+
+```sh
+npm install @openagentsinc/ai@rc
+# or pin the exact train (pre-stable never takes `latest`):
+npm install @openagentsinc/ai@0.2.0-rc.1
+```
+
+The packages publish TypeScript source directly — use a TypeScript-aware loader
+(`tsx`, Vite, or Vite Plus). They depend on `effect@4.0.0-beta.94`; keep one
+`effect` version in your application.
 
 ## The layers
 
@@ -67,56 +81,55 @@ The umbrella exports curated per-layer subpaths that mirror the diagram:
 - `@openagentsinc/ai/ui-stream` — L5
 - `@openagentsinc/ai/recall` — L6
 
-## Usage sketch
+## Usage
 
-Build a corpus from the durable log, run deterministic Tier D recall over
-it, and project a `KhalaRuntimeEvent` stream to renderable `UiMessage`
-chunks.
+Build a corpus from thread notes and run deterministic Tier D recall over it —
+pure traversal, zero model calls, cited spans. The end-to-end flows (harness
+turn suspend/continue, event → UI chunks, corpus → recall) are in
+[Getting started](../../docs/getting-started.md).
 
 ```ts
 import { Effect } from "effect";
-import {
-  applyUiChunk,
-  buildHistoryCorpus,
-  initialUiMessage,
-  khalaEventToUiChunks,
-  recallTierD,
-} from "@openagentsinc/ai";
+import { buildHistoryCorpus, recallTierD } from "@openagentsinc/ai";
 
 const program = Effect.gen(function* () {
-  // 1. Build a deterministic corpus from the durable event log (L2 -> L6).
-  const { manifest, entries } = yield* buildHistoryCorpus({
+  const corpus = yield* buildHistoryCorpus({
     scope: { _tag: "Thread", threadId: "thread-1" },
-    turnIds: ["turn-1"],
-    eventLog: store, // any HarnessEventLogStore-shaped reader
-    builtAt: "2026-07-21T00:00:00.000Z",
+    threads: [
+      {
+        id: "thread-1",
+        title: "Deploy review",
+        updatedAt: "2026-07-21T00:00:00Z",
+        notes: [
+          {
+            key: "note-1",
+            role: "assistant",
+            text: "The tests passed. The deploy is complete.",
+            timestamp: "2026-07-21T00:05:00Z",
+          },
+        ],
+      },
+    ],
     policy: {
-      includeVisibilities: ["public"],
-      includeRedactionClasses: ["public_ref"],
+      includeVisibilities: ["private"],
+      includeRedactionClasses: ["private_ref"],
     },
+    builtAt: "2026-07-21T00:10:00Z",
   });
 
-  // 2. Run Tier D recall — pure traversal, zero model calls, cited spans.
-  const recalled = yield* recallTierD({
-    entries,
-    coverageNote: manifest.coverage.note,
+  return yield* recallTierD({
+    entries: corpus.entries,
+    coverageNote: corpus.manifest.coverage.note,
     question: { _tag: "Grep", pattern: "deploy" },
   });
-
-  // 3. Project runtime events to UI chunks and fold them into a UiMessage.
-  let message = initialUiMessage();
-  for (const event of events) {
-    for (const chunk of khalaEventToUiChunks(event)) {
-      message = applyUiChunk(message, chunk);
-    }
-  }
-
-  return { recalled, message };
 });
+
+const response = await Effect.runPromise(program);
+console.log(response.cost.modelCalls); // 0
 ```
 
 ## More
 
-- The SDK docs index: [`docs/ai-sdk/README.md`](../../docs/ai-sdk/README.md)
-- The analysis and placement decision:
-  [`docs/fable/2026-07-21-effect-native-openagents-ai-sdk-analysis.md`](../../docs/fable/2026-07-21-effect-native-openagents-ai-sdk-analysis.md)
+- [Layer index](../../docs/README.md) · [Packages](../../docs/packages.md) ·
+  [Getting started](../../docs/getting-started.md)
+- Roadmap: [`docs/ROADMAP.md`](../../docs/ROADMAP.md)

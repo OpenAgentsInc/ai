@@ -1,13 +1,60 @@
-# Agent Runtime Schema
+# @openagentsinc/agent-runtime-schema
+
+> **Layer L1 — vocabulary** · part of the [OpenAgents AI SDK](../../docs/README.md)
 
 `@openagentsinc/agent-runtime-schema` is the RK1 schema-only Agent Runtime Kernel
 contract. It defines the durable OpenAgents runtime run and event log shape used
-by native, external, hosted, and fixture loops.
+by native, external, hosted, and fixture loops. It is the L1 vocabulary every
+SDK layer speaks upward: one neutral event union (`KhalaRuntimeEvent`), with
+`sequence` as the durable cursor and `visibility` / `redactionClass` as schema
+fields on every event.
 
 The package intentionally contains no executor, provider SDK, or Vercel AI SDK
 dependency. Adapter-specific loops project into this contract at the boundary.
-worker and UI surfaces consume event logs and projections derived from this
+Worker and UI surfaces consume event logs and projections derived from this
 contract.
+
+## Install
+
+```sh
+npm install @openagentsinc/agent-runtime-schema@rc
+# or via the umbrella:
+npm install @openagentsinc/ai@rc   # re-exported at @openagentsinc/ai/schema
+```
+
+## Primary API
+
+- `KhalaRuntimeEvent` — the neutral event union (`openagents.khala_runtime_event.v1`).
+- `decodeKhalaRuntimeEvent` — decode/validate one event (decode is the validity
+  authority).
+- `AgentRuntimeVisibility`, `AgentRuntimeRedactionClass` — the redaction fields.
+- `RuntimeInteraction` — the provider-neutral question / approval / plan-review
+  lifecycle.
+- The `./webhooks` subpath normalizes provider webhook deliveries into bounded
+  `openagents.agent_definition_webhook_event.v1` records.
+
+```ts
+import { decodeKhalaRuntimeEvent } from "@openagentsinc/agent-runtime-schema";
+
+// `sequence` is the durable cursor; visibility + redactionClass gate every
+// projection. Decode is the only validity authority.
+const event = decodeKhalaRuntimeEvent({
+  schema: "openagents.khala_runtime_event.v1",
+  kind: "turn.started",
+  eventId: "event-1",
+  threadId: "thread-1",
+  turnId: "turn-1",
+  sequence: 0,
+  visibility: "private",
+  redactionClass: "private_ref",
+  observedAt: "2026-07-21T00:00:00Z",
+  source: { lane: "test_fixture" },
+  causalityRefs: [],
+});
+console.log(event.kind); // 'turn.started'
+```
+
+## Details
 
 Day 1 of the Fast Follow thread-fabric program adds
 `openagents.runtime_control_intent.v2` and
@@ -71,3 +118,8 @@ background-agent triggers. GitHub deliveries are converted into bounded
 `openagents.agent_definition_webhook_event.v1` records before trigger
 conditions run, so Worker ingress never passes raw provider payloads into model
 or run context.
+
+## More
+
+- [Layer index](../../docs/README.md) · [Packages](../../docs/packages.md) ·
+  [Getting started](../../docs/getting-started.md)

@@ -1,30 +1,56 @@
-# Khala AI SDK Core
+# @openagentsinc/ai-model
 
-OpenCode-style AI SDK Core adapter for Khala Code.
+> **Layer L0 — model call** · part of the [OpenAgents AI SDK](../../docs/README.md)
 
-This package keeps AI SDK Core as provider-call transport only. It calls a
-`streamText`-compatible function, maps stream parts into
-`openagents.khala_runtime_event.v1`, and bridges Khala tools into AI SDK
-`tool()` definitions while executing through the OpenAgents/Khala tool
-dispatcher.
+The L0 model-call substrate. It keeps `effect/unstable/ai` (and the AI SDK Core
+`streamText` transport) as provider-call transport only: it makes the call, maps
+provider stream parts into the neutral `openagents.khala_runtime_event.v1`
+vocabulary, and runs typed provider-fallback plans that never launder an
+exhausted account. Upstream is consumed, never forked — AI SDK stream parts are
+not the product transcript schema.
 
-The package does not fork AI SDK Core and does not make AI SDK stream parts the
-product transcript schema.
+Every layer above speaks `KhalaRuntimeEvent` upward. This package is the one
+place where a provider call becomes that vocabulary.
 
-## Effect AI substrate path (STREAM-01)
+## Install
 
-The module `src/effect-ai.ts` adds an `effect/unstable/ai` path. The path is
-additive. The current public API does not change.
+```sh
+npm install @openagentsinc/ai-model@rc
+# or via the umbrella:
+npm install @openagentsinc/ai@rc   # re-exported at @openagentsinc/ai/model
+```
 
-- `khalaEffectAiLanguageModelLayer` supplies the Effect AI `LanguageModel`
-  service. The same injectable `streamText` transport does the provider call.
-- `khalaAiSdkTextStreamPartFromEffectAiStreamPart` maps an Effect AI
-  `Response.StreamPart` value to the ingestion vocabulary. The function
-  `khalaRuntimeEventFromAiSdkTextStreamPart` stays the one projection point
-  for `KhalaRuntimeEvent`.
-- `runKhalaEffectAiCoreRuntime` runs one `LanguageModel.streamText` turn. It
-  collects the turn into `KhalaRuntimeEvent` values.
+## Primary API
 
-A model-call failure on this path is a typed `AiError` value. The map from
-`AiError` reasons to harness failure classes is in
-`@openagentsinc/harness-conformance` (`ai-error-failure-class.ts`).
+- `khalaEffectAiLanguageModelLayer` — supplies the Effect AI `LanguageModel`
+  service over an injectable `streamText`-compatible transport.
+- `runKhalaEffectAiCoreRuntime` — runs one `LanguageModel.streamText` turn and
+  collects it into `KhalaRuntimeEvent` values.
+- `khalaAiSdkTextStreamPartFromEffectAiStreamPart` — maps one Effect AI
+  `Response.StreamPart` to the ingestion vocabulary.
+- `normalizeAiSdkTextStreamPart` — normalizes an unknown provider stream part
+  into the typed ingestion vocabulary (unknown shapes fall back to `raw`).
+- `buildKhalaAiSdkCoreStreamTextOptions`, `lowerKhalaAiSdkProviderOptions` —
+  lower typed provider options for the transport call.
+
+```ts
+import { normalizeAiSdkTextStreamPart } from "@openagentsinc/ai-model";
+
+// A raw provider stream part is normalized before it can become a runtime
+// event — the projection is the only bridge, so no raw chunk leaks upward.
+const part = normalizeAiSdkTextStreamPart({
+  type: "text-delta",
+  id: "text-1",
+  delta: "Hello",
+});
+console.log(part.type); // 'text-delta'
+```
+
+A model-call failure on the Effect AI path is a typed `AiError`. The map from
+`AiError` reasons to harness failure classes lives in
+`@openagentsinc/harness-conformance` (monorepo).
+
+## More
+
+- [Layer index](../../docs/README.md) · [Packages](../../docs/packages.md) ·
+  [Getting started](../../docs/getting-started.md)

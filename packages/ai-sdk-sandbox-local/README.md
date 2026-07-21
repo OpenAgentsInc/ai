@@ -1,15 +1,41 @@
 # @openagentsinc/ai-sdk-sandbox-local
 
-Owner-local `HarnessV1SandboxProvider` for AI SDK harness fixtures.
+> **Layer L3 — sandbox** · part of the [OpenAgents AI SDK](../../docs/README.md)
 
-This package is intentionally not a production sandbox. It creates a temporary
-workspace, scopes file APIs to that workspace, launches child processes with
-explicit `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR`, and exposes localhost
-port URLs for bridge experiments. It does not provide kernel, network, or
-multi-tenant containment.
+An owner-local sandbox provider for AI SDK harness fixtures. It creates a
+temporary workspace, scopes the file APIs to that workspace, launches child
+processes with explicit `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR`, and
+exposes localhost port URLs for bridge experiments.
 
-Use it to prove Khala Code can run AI SDK harnesses without Vercel before the
-same adapter contract is backed by the OpenAgents sandbox/workroom runtime.
+It is intentionally **not** a production sandbox: no kernel, network, or
+multi-tenant containment. Use it to prove a coding-agent harness runs without
+Vercel before the same provider contract is backed by the managed OpenAgents
+sandbox/workroom runtime (`@openagentsinc/ai-sdk-sandbox-openagents`).
 
-Set `inheritClaudeConfig: true` for an owner-local Claude Code session that
-must reuse the host CLI's current login instead of an isolated config path.
+## Install
+
+```sh
+npm install @openagentsinc/ai-sdk-sandbox-local@rc
+```
+
+## Primary API
+
+- `createLocalAiSdkSandboxProvider(options?)` — builds the provider (returns a
+  `HarnessV1SandboxProvider`).
+- `LocalAiSdkSandboxProvider` — the provider class.
+- Options include per-account homes and `inheritClaudeConfig: true`, which
+  reuses the host Claude Code CLI login instead of an isolated config path.
+
+```ts
+import { createLocalAiSdkSandboxProvider } from "@openagentsinc/ai-sdk-sandbox-local";
+
+// An owner-local provider that isolates each session under a temp workspace.
+const provider = createLocalAiSdkSandboxProvider({
+  inheritClaudeConfig: true,
+});
+```
+
+## More
+
+- [Layer index](../../docs/README.md) · [Packages](../../docs/packages.md) ·
+  [Getting started](../../docs/getting-started.md)

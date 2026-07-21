@@ -12,6 +12,14 @@ npm scope with pre-stable dist-tag `rc` only. The OpenAgents monorepo
 consumes these packages from npm (see issue #2). The reserved shell
 `OpenAgentsInc/openagents-ai` remains a placeholder name reservation.
 
+**This is the layer index and the single source of truth.** The engine, the
+layer diagram, and the per-package export map are authored here. The monorepo
+copy under
+[`openagents/docs/ai-sdk/`](https://github.com/OpenAgentsInc/openagents/blob/main/docs/ai-sdk/README.md)
+(live at [openagents.com/aisdk](https://openagents.com/aisdk)) mirrors this
+index for consumers and must not drift. Companion pages:
+[Getting started](./getting-started.md) and [Packages](./packages.md).
+
 ## Layer diagram
 
 ```
@@ -37,7 +45,8 @@ union. One durable cursor.
 | `@openagentsinc/agent-runtime-schema`      | L1 vocabulary                       |
 | `@openagentsinc/agent-harness-contract`    | L2–L5 core (includes ChatTransport) |
 | `@openagentsinc/ai-model`                  | L0 model-call bridge                |
-| `@openagentsinc/history-corpus`            | L6 recall                           |
+| `@openagentsinc/history-corpus`            | L6 recall (history adapter)         |
+| `@openagentsinc/rlm`                       | L6 recursive engine (Tier D + S)    |
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                          |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                          |
 
