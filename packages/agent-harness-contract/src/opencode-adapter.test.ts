@@ -3,10 +3,18 @@ import type { KhalaRuntimeSource } from "@openagentsinc/agent-runtime-schema";
 import { describe, expect, test } from "vite-plus/test";
 
 import {
+  decodeOpencodeSessionEvent,
   makeOpencodeAdapter,
+  OPENCODE_APPROVAL_DECISION_TO_REPLY,
   type OpencodeEvent,
   opencodeEventToKhalaEvents,
+  type OpencodePermissionReply,
+  opencodePermissionToRuntimeInteractionPayload,
   type OpencodeProjectionContext,
+  opencodeToolCallId,
+  type OpencodeTransport,
+  OpencodeTransportError,
+  type OpencodeWireEvent,
 } from "./opencode-adapter.ts";
 import type { HarnessStreamEvent } from "./stream.ts";
 
@@ -252,5 +260,373 @@ describe("opencode adapter — identity and capability posture", () => {
       }),
     );
     expect(error.capability).toBe("suspend_turn");
+  });
+});
+
+// The raw SSE wire shapes the live transport actually decodes: `GET /event`
+// wraps each `session.next.*` notification's schema fields under `properties`
+// (opencode `packages/schema/src/session-event.ts`). tool.called/success/failed
+// carry `provider: { executed }`; step.ended carries the real `tokens`; a
+// permission ask arrives as `permission.v2.asked` with a `source.callID`.
+const WIRE_TEXT_DELTA: OpencodeWireEvent = {
+  type: "session.next.text.delta",
+  properties: { sessionID: "ses_1", assistantMessageID: "msg_1", textID: "txt_1", delta: "Hi " },
+};
+const WIRE_TOOL_CALLED: OpencodeWireEvent = {
+  type: "session.next.tool.called",
+  properties: {
+    sessionID: "ses_1",
+    assistantMessageID: "msg_1",
+    callID: "call_ab",
+    tool: "bash",
+    input: { command: "ls" },
+    provider: { executed: true },
+  },
+};
+const WIRE_TOOL_SUCCESS: OpencodeWireEvent = {
+  type: "session.next.tool.success",
+  properties: {
+    sessionID: "ses_1",
+    assistantMessageID: "msg_1",
+    callID: "call_ab",
+    structured: {},
+    content: [],
+    provider: { executed: true },
+  },
+};
+const WIRE_STEP_ENDED: OpencodeWireEvent = {
+  type: "session.next.step.ended",
+  properties: {
+    sessionID: "ses_1",
+    assistantMessageID: "msg_1",
+    finish: "stop",
+    cost: 0.001,
+    tokens: { input: 30, output: 9, reasoning: 4, cache: { read: 2, write: 1 } },
+  },
+};
+
+describe("opencode live-path — decode of the real SSE wire shapes", () => {
+  test("decodeOpencodeSessionEvent flattens provider.executed and the real tokens shape", () => {
+    expect(decodeOpencodeSessionEvent(WIRE_TOOL_CALLED)).toEqual({
+      type: "session.next.tool.called",
+      assistantMessageID: "msg_1",
+      callID: "call_ab",
+      tool: "bash",
+      providerExecuted: true,
+    });
+    expect(decodeOpencodeSessionEvent(WIRE_STEP_ENDED)).toEqual({
+      type: "session.next.step.ended",
+      assistantMessageID: "msg_1",
+      finish: "stop",
+      tokens: { input: 30, output: 9, reasoning: 4, cache: { read: 2, write: 1 } },
+    });
+  });
+
+  test("tool.failed extracts a bounded public-safe message from the error payload", () => {
+    const decoded = decodeOpencodeSessionEvent({
+      type: "session.next.tool.failed",
+      properties: {
+        sessionID: "ses_1",
+        callID: "call_ab",
+        error: { type: "unknown", message: "command not found: frobnicate" },
+        provider: { executed: false },
+      },
+    });
+    expect(decoded).toEqual({
+      type: "session.next.tool.failed",
+      callID: "call_ab",
+      messageSafe: "command not found: frobnicate",
+      providerExecuted: false,
+    });
+  });
+
+  test("a live-only / unmodelled event decodes to undefined (no neutral projection)", () => {
+    expect(
+      decodeOpencodeSessionEvent({
+        type: "session.next.tool.input.delta",
+        properties: { sessionID: "ses_1", callID: "call_ab", delta: "{" },
+      }),
+    ).toBeUndefined();
+    expect(
+      decodeOpencodeSessionEvent({ type: "session.next.step.started", properties: {} }),
+    ).toBeUndefined();
+  });
+
+  test("a decoded real stream projects onto the neutral stream with call/result correlation", () => {
+    let seq = 0;
+    const ctx: OpencodeProjectionContext = {
+      source: SOURCE,
+      threadId: "s1",
+      turnId: "t1",
+      nextSequence: () => seq++,
+      toolNames: new Map<string, string>(),
+    };
+    const wire: ReadonlyArray<OpencodeWireEvent> = [
+      WIRE_TEXT_DELTA,
+      WIRE_TOOL_CALLED,
+      WIRE_TOOL_SUCCESS,
+      WIRE_STEP_ENDED,
+    ];
+    const events = wire.flatMap((w) => {
+      const decoded = decodeOpencodeSessionEvent(w);
+      return decoded === undefined ? [] : opencodeEventToKhalaEvents(decoded, ctx);
+    });
+
+    expect(kinds(events)).toEqual(["text.delta", "tool.call", "tool.result", "turn.finished"]);
+    // The tool.call and its later tool.success (which carries only callID) share
+    // one neutral toolCallId derived from the opencode callID.
+    const call = events.find((e) => e.kind === "tool.call");
+    const result = events.find((e) => e.kind === "tool.result");
+    const expectedId = opencodeToolCallId("call_ab");
+    expect((call as { toolCallId?: string }).toolCallId).toBe(expectedId);
+    expect((result as { toolCallId?: string }).toolCallId).toBe(expectedId);
+    // step.ended carried the real tokens onto turn.finished.
+    expect(events.at(-1)).toMatchObject({
+      kind: "turn.finished",
+      finishReason: "stop",
+      usage: { inputTokens: 30, outputTokens: 9, reasoningTokens: 4, totalTokens: 43 },
+    });
+  });
+
+  test("step.failed projects to an error turn.finished with no fabricated usage", () => {
+    let seq = 0;
+    const ctx: OpencodeProjectionContext = {
+      source: SOURCE,
+      threadId: "s1",
+      turnId: "t1",
+      nextSequence: () => seq++,
+      toolNames: new Map<string, string>(),
+    };
+    const decoded = decodeOpencodeSessionEvent({
+      type: "session.next.step.failed",
+      properties: { sessionID: "ses_1", assistantMessageID: "msg_1", error: { message: "boom" } },
+    });
+    const events = decoded === undefined ? [] : opencodeEventToKhalaEvents(decoded, ctx);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ kind: "turn.finished", finishReason: "error" });
+    expect((events[0] as { usage?: unknown }).usage).toBeUndefined();
+  });
+
+  test("permission.v2.asked records a pending approval and projects to no transcript event", () => {
+    let seq = 0;
+    const pendingApprovals = new Map<string, string>();
+    const toolNames = new Map<string, string>([["call_ab", "bash"]]);
+    const ctx: OpencodeProjectionContext = {
+      source: SOURCE,
+      threadId: "s1",
+      turnId: "t1",
+      nextSequence: () => seq++,
+      toolNames,
+      pendingApprovals,
+    };
+    const decoded = decodeOpencodeSessionEvent({
+      type: "permission.v2.asked",
+      properties: {
+        id: "per_xyz",
+        sessionID: "ses_1",
+        action: "run a shell command",
+        resources: ["bash"],
+        source: { type: "tool", messageID: "msg_1", callID: "call_ab" },
+      },
+    });
+    const events = decoded === undefined ? [] : opencodeEventToKhalaEvents(decoded, ctx);
+    expect(events).toEqual([]);
+    // The pending approval keys the neutral toolCallId to the opencode per_ id.
+    expect(pendingApprovals.get(opencodeToolCallId("call_ab"))).toBe("per_xyz");
+
+    // The permission routes onto the durable RuntimeInteraction tool_approval model.
+    const payload = opencodePermissionToRuntimeInteractionPayload(
+      decoded as Extract<OpencodeEvent, { type: "permission.v2.asked" }>,
+      toolNames,
+    );
+    expect(payload).toMatchObject({
+      kind: "tool_approval",
+      toolCallId: opencodeToolCallId("call_ab"),
+      toolName: "bash",
+      authority: { status: "operator_escalation_required", allowed: false },
+    });
+  });
+
+  test("the harness decision vocabulary maps onto opencode's reply vocabulary", () => {
+    expect(OPENCODE_APPROVAL_DECISION_TO_REPLY["allow-once"]).toBe("once");
+    expect(OPENCODE_APPROVAL_DECISION_TO_REPLY["allow-session"]).toBe("always");
+    expect(OPENCODE_APPROVAL_DECISION_TO_REPLY.deny).toBe("reject");
+  });
+});
+
+/**
+ * A fixture {@link OpencodeTransport} scripted with real-wire-decoded events.
+ * It records the calls a live transport would make (createSession, prompt,
+ * replyToPermission) so a test can assert the adapter drives the control plane
+ * correctly without a live opencode server.
+ */
+const makeRecordingTransport = (
+  turnEvents: ReadonlyArray<OpencodeWireEvent>,
+): {
+  readonly transport: OpencodeTransport;
+  readonly replies: Array<{ sessionId: string; requestId: string; reply: OpencodePermissionReply }>;
+  readonly created: { count: number };
+} => {
+  const replies: Array<{
+    sessionId: string;
+    requestId: string;
+    reply: OpencodePermissionReply;
+  }> = [];
+  const created = { count: 0 };
+  const decoded = turnEvents.flatMap((w) => {
+    const event = decodeOpencodeSessionEvent(w);
+    return event === undefined ? [] : [event];
+  });
+  const transport: OpencodeTransport = {
+    createSession: () =>
+      Effect.sync(() => {
+        created.count += 1;
+        return { sessionId: "ses_live_1" };
+      }),
+    prompt: () => Effect.succeed(decoded),
+    replyToPermission: (params) =>
+      Effect.sync(() => {
+        replies.push(params);
+      }),
+    shutdown: () => Effect.void,
+  };
+  return { transport, replies, created };
+};
+
+describe("opencode adapter — live transport drive path", () => {
+  test("the adapter creates a session and drives a turn through the injected transport", async () => {
+    const { transport, created } = makeRecordingTransport([
+      WIRE_TEXT_DELTA,
+      WIRE_TOOL_CALLED,
+      WIRE_TOOL_SUCCESS,
+      WIRE_STEP_ENDED,
+    ]);
+    const result = await Effect.runPromise(
+      Effect.gen(function* () {
+        const adapter = makeOpencodeAdapter({ transport });
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "go" });
+        const events = yield* collect(control.events);
+        const done = yield* control.done;
+        return { events, done };
+      }),
+    );
+    expect(created.count).toBe(1);
+    expect(kinds(result.events)).toEqual([
+      "turn.started",
+      "text.delta",
+      "tool.call",
+      "tool.result",
+      "turn.finished",
+    ]);
+    expect(sequences(result.events)).toEqual([0, 1, 2, 3, 4]);
+    expect(result.done.finishReason).toBe("stop");
+  });
+
+  test("a live transport reports builtin-tool approvals; the scripted fixture does not", () => {
+    const { transport } = makeRecordingTransport([WIRE_STEP_ENDED]);
+    expect(makeOpencodeAdapter({ transport }).supportsBuiltinToolApprovals).toBe(true);
+    expect(makeOpencodeAdapter().supportsBuiltinToolApprovals).toBe(false);
+  });
+
+  test("submitToolApproval answers opencode's permission reply endpoint", async () => {
+    const wirePermission: OpencodeWireEvent = {
+      type: "permission.v2.asked",
+      properties: {
+        id: "per_live",
+        sessionID: "ses_live_1",
+        action: "run a shell command",
+        resources: ["bash"],
+        source: { type: "tool", messageID: "msg_1", callID: "call_ab" },
+      },
+    };
+    const { transport, replies } = makeRecordingTransport([
+      WIRE_TOOL_CALLED,
+      wirePermission,
+      WIRE_TOOL_SUCCESS,
+      WIRE_STEP_ENDED,
+    ]);
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const adapter = makeOpencodeAdapter({ transport });
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "go" });
+        // Drain the turn so the permission ask is folded into pending approvals.
+        yield* collect(control.events);
+        yield* control.submitToolApproval(opencodeToolCallId("call_ab"), "allow-once");
+      }),
+    );
+    expect(replies).toEqual([{ sessionId: "ses_live_1", requestId: "per_live", reply: "once" }]);
+  });
+
+  test("a transport createSession failure surfaces as a typed start error", async () => {
+    const failing: OpencodeTransport = {
+      createSession: () =>
+        Effect.fail(
+          new OpencodeTransportError({
+            failureClass: "account_rate_limited",
+            detail: "429 too many requests",
+          }),
+        ),
+      prompt: () => Effect.succeed([]),
+      replyToPermission: () => Effect.void,
+      shutdown: () => Effect.void,
+    };
+    const error = await Effect.runPromise(
+      Effect.gen(function* () {
+        const adapter = makeOpencodeAdapter({ transport: failing });
+        return yield* adapter.start({ sessionId: "s1", source: SOURCE }).pipe(Effect.flip);
+      }),
+    );
+    expect(error.failureClass).toBe("account_rate_limited");
+  });
+
+  test("detach exports the opencode session id and start reuses it (no second create)", async () => {
+    const { transport, created } = makeRecordingTransport([WIRE_STEP_ENDED]);
+    const outcome = await Effect.runPromise(
+      Effect.gen(function* () {
+        const adapter = makeOpencodeAdapter({ transport });
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const resume = yield* session.detach();
+        const resumed = yield* adapter.start({
+          sessionId: "s1",
+          source: SOURCE,
+          resumeFrom: resume,
+        });
+        return { resume, resumed };
+      }),
+    );
+    expect((outcome.resume.data as { opencodeSessionId?: string }).opencodeSessionId).toBe(
+      "ses_live_1",
+    );
+    expect(outcome.resumed.isResume).toBe(true);
+    // One create for the fresh session; the resume reused the exported id.
+    expect(created.count).toBe(1);
+  });
+});
+
+// LIVE SMOKE — NEVER runs in CI (skipped). It documents how to drive a real
+// local opencode server end to end. To run it by hand: start `opencode serve`,
+// implement `OpencodeTransport` over its REST + SSE control plane (see the seam
+// doc in opencode-adapter.ts), point `OPENCODE_BASE_URL` at the printed URL,
+// and change `test.skip` to `test`. The hermetic suite above never needs it.
+describe("opencode adapter — live smoke (skipped)", () => {
+  test.skip("drives a real local opencode server: session create -> prompt -> projected turn", async () => {
+    // 1. `POST {OPENCODE_BASE_URL}/session` -> opencode session id.
+    // 2. Subscribe to `GET {OPENCODE_BASE_URL}/event` (SSE); for each event with
+    //    `properties.sessionID === sessionId`, decode via
+    //    `decodeOpencodeSessionEvent` and buffer non-undefined results.
+    // 3. `POST {OPENCODE_BASE_URL}/session/{sessionId}/message` with
+    //    `{ parts: [{ type: "text", text: prompt }] }`; resolve the buffer when
+    //    `session.next.step.ended` for the assistant message arrives.
+    // 4. Answer any `permission.v2.asked` via
+    //    `POST {OPENCODE_BASE_URL}/api/session/{sessionId}/permission/{id}/reply`.
+    // 5. Wire that as an `OpencodeTransport`, then:
+    //      const adapter = makeOpencodeAdapter({ transport: liveTransport })
+    //      const session = await Effect.runPromise(adapter.start({ sessionId, source: SOURCE }))
+    //      const control = await Effect.runPromise(session.promptTurn({ turnId: "t1", prompt: "..." }))
+    //      const events = await Effect.runPromise(collect(control.events))
+    //    Assert `events[0].kind === "turn.started"` and the last is `turn.finished`.
+    expect(true).toBe(true);
   });
 });
