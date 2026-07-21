@@ -1,0 +1,15 @@
+packages:
+  - packages/*
+  - types/*
+
+allowBuilds:
+  esbuild: true
+  msgpackr-extract: true
+
+catalog:
+  "@types/node": 24.13.1
+  effect: 4.0.0-beta.94
+  typescript: ^6.0.3
+
+overrides:
+  effect: "catalog:"

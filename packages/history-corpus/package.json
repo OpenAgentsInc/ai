@@ -1,0 +1,36 @@
+{
+  "name": "@openagentsinc/history-corpus",
+  "version": "0.1.0",
+  "private": false,
+  "license": "Apache-2.0",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./corpus": "./src/corpus.ts",
+    "./builder": "./src/builder.ts",
+    "./recall": "./src/recall.ts",
+    "./recall-tier-d": "./src/recall-tier-d.ts",
+    "./recursive-recall": "./src/recursive-recall.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vp test --run packages/history-corpus/src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@openagentsinc/agent-harness-contract": "workspace:*",
+    "@openagentsinc/agent-runtime-schema": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/vite-plus-matchers": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@openagentsinc/ai-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "pnpm run fmt:check && vp lint --quiet && pnpm run typecheck && pnpm test",
+    "test": "vp test --run",
+    "typecheck": "vp run --concurrency-limit 2 --filter './**' typecheck",
+    "lint": "vp lint --report-unused-disable-directives",
+    "fmt": "vp fmt",
+    "fmt:check": "vp fmt --check"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vite-plus": "0.2.4"
+  },
+  "engines": {
+    "node": "^24.13.1"
+  },
+  "packageManager": "pnpm@11.10.0"
+}
