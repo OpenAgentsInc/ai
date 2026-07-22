@@ -5,6 +5,7 @@ export const GRAPH_ADAPTER_CAPABILITIES_SCHEMA_ID =
 
 export const GraphAdapterCapability = S.Literals([
   "graph_read",
+  "rlm_v2_projection",
   "vector_read",
   "hybrid_query",
   "atomic_graph_vector_projection",

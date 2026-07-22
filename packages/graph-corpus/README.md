@@ -15,7 +15,9 @@ The package supplies:
 - descriptive adapter capabilities with typed unsupported-operation errors;
 - a pure, source-outward delete planner with complete artifact accounting;
 - digest-bound host execution-result and receipt contracts; and
-- exact RLM source locators without an RLM projection or query adapter.
+- an immutable RLM v2 projection with exact graph and original source
+  locators; and
+- bounded graph lookup, traversal, source expansion, and safe text search.
 
 ```ts
 import {
@@ -86,13 +88,55 @@ after-state digest. This package does not execute the plan.
 
 ## Adapter capabilities
 
-`GraphAdapterCapabilities` declares observed support for graph read, vector
-read, hybrid query, atomic graph-vector projection, provenance delete
-planning, and snapshot export. `requireGraphAdapterCapability` returns a typed
-error for an operation that the adapter does not declare. A capability value
-does not grant host authority.
+`GraphAdapterCapabilities` declares observed support for graph read, RLM v2
+projection, vector read, hybrid query, atomic graph-vector projection,
+provenance delete planning, and snapshot export.
+`requireGraphAdapterCapability` returns a typed error for an operation that the
+adapter does not declare. A capability value does not grant host authority.
 
-The embedding descriptor identifies fields and dimensions only. Issue #35 owns
-the later RLM projection. This package does not store vectors. Delete execution,
-ranking mutation, archive, query, extraction, model, and database operations
-are outside this package.
+## RLM v2 graph projection
+
+`makeGraphRlmProjection` adapts one verified graph snapshot to one RLM v2
+corpus. The graph and RLM identities are separate. Each RLM entry has a graph
+element address that binds the graph ref, scope, graph digest, and manifest
+digest. Each entry also keeps its complete set of original RLM source
+locators.
+
+The caller must supply the `rlm_v2_projection` capability and a complete
+classification projection. The classification gives one visibility and one
+redaction class for each readable graph element. Its digest binds it to the
+graph and to the complete identity, policy, and coverage of each supporting
+leaf corpus. The classification must be the most restrictive visibility and
+redaction class in the supporting source set. The adapter rejects a missing
+element, a duplicate element, a composite support handle, a policy widening,
+or a stale digest.
+
+`makeGraphRlmCorpusSource` resolves only registered, exact graph source refs.
+The projected handle checks the graph, classification, and authorized
+supporting corpora before each read. This check makes graph citations and their
+original supporting locators valid through the RLM citation interface.
+
+The graph operators require all six limits: depth, visited elements, returned
+elements, source addresses, characters per result, and total observation
+characters. Each result is `Complete` or `Truncated`. A truncated result lists
+each limit that it hit. Text search reads only canonical identity keys and
+relation kinds. It does not read source text.
+
+Vector and hybrid search are optional callbacks. They require exact adapter
+capabilities, a current complete vector inventory, and a complete retrieval
+binding. The retrieval binding joins each vector artifact and owner to one
+explicit embedding descriptor, schema, and dimension. Requests and responses
+bind all graph, inventory, retrieval, descriptor, and limit values. Scores use
+fixed-point micro-units. The adapter rejects stale inventories, incomplete
+bindings, oversized responses, and result refs that are not in the current
+graph.
+
+This adapter uses the graph package's hard-capped in-memory snapshot. Projection
+is eager. Source resolution does not scan or materialize the RLM corpus and does
+not call an optional search adapter. This package does not claim out-of-core
+graph support.
+
+The embedding descriptor identifies fields and dimensions only. This package
+does not store vectors. Natural-language graph queries, Cypher, model calls,
+ranking feedback, storage, delete execution, and product wiring are outside
+this package.

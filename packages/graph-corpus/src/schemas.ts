@@ -37,6 +37,18 @@ export type GraphDigest = typeof GraphDigest.Type;
 export const GraphElementKind = S.Literals(["mention", "entity", "relation"]);
 export type GraphElementKind = typeof GraphElementKind.Type;
 
+/** Canonical address for one readable element in one immutable graph snapshot. */
+export const GraphElementAddress = S.Struct({
+  schemaId: S.Literal(GRAPH_ELEMENT_ADDRESS_SCHEMA_ID),
+  graphRef: GraphRef,
+  scopeRef: GraphScopeRef,
+  graphDigest: GraphDigest,
+  manifestDigest: GraphDigest,
+  elementKind: GraphElementKind,
+  elementRef: GraphElementRef,
+});
+export type GraphElementAddress = typeof GraphElementAddress.Type;
+
 const isWellFormedUnicode = (value: string): boolean => {
   for (let index = 0; index < value.length; index++) {
     const code = value.charCodeAt(index);
