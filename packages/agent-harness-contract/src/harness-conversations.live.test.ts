@@ -29,6 +29,8 @@ import { makeCodexHarnessAdapter } from "./codex-adapter.ts";
 import { makeLiveCodexExecSpawner } from "./codex-exec-live-spawner.ts";
 import { runHarnessConversation } from "./harness-conversation-driver.ts";
 import { makeAcpHarnessAdapter } from "./acp-adapter.ts";
+import { makeCursorHarnessAdapter } from "./cursor-adapter.ts";
+import { makeLiveCursorAcpTransport } from "./cursor-acp-live-transport.ts";
 import { makeLiveGrokAcpTransport } from "./grok-acp-live-transport.ts";
 import { makeOpencodeAdapter } from "./opencode-adapter.ts";
 import { makeLiveOpencodeTransport } from "./opencode-live-transport.ts";
@@ -57,6 +59,11 @@ const grokBinary = [
   join(homedir(), ".grok", "bin", "grok"),
   "/opt/homebrew/bin/grok",
   "/usr/local/bin/grok",
+].find((path) => existsSync(path));
+
+const cursorBinary = [
+  join(homedir(), ".local", "bin", "cursor-agent"),
+  "/opt/homebrew/bin/cursor-agent",
 ].find((path) => existsSync(path));
 
 const opencodeBinary = [
@@ -208,4 +215,44 @@ describe.skipIf(!live)("multi-turn LIVE conversations per harness", () => {
     expect(result.turns[1].answer).toContain("42");
     expect(result.turns[2].answer).toContain("51");
   });
+
+  test(
+    "cursor (ACP): three turns with continuity and correction",
+    { timeout: 900_000 },
+    async () => {
+      expect(cursorBinary).toBeDefined();
+      const workdir = mkdtempSync(join(tmpdir(), "oa-convo-cursor-"));
+      const source: KhalaRuntimeSource = {
+        lane: "agent_client_protocol",
+        adapterKind: "cursor_cli",
+      };
+      const result = await Effect.runPromise(
+        Effect.gen(function* () {
+          const transport = yield* makeLiveCursorAcpTransport({
+            binaryPath: cursorBinary as string,
+            cwd: workdir,
+          });
+          const adapter = makeCursorHarnessAdapter({
+            cursorAgentPath: cursorBinary as string,
+            transport,
+          });
+          const conversation = yield* runHarnessConversation({
+            adapter,
+            lane: "cursor-local",
+            model: "cursor-default",
+            source,
+            sessionId: `convo-cursor-${process.pid}`,
+            userTurns: USER_TURNS,
+          });
+          yield* transport.shutdown();
+          return conversation;
+        }),
+      );
+      console.log(`transcript: ${writeTranscript("cursor", result.transcriptLines)}`);
+      report(result);
+      expect(result.turns).toHaveLength(3);
+      expect(result.turns[1].answer).toContain("42");
+      expect(result.turns[2].answer).toContain("51");
+    },
+  );
 });

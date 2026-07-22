@@ -5,6 +5,7 @@ import type {
 } from "@openagentsinc/agent-runtime-schema";
 import type { AcpAdapterEvent } from "./acp-adapter.ts";
 import { makeAcpHarnessAdapter } from "./acp-adapter.ts";
+import type { AcpTransport } from "./acp-adapter.ts";
 import type { AgentHarness, HarnessStartOptions } from "./adapter.ts";
 import { HarnessStartError } from "./adapter.ts";
 import type { HarnessBuiltinTool } from "./common-tool.ts";
@@ -358,6 +359,8 @@ export const cursorAcpFailureTurnScript: ReadonlyArray<AcpAdapterEvent> = [
 
 /** Configuration for {@link makeCursorHarnessAdapter}. */
 export interface CursorHarnessAdapterConfig {
+  /** Live ACP peer transport; overrides the scripted turn when present. */
+  readonly transport?: AcpTransport;
   /**
    * The resolved absolute (or PATH-resolvable) `cursor-agent` executable,
    * INJECTED by the caller after resolving it via {@link CURSOR_AGENT_DISCOVERY}.
@@ -397,6 +400,7 @@ export const makeCursorHarnessAdapter = (config: CursorHarnessAdapterConfig): Ag
     adapterKind: CURSOR_PEER_PROFILE.adapterKind,
     builtinTools: CURSOR_BUILTIN_TOOLS,
     script: config.script ?? cursorAcpTurnScript,
+    ...(config.transport === undefined ? {} : { transport: config.transport }),
     supportsSuspend: flags.supportsSuspend,
     supportsContinue: flags.supportsContinue,
     continueIsLossy: flags.continueIsLossy,
