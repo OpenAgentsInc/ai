@@ -10,7 +10,7 @@ monorepo.
 ## Where the SDK is today
 
 Extracted 2026-07-21 from the openagents monorepo. Apache-2.0. Published rc
-trains through `0.2.0-rc.7`. The monorepo consumes the train from npm and
+trains through `0.2.1-rc.2`. The monorepo consumes the train from npm and
 deleted its in-tree copies. Layers L0–L6 are live: the
 `effect/unstable/ai` model bridge (`ai-model`), the `KhalaRuntimeEvent`
 vocabulary (`agent-runtime-schema`), the durable seq-cursor event log, the
@@ -320,10 +320,11 @@ SDK-MEM-09 (#38) implements these reusable laws in
 `@openagentsinc/conformance-kit`. Each operation under test is injected into a
 law runner. Public fixtures cover same-name identity, explicit merges, shared
 deletion, prompt injection, stale corpora, unsupported capabilities,
-ranking-only changes, and archive corruption. The `0.2.1-rc.2` candidate train
+ranking-only changes, and archive corruption. The published `0.2.1-rc.2` train
 adds granular conformance exports, `@openagentsinc/ai/graph/ranking`,
 `@openagentsinc/ai/graph/archive`, and the optional
-`@openagentsinc/ai/conformance` subpath.
+`@openagentsinc/ai/conformance` subpath. The release receipt is in
+[`releases/2026-07-22-ai-sdk-graph-memory-0.2.1-rc.2.md`](./releases/2026-07-22-ai-sdk-graph-memory-0.2.1-rc.2.md).
 
 The phase is implemented only when the packages and laws are merged and the
 OpenAgents consumer has completed its separate authority and durable-adapter
