@@ -54,6 +54,9 @@ L0  MODEL CALL    effect/unstable/ai (upstream, consumed, never forked)
                   + @openagentsinc/ai-model — the LanguageModel
                   Layer over the existing transport, bidirectional
                   StreamPart maps
+------------------------------------------------------------------
+P   PROGRAMS      @openagentsinc/dse — typed signatures, immutable
+                  artifacts, portable runtime, explicit optimizer
 ```
 
 ## The roster
@@ -67,6 +70,7 @@ L0  MODEL CALL    effect/unstable/ai (upstream, consumed, never forked)
 | `@openagentsinc/agent-harness-contract` | L4 harness     | `AgentHarness` adapters, session verbs, readiness projection, skills, host tools                   |
 | `@openagentsinc/agent-harness-contract` | L5 UI stream   | UI message chunks, progressive reducer, smooth stream, partial-object stream                       |
 | `@openagentsinc/history-corpus`         | L6 recall      | Corpus export, `HistoryRecall` contract, deterministic Tier D recall                               |
+| `@openagentsinc/dse`                    | programs       | Effect Schema signatures, immutable artifacts, prediction receipts, bounded offline optimizer      |
 
 ## The subpaths
 
@@ -80,6 +84,11 @@ The umbrella exports curated per-layer subpaths that mirror the diagram:
 - `@openagentsinc/ai/harness` — L4
 - `@openagentsinc/ai/ui-stream` — L5
 - `@openagentsinc/ai/recall` — L6
+- `@openagentsinc/ai/program` — DSE contract plus portable runtime
+- `@openagentsinc/ai/program/contract` — DSE schemas and pure contracts
+- `@openagentsinc/ai/program/runtime` — prediction, resolution, and event projection
+- `@openagentsinc/ai/program/optimizer` — explicit offline compiler
+- `@openagentsinc/ai/program/test` — deterministic fixtures
 
 ## Usage
 

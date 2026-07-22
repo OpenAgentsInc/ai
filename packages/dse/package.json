@@ -1,0 +1,37 @@
+{
+  "name": "@openagentsinc/dse",
+  "version": "0.2.0-rc.3",
+  "private": false,
+  "description": "Effect-native typed model programs, immutable compilation artifacts, bounded optimization, and receipted prediction.",
+  "license": "Apache-2.0",
+  "files": [
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./contract": "./src/contract/index.ts",
+    "./runtime": "./src/runtime/index.ts",
+    "./optimizer": "./src/optimizer/index.ts",
+    "./test": "./src/test-support.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vp test --run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@openagentsinc/agent-runtime-schema": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/vite-plus-matchers": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

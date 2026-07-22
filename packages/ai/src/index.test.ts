@@ -14,6 +14,11 @@ import * as Sandbox from "@openagentsinc/ai/sandbox";
 import * as Harness from "@openagentsinc/ai/harness";
 import * as UiStream from "@openagentsinc/ai/ui-stream";
 import * as Recall from "@openagentsinc/ai/recall";
+import * as Program from "@openagentsinc/ai/program";
+import * as ProgramContract from "@openagentsinc/ai/program/contract";
+import * as ProgramRuntime from "@openagentsinc/ai/program/runtime";
+import * as ProgramOptimizer from "@openagentsinc/ai/program/optimizer";
+import * as ProgramTest from "@openagentsinc/ai/program/test";
 
 describe("@openagentsinc/ai umbrella root", () => {
   test("re-exports the key symbol of every layer", () => {
@@ -36,6 +41,10 @@ describe("@openagentsinc/ai umbrella root", () => {
     // L6 recall
     expect(typeof Root.buildHistoryCorpus).toBe("function");
     expect(typeof Root.recallTierD).toBe("function");
+    // Canonical model programs
+    expect(typeof Root.Dse.bindProgram).toBe("function");
+    expect(typeof Root.Dse.predict).toBe("function");
+    expect(typeof Root.Dse.predictReceiptToRuntimeEvents).toBe("function");
   });
 
   test("the one audited shared name resolves to the single schema binding", () => {
@@ -89,5 +98,16 @@ describe("@openagentsinc/ai layer subpaths", () => {
     expect(typeof Recall.buildHistoryCorpus).toBe("function");
     expect(typeof Recall.recallTierD).toBe("function");
     expect(Recall.buildHistoryCorpus).toBe(Root.buildHistoryCorpus);
+  });
+
+  test("./program exports DSE while compile authority stays explicit", () => {
+    expect(Program.bindProgram).toBe(Root.Dse.bindProgram);
+    expect(ProgramContract.makeSignature).toBe(Root.Dse.makeSignature);
+    expect(ProgramRuntime.predict).toBe(Root.Dse.predict);
+    expect(typeof ProgramRuntime.predictReceiptToRuntimeEvents).toBe("function");
+    expect(typeof ProgramOptimizer.compileSignature).toBe("function");
+    expect(typeof ProgramTest.honestDataset).toBe("function");
+    expect("compileSignature" in Program).toBe(false);
+    expect("promote" in ProgramRuntime).toBe(false);
   });
 });

@@ -4294,11 +4294,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "7f1a5b28b7b8a66a"
+              "sig": "8a74400ac64a06cd"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "7f1a5b28b7b8a66a"
+              "sig": "8a74400ac64a06cd"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -4908,6 +4908,10 @@
               "kind": "value",
               "sig": "7dce9bb9b1252560"
             },
+            "Dse": {
+              "kind": "alias",
+              "sig": "eb5821bd5c64c9d6"
+            },
             "EditorAnchor": {
               "kind": "type",
               "sig": "2e84290fbeeab961"
@@ -5082,7 +5086,7 @@
             },
             "HarnessAgentStreamError": {
               "kind": "type",
-              "sig": "3ab2f0674d7d49dd"
+              "sig": "647510ff40630152"
             },
             "HarnessAgentStreamResult": {
               "kind": "interface",
@@ -5350,7 +5354,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "81859b0c6cf1e645"
+              "sig": "2aba2672faa201b0"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -5442,7 +5446,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "94f47615a0ad8356"
+              "sig": "075d08b0e93e7364"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -5482,7 +5486,7 @@
             },
             "InferenceProviderDescriptor": {
               "kind": "type",
-              "sig": "78b47c3627429581"
+              "sig": "2b25c72a4eb41f54"
             },
             "initialUiMessage": {
               "kind": "value",
@@ -6654,7 +6658,7 @@
             },
             "ThreadEventAuthorityProjection": {
               "kind": "type",
-              "sig": "a14a17ef31b038a5"
+              "sig": "8ae4bb408e74b2d9"
             },
             "ThreadEventAuthorityRelation": {
               "kind": "type",
@@ -7156,11 +7160,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "7f1a5b28b7b8a66a"
+              "sig": "8a74400ac64a06cd"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "7f1a5b28b7b8a66a"
+              "sig": "8a74400ac64a06cd"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -7752,7 +7756,7 @@
             },
             "HarnessAgentStreamError": {
               "kind": "type",
-              "sig": "3ab2f0674d7d49dd"
+              "sig": "647510ff40630152"
             },
             "HarnessAgentStreamResult": {
               "kind": "interface",
@@ -8693,6 +8697,1287 @@
             }
           }
         },
+        "./program": {
+          "source": "./src/program.ts",
+          "exports": {
+            "abortCanary": {
+              "kind": "value",
+              "sig": "2ca29f229036e9d2"
+            },
+            "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ActivationDecision": {
+              "kind": "type",
+              "sig": "f1a4010f20377fe6"
+            },
+            "ActivationReceipt": {
+              "kind": "type",
+              "sig": "28bcf4eb4124ba0a"
+            },
+            "ActivationRefusalReason": {
+              "kind": "type",
+              "sig": "0dab2baeee790372"
+            },
+            "ActivationResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "ActivationTransition": {
+              "kind": "type",
+              "sig": "82057dd964a7dc3b"
+            },
+            "ArtifactResolutionError": {
+              "kind": "class",
+              "sig": "7089331db10462e5"
+            },
+            "BASELINE_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "BaselinePointer": {
+              "kind": "type",
+              "sig": "b63b4e61acaedabc"
+            },
+            "beginCanary": {
+              "kind": "value",
+              "sig": "15ede4738a133da6"
+            },
+            "beginShadow": {
+              "kind": "value",
+              "sig": "177478974435edcd"
+            },
+            "bindProgram": {
+              "kind": "value",
+              "sig": "0bc6bef9835df688"
+            },
+            "BindProgramResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "buildDatasetSplit": {
+              "kind": "value",
+              "sig": "b2d11b6acf187a81"
+            },
+            "CANARY_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "CanaryPlan": {
+              "kind": "type",
+              "sig": "3d85a49bdff0ea84"
+            },
+            "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "CandidateArtifact": {
+              "kind": "type",
+              "sig": "4afe7156f6df6eb8"
+            },
+            "candidateArtifactDigest": {
+              "kind": "value",
+              "sig": "e9882a1267a11cb0"
+            },
+            "candidateId": {
+              "kind": "value",
+              "sig": "b4170070fa6f7abb"
+            },
+            "CandidateId": {
+              "kind": "type",
+              "sig": "c1e9050575c2b39d"
+            },
+            "catalogClaimHolds": {
+              "kind": "value",
+              "sig": "7c86ce4a6fa3a89e"
+            },
+            "ClaimedAction": {
+              "kind": "type",
+              "sig": "f0152825b6a5c9b0"
+            },
+            "COMPILED_PROGRAM_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "CompiledProgram": {
+              "kind": "type",
+              "sig": "9a21bdaa7d363b3f"
+            },
+            "DATASET_REVISION_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "DATASET_SPLIT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "datasetId": {
+              "kind": "value",
+              "sig": "88720406c001ac7d"
+            },
+            "DatasetId": {
+              "kind": "type",
+              "sig": "ac1f5a4c163a9019"
+            },
+            "DatasetRevision": {
+              "kind": "type",
+              "sig": "076d901a3d31c261"
+            },
+            "datasetRevisionId": {
+              "kind": "value",
+              "sig": "085ca8a50f10183d"
+            },
+            "DatasetRevisionId": {
+              "kind": "type",
+              "sig": "6dc5dc70443ae053"
+            },
+            "DatasetSplit": {
+              "kind": "type",
+              "sig": "3abcf688a570e3cd"
+            },
+            "DatasetSplitFailure": {
+              "kind": "type",
+              "sig": "0dab2baeee790372"
+            },
+            "DatasetSplitName": {
+              "kind": "type",
+              "sig": "2c05c830b6a90d73"
+            },
+            "DatasetSplitResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "DecodePolicy": {
+              "kind": "type",
+              "sig": "208d4e468db93197"
+            },
+            "DEFAULT_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "defaultResourceBudget": {
+              "kind": "value",
+              "sig": "a6b008fa76e607bb"
+            },
+            "deriveSignatureCatalog": {
+              "kind": "value",
+              "sig": "2dba2f46580113fa"
+            },
+            "DseCompletion": {
+              "kind": "interface",
+              "sig": "b927e624a97dccd3"
+            },
+            "DseDecodeError": {
+              "kind": "class",
+              "sig": "cfdbe9b470348081"
+            },
+            "DseModel": {
+              "kind": "class",
+              "sig": "a3503d4d56ab428d"
+            },
+            "DseModelError": {
+              "kind": "class",
+              "sig": "2164c2f13b730181"
+            },
+            "DseModelInterface": {
+              "kind": "interface",
+              "sig": "b65f0a8351cd19a0"
+            },
+            "DsePredictUsageCounts": {
+              "kind": "type",
+              "sig": "b4ce59dc740f5c1b"
+            },
+            "DseProgram": {
+              "kind": "interface",
+              "sig": "bf526e31593807b5"
+            },
+            "DseSignature": {
+              "kind": "interface",
+              "sig": "240260cce0efbe34"
+            },
+            "DseTimestamp": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "DseUsageTruth": {
+              "kind": "type",
+              "sig": "bb406e82cbf6301d"
+            },
+            "EVALUATION_REPORT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "EvaluationReport": {
+              "kind": "type",
+              "sig": "8f3187b5211ee66a"
+            },
+            "exampleId": {
+              "kind": "value",
+              "sig": "7c7449b9d7c9e44e"
+            },
+            "ExampleId": {
+              "kind": "type",
+              "sig": "ad787db064eb2fcd"
+            },
+            "ExampleScore": {
+              "kind": "type",
+              "sig": "1a9d38322fd65581"
+            },
+            "FieldDescriptor": {
+              "kind": "type",
+              "sig": "4a4f4b72c865222e"
+            },
+            "HonestChatReplyInput": {
+              "kind": "type",
+              "sig": "04b0f57603cabbef"
+            },
+            "HonestChatReplyOutput": {
+              "kind": "type",
+              "sig": "6d315e8e50bd46b2"
+            },
+            "honestChatReplySignature": {
+              "kind": "value",
+              "sig": "4449c13d59b065c5"
+            },
+            "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "IndependentReviewResult": {
+              "kind": "type",
+              "sig": "9967904c86d11710"
+            },
+            "indexExamples": {
+              "kind": "value",
+              "sig": "fbe796ba8f143789"
+            },
+            "LabeledExample": {
+              "kind": "type",
+              "sig": "2347504fad1895e1"
+            },
+            "makeBaselinePointer": {
+              "kind": "value",
+              "sig": "8a34fc1aa7ee03e8"
+            },
+            "makeCandidateArtifact": {
+              "kind": "value",
+              "sig": "237cb1d8e152f255"
+            },
+            "makeDatasetRevision": {
+              "kind": "value",
+              "sig": "3769a2084b4e0d5a"
+            },
+            "makeSearchPlan": {
+              "kind": "value",
+              "sig": "893819061eb28048"
+            },
+            "makeSignature": {
+              "kind": "value",
+              "sig": "17db4c27a92bae92"
+            },
+            "MakeSignatureArgs": {
+              "kind": "interface",
+              "sig": "8e5da158952a3d74"
+            },
+            "MAX_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "Metric": {
+              "kind": "interface",
+              "sig": "3c0fcb46759afbda"
+            },
+            "MetricComponent": {
+              "kind": "type",
+              "sig": "9915306f2197c101"
+            },
+            "predict": {
+              "kind": "value",
+              "sig": "0ebbfb2641706d66"
+            },
+            "PREDICT_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "PredictArgs": {
+              "kind": "interface",
+              "sig": "4497007cffbad38f"
+            },
+            "PredictDeps": {
+              "kind": "interface",
+              "sig": "a8f8b946af4a3b6d"
+            },
+            "PredictEventProjectionContext": {
+              "kind": "interface",
+              "sig": "734798586fe73cfa"
+            },
+            "PredictOutcome": {
+              "kind": "interface",
+              "sig": "729d4992148c47ad"
+            },
+            "PredictReceipt": {
+              "kind": "type",
+              "sig": "067f4e567f46e751"
+            },
+            "predictReceiptToRuntimeEvents": {
+              "kind": "value",
+              "sig": "0fceaced6b3112ef"
+            },
+            "producerId": {
+              "kind": "value",
+              "sig": "62c9edb5b5014d0b"
+            },
+            "ProducerId": {
+              "kind": "type",
+              "sig": "6c578ec93bef435f"
+            },
+            "ProducerIdentity": {
+              "kind": "type",
+              "sig": "23ce12db309941c6"
+            },
+            "Program": {
+              "kind": "type",
+              "sig": "bf526e31593807b5"
+            },
+            "promoteActivation": {
+              "kind": "value",
+              "sig": "2ca29f229036e9d2"
+            },
+            "PROMOTION_REQUEST_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "promotionId": {
+              "kind": "value",
+              "sig": "262ae16a8641c3b5"
+            },
+            "PromotionId": {
+              "kind": "type",
+              "sig": "d35ab54427cebc04"
+            },
+            "PromotionRefusalReason": {
+              "kind": "type",
+              "sig": "0dab2baeee790372"
+            },
+            "PromotionRequest": {
+              "kind": "type",
+              "sig": "ad623b2c5f2d4653"
+            },
+            "PROMPT_IR_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "PromptIr": {
+              "kind": "type",
+              "sig": "ff21ca556480f58c"
+            },
+            "receiptId": {
+              "kind": "value",
+              "sig": "9a2c4d8d32c1b9d2"
+            },
+            "ReceiptId": {
+              "kind": "type",
+              "sig": "88c9aa990f6f254e"
+            },
+            "RELEASE_CHANNEL_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ReleaseChannel": {
+              "kind": "type",
+              "sig": "4178de6fd61ea0e2"
+            },
+            "RELEASED_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ReleasedArtifactPointer": {
+              "kind": "type",
+              "sig": "83b1dcb9eac35c1f"
+            },
+            "releasedArtifactRefFor": {
+              "kind": "value",
+              "sig": "7d811d7e43635309"
+            },
+            "ReleasedArtifactType": {
+              "kind": "alias",
+              "sig": "8273a59953daf003"
+            },
+            "ReleaseMode": {
+              "kind": "type",
+              "sig": "3bc1743ccbba4ee6"
+            },
+            "renderPrompt": {
+              "kind": "value",
+              "sig": "731cc71aa52b5c09"
+            },
+            "resolveActivation": {
+              "kind": "value",
+              "sig": "c1759a6fe5cca382"
+            },
+            "ResolveActivationArgs": {
+              "kind": "interface",
+              "sig": "a29b56d97e411110"
+            },
+            "ResolveArgs": {
+              "kind": "interface",
+              "sig": "2fa35c66c58af413"
+            },
+            "ResolvedArtifact": {
+              "kind": "interface",
+              "sig": "630b4609b05619e1"
+            },
+            "resolveReleasedArtifact": {
+              "kind": "value",
+              "sig": "4656df57b1c6d364"
+            },
+            "RESOURCE_BUDGET_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ResourceBudget": {
+              "kind": "type",
+              "sig": "e35bf3557e85f3f1"
+            },
+            "reviewerId": {
+              "kind": "value",
+              "sig": "42f8231cf64f8e6a"
+            },
+            "ReviewerId": {
+              "kind": "type",
+              "sig": "5f19d02e136390c8"
+            },
+            "ReviewerIdentity": {
+              "kind": "type",
+              "sig": "a09098b94d00597d"
+            },
+            "rewardBundle": {
+              "kind": "value",
+              "sig": "68cf66c18ed78112"
+            },
+            "rollback": {
+              "kind": "value",
+              "sig": "b1ac5bd9a1bc940e"
+            },
+            "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "rollbackActivation": {
+              "kind": "value",
+              "sig": "2ca29f229036e9d2"
+            },
+            "RollbackArgs": {
+              "kind": "interface",
+              "sig": "0771c87f391c2a3f"
+            },
+            "RollbackReceipt": {
+              "kind": "type",
+              "sig": "58da7e5e98d27e66"
+            },
+            "RollbackResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "RouteDecision": {
+              "kind": "type",
+              "sig": "e5c0583b6560d49c"
+            },
+            "SEARCH_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "SearchAlgorithm": {
+              "kind": "type",
+              "sig": "b50e2a5c9e088761"
+            },
+            "SearchPlan": {
+              "kind": "type",
+              "sig": "0c2eaf0c21850749"
+            },
+            "Sha256Hex": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "SIGNATURE_CATALOG": {
+              "kind": "value",
+              "sig": "bbfc2aab7860424d"
+            },
+            "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "SIGNATURE_REGISTRY": {
+              "kind": "value",
+              "sig": "bb3c2e866e9e9380"
+            },
+            "SignatureCatalog": {
+              "kind": "type",
+              "sig": "5bda45b05e9f7cae"
+            },
+            "SignatureCatalogEntry": {
+              "kind": "type",
+              "sig": "7e4e8939b403bead"
+            },
+            "SignatureContract": {
+              "kind": "type",
+              "sig": "f89f5457801a96ff"
+            },
+            "signatureId": {
+              "kind": "value",
+              "sig": "a2ba61f26e7896c0"
+            },
+            "SignatureId": {
+              "kind": "type",
+              "sig": "e784ee7bd7ec0e7c"
+            },
+            "SignatureRegistryEntry": {
+              "kind": "interface",
+              "sig": "9d5c95bc58d34d9a"
+            },
+            "ThermalLevel": {
+              "kind": "type",
+              "sig": "e9bf843ab767e8f0"
+            },
+            "TriageRouteInput": {
+              "kind": "type",
+              "sig": "09400550488b9dd8"
+            },
+            "TriageRouteOutput": {
+              "kind": "type",
+              "sig": "df6f8852aa18c125"
+            },
+            "triageRouteSignature": {
+              "kind": "value",
+              "sig": "499e933226ad232f"
+            },
+            "TurnRouteInput": {
+              "kind": "type",
+              "sig": "4cef581c30059735"
+            },
+            "TurnRouteOutput": {
+              "kind": "type",
+              "sig": "7a76e9aa9c428aa7"
+            },
+            "turnRouteSignature": {
+              "kind": "value",
+              "sig": "f5565400088533b7"
+            },
+            "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "UncertaintyMethod": {
+              "kind": "type",
+              "sig": "79c0841140b8c21a"
+            },
+            "UncertaintyRecord": {
+              "kind": "type",
+              "sig": "885587c8ee22eaa7"
+            }
+          }
+        },
+        "./program/contract": {
+          "source": "./src/program-contract.ts",
+          "exports": {
+            "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ActivationReceipt": {
+              "kind": "type",
+              "sig": "28bcf4eb4124ba0a"
+            },
+            "ActivationTransition": {
+              "kind": "type",
+              "sig": "82057dd964a7dc3b"
+            },
+            "BASELINE_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "BaselinePointer": {
+              "kind": "type",
+              "sig": "b63b4e61acaedabc"
+            },
+            "bindProgram": {
+              "kind": "value",
+              "sig": "0bc6bef9835df688"
+            },
+            "BindProgramResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "buildDatasetSplit": {
+              "kind": "value",
+              "sig": "b2d11b6acf187a81"
+            },
+            "CANARY_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "CanaryPlan": {
+              "kind": "type",
+              "sig": "3d85a49bdff0ea84"
+            },
+            "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "CandidateArtifact": {
+              "kind": "type",
+              "sig": "4afe7156f6df6eb8"
+            },
+            "candidateArtifactDigest": {
+              "kind": "value",
+              "sig": "e9882a1267a11cb0"
+            },
+            "candidateId": {
+              "kind": "value",
+              "sig": "b4170070fa6f7abb"
+            },
+            "CandidateId": {
+              "kind": "type",
+              "sig": "c1e9050575c2b39d"
+            },
+            "catalogClaimHolds": {
+              "kind": "value",
+              "sig": "7c86ce4a6fa3a89e"
+            },
+            "ClaimedAction": {
+              "kind": "type",
+              "sig": "f0152825b6a5c9b0"
+            },
+            "COMPILED_PROGRAM_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "CompiledProgram": {
+              "kind": "type",
+              "sig": "9a21bdaa7d363b3f"
+            },
+            "DATASET_REVISION_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "DATASET_SPLIT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "datasetId": {
+              "kind": "value",
+              "sig": "88720406c001ac7d"
+            },
+            "DatasetId": {
+              "kind": "type",
+              "sig": "ac1f5a4c163a9019"
+            },
+            "DatasetRevision": {
+              "kind": "type",
+              "sig": "076d901a3d31c261"
+            },
+            "datasetRevisionId": {
+              "kind": "value",
+              "sig": "085ca8a50f10183d"
+            },
+            "DatasetRevisionId": {
+              "kind": "type",
+              "sig": "6dc5dc70443ae053"
+            },
+            "DatasetSplit": {
+              "kind": "type",
+              "sig": "3abcf688a570e3cd"
+            },
+            "DatasetSplitFailure": {
+              "kind": "type",
+              "sig": "0dab2baeee790372"
+            },
+            "DatasetSplitName": {
+              "kind": "type",
+              "sig": "2c05c830b6a90d73"
+            },
+            "DatasetSplitResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "DecodePolicy": {
+              "kind": "type",
+              "sig": "208d4e468db93197"
+            },
+            "DEFAULT_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "defaultResourceBudget": {
+              "kind": "value",
+              "sig": "a6b008fa76e607bb"
+            },
+            "deriveSignatureCatalog": {
+              "kind": "value",
+              "sig": "2dba2f46580113fa"
+            },
+            "DseProgram": {
+              "kind": "interface",
+              "sig": "bf526e31593807b5"
+            },
+            "DseSignature": {
+              "kind": "interface",
+              "sig": "240260cce0efbe34"
+            },
+            "DseTimestamp": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "DseUsageTruth": {
+              "kind": "type",
+              "sig": "bb406e82cbf6301d"
+            },
+            "EVALUATION_REPORT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "EvaluationReport": {
+              "kind": "type",
+              "sig": "8f3187b5211ee66a"
+            },
+            "exampleId": {
+              "kind": "value",
+              "sig": "7c7449b9d7c9e44e"
+            },
+            "ExampleId": {
+              "kind": "type",
+              "sig": "ad787db064eb2fcd"
+            },
+            "ExampleScore": {
+              "kind": "type",
+              "sig": "1a9d38322fd65581"
+            },
+            "FieldDescriptor": {
+              "kind": "type",
+              "sig": "4a4f4b72c865222e"
+            },
+            "HonestChatReplyInput": {
+              "kind": "type",
+              "sig": "04b0f57603cabbef"
+            },
+            "HonestChatReplyOutput": {
+              "kind": "type",
+              "sig": "6d315e8e50bd46b2"
+            },
+            "honestChatReplySignature": {
+              "kind": "value",
+              "sig": "4449c13d59b065c5"
+            },
+            "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "IndependentReviewResult": {
+              "kind": "type",
+              "sig": "9967904c86d11710"
+            },
+            "indexExamples": {
+              "kind": "value",
+              "sig": "fbe796ba8f143789"
+            },
+            "LabeledExample": {
+              "kind": "type",
+              "sig": "2347504fad1895e1"
+            },
+            "makeBaselinePointer": {
+              "kind": "value",
+              "sig": "8a34fc1aa7ee03e8"
+            },
+            "makeCandidateArtifact": {
+              "kind": "value",
+              "sig": "237cb1d8e152f255"
+            },
+            "makeDatasetRevision": {
+              "kind": "value",
+              "sig": "3769a2084b4e0d5a"
+            },
+            "makeSearchPlan": {
+              "kind": "value",
+              "sig": "893819061eb28048"
+            },
+            "makeSignature": {
+              "kind": "value",
+              "sig": "17db4c27a92bae92"
+            },
+            "MakeSignatureArgs": {
+              "kind": "interface",
+              "sig": "8e5da158952a3d74"
+            },
+            "MAX_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "Metric": {
+              "kind": "interface",
+              "sig": "3c0fcb46759afbda"
+            },
+            "MetricComponent": {
+              "kind": "type",
+              "sig": "9915306f2197c101"
+            },
+            "PREDICT_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "PredictReceipt": {
+              "kind": "type",
+              "sig": "067f4e567f46e751"
+            },
+            "producerId": {
+              "kind": "value",
+              "sig": "62c9edb5b5014d0b"
+            },
+            "ProducerId": {
+              "kind": "type",
+              "sig": "6c578ec93bef435f"
+            },
+            "ProducerIdentity": {
+              "kind": "type",
+              "sig": "23ce12db309941c6"
+            },
+            "Program": {
+              "kind": "type",
+              "sig": "bf526e31593807b5"
+            },
+            "PROMOTION_REQUEST_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "promotionId": {
+              "kind": "value",
+              "sig": "262ae16a8641c3b5"
+            },
+            "PromotionId": {
+              "kind": "type",
+              "sig": "d35ab54427cebc04"
+            },
+            "PromotionRefusalReason": {
+              "kind": "type",
+              "sig": "0dab2baeee790372"
+            },
+            "PromotionRequest": {
+              "kind": "type",
+              "sig": "ad623b2c5f2d4653"
+            },
+            "PROMPT_IR_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "PromptIr": {
+              "kind": "type",
+              "sig": "ff21ca556480f58c"
+            },
+            "receiptId": {
+              "kind": "value",
+              "sig": "9a2c4d8d32c1b9d2"
+            },
+            "ReceiptId": {
+              "kind": "type",
+              "sig": "88c9aa990f6f254e"
+            },
+            "RELEASE_CHANNEL_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ReleaseChannel": {
+              "kind": "type",
+              "sig": "4178de6fd61ea0e2"
+            },
+            "RELEASED_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ReleasedArtifactPointer": {
+              "kind": "type",
+              "sig": "83b1dcb9eac35c1f"
+            },
+            "releasedArtifactRefFor": {
+              "kind": "value",
+              "sig": "7d811d7e43635309"
+            },
+            "ReleasedArtifactType": {
+              "kind": "alias",
+              "sig": "8273a59953daf003"
+            },
+            "ReleaseMode": {
+              "kind": "type",
+              "sig": "3bc1743ccbba4ee6"
+            },
+            "RESOURCE_BUDGET_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "ResourceBudget": {
+              "kind": "type",
+              "sig": "e35bf3557e85f3f1"
+            },
+            "reviewerId": {
+              "kind": "value",
+              "sig": "42f8231cf64f8e6a"
+            },
+            "ReviewerId": {
+              "kind": "type",
+              "sig": "5f19d02e136390c8"
+            },
+            "ReviewerIdentity": {
+              "kind": "type",
+              "sig": "a09098b94d00597d"
+            },
+            "rewardBundle": {
+              "kind": "value",
+              "sig": "68cf66c18ed78112"
+            },
+            "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "RollbackReceipt": {
+              "kind": "type",
+              "sig": "58da7e5e98d27e66"
+            },
+            "RouteDecision": {
+              "kind": "type",
+              "sig": "e5c0583b6560d49c"
+            },
+            "SEARCH_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "SearchAlgorithm": {
+              "kind": "type",
+              "sig": "b50e2a5c9e088761"
+            },
+            "SearchPlan": {
+              "kind": "type",
+              "sig": "0c2eaf0c21850749"
+            },
+            "Sha256Hex": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "SIGNATURE_CATALOG": {
+              "kind": "value",
+              "sig": "bbfc2aab7860424d"
+            },
+            "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "SIGNATURE_REGISTRY": {
+              "kind": "value",
+              "sig": "bb3c2e866e9e9380"
+            },
+            "SignatureCatalog": {
+              "kind": "type",
+              "sig": "5bda45b05e9f7cae"
+            },
+            "SignatureCatalogEntry": {
+              "kind": "type",
+              "sig": "7e4e8939b403bead"
+            },
+            "SignatureContract": {
+              "kind": "type",
+              "sig": "f89f5457801a96ff"
+            },
+            "signatureId": {
+              "kind": "value",
+              "sig": "a2ba61f26e7896c0"
+            },
+            "SignatureId": {
+              "kind": "type",
+              "sig": "e784ee7bd7ec0e7c"
+            },
+            "SignatureRegistryEntry": {
+              "kind": "interface",
+              "sig": "9d5c95bc58d34d9a"
+            },
+            "ThermalLevel": {
+              "kind": "type",
+              "sig": "e9bf843ab767e8f0"
+            },
+            "TriageRouteInput": {
+              "kind": "type",
+              "sig": "09400550488b9dd8"
+            },
+            "TriageRouteOutput": {
+              "kind": "type",
+              "sig": "df6f8852aa18c125"
+            },
+            "triageRouteSignature": {
+              "kind": "value",
+              "sig": "499e933226ad232f"
+            },
+            "TurnRouteInput": {
+              "kind": "type",
+              "sig": "4cef581c30059735"
+            },
+            "TurnRouteOutput": {
+              "kind": "type",
+              "sig": "7a76e9aa9c428aa7"
+            },
+            "turnRouteSignature": {
+              "kind": "value",
+              "sig": "f5565400088533b7"
+            },
+            "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "UncertaintyMethod": {
+              "kind": "type",
+              "sig": "79c0841140b8c21a"
+            },
+            "UncertaintyRecord": {
+              "kind": "type",
+              "sig": "885587c8ee22eaa7"
+            }
+          }
+        },
+        "./program/optimizer": {
+          "source": "./src/program-optimizer.ts",
+          "exports": {
+            "CandidateKnobs": {
+              "kind": "interface",
+              "sig": "24cdd552e085b1b1"
+            },
+            "CompileArgs": {
+              "kind": "interface",
+              "sig": "c55d20505740c777"
+            },
+            "CompileError": {
+              "kind": "class",
+              "sig": "e5686a4a4b26ad2e"
+            },
+            "CompileResult": {
+              "kind": "interface",
+              "sig": "bbedffc2e060bc00"
+            },
+            "compileSignature": {
+              "kind": "value",
+              "sig": "fa74fc9e83876117"
+            },
+            "computeUncertainty": {
+              "kind": "value",
+              "sig": "9e12a6837331d1e7"
+            },
+            "EvaluateArgs": {
+              "kind": "interface",
+              "sig": "d781a2f29257e4ef"
+            },
+            "evaluateCandidate": {
+              "kind": "value",
+              "sig": "6ed00ecc8f903fc3"
+            },
+            "EvaluationError": {
+              "kind": "class",
+              "sig": "a351c5a476faf51a"
+            },
+            "generateCandidates": {
+              "kind": "value",
+              "sig": "a69d384f44ffbced"
+            },
+            "MIN_NORMAL_APPROX_SAMPLE": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "promote": {
+              "kind": "value",
+              "sig": "51f028325fe71b6c"
+            },
+            "PromoteArgs": {
+              "kind": "interface",
+              "sig": "a049ed2570920a06"
+            },
+            "PromotionOutcome": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            }
+          }
+        },
+        "./program/runtime": {
+          "source": "./src/program-runtime.ts",
+          "exports": {
+            "abortCanary": {
+              "kind": "value",
+              "sig": "2ca29f229036e9d2"
+            },
+            "ActivationDecision": {
+              "kind": "type",
+              "sig": "f1a4010f20377fe6"
+            },
+            "ActivationRefusalReason": {
+              "kind": "type",
+              "sig": "0dab2baeee790372"
+            },
+            "ActivationResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "ArtifactResolutionError": {
+              "kind": "class",
+              "sig": "7089331db10462e5"
+            },
+            "beginCanary": {
+              "kind": "value",
+              "sig": "15ede4738a133da6"
+            },
+            "beginShadow": {
+              "kind": "value",
+              "sig": "177478974435edcd"
+            },
+            "DseCompletion": {
+              "kind": "interface",
+              "sig": "b927e624a97dccd3"
+            },
+            "DseDecodeError": {
+              "kind": "class",
+              "sig": "cfdbe9b470348081"
+            },
+            "DseModel": {
+              "kind": "class",
+              "sig": "a3503d4d56ab428d"
+            },
+            "DseModelError": {
+              "kind": "class",
+              "sig": "2164c2f13b730181"
+            },
+            "DseModelInterface": {
+              "kind": "interface",
+              "sig": "b65f0a8351cd19a0"
+            },
+            "DsePredictUsageCounts": {
+              "kind": "type",
+              "sig": "b4ce59dc740f5c1b"
+            },
+            "predict": {
+              "kind": "value",
+              "sig": "0ebbfb2641706d66"
+            },
+            "PredictArgs": {
+              "kind": "interface",
+              "sig": "4497007cffbad38f"
+            },
+            "PredictDeps": {
+              "kind": "interface",
+              "sig": "a8f8b946af4a3b6d"
+            },
+            "PredictEventProjectionContext": {
+              "kind": "interface",
+              "sig": "734798586fe73cfa"
+            },
+            "PredictOutcome": {
+              "kind": "interface",
+              "sig": "729d4992148c47ad"
+            },
+            "predictReceiptToRuntimeEvents": {
+              "kind": "value",
+              "sig": "0fceaced6b3112ef"
+            },
+            "promoteActivation": {
+              "kind": "value",
+              "sig": "2ca29f229036e9d2"
+            },
+            "renderPrompt": {
+              "kind": "value",
+              "sig": "731cc71aa52b5c09"
+            },
+            "resolveActivation": {
+              "kind": "value",
+              "sig": "c1759a6fe5cca382"
+            },
+            "ResolveActivationArgs": {
+              "kind": "interface",
+              "sig": "a29b56d97e411110"
+            },
+            "ResolveArgs": {
+              "kind": "interface",
+              "sig": "2fa35c66c58af413"
+            },
+            "ResolvedArtifact": {
+              "kind": "interface",
+              "sig": "630b4609b05619e1"
+            },
+            "resolveReleasedArtifact": {
+              "kind": "value",
+              "sig": "4656df57b1c6d364"
+            },
+            "rollback": {
+              "kind": "value",
+              "sig": "b1ac5bd9a1bc940e"
+            },
+            "rollbackActivation": {
+              "kind": "value",
+              "sig": "2ca29f229036e9d2"
+            },
+            "RollbackArgs": {
+              "kind": "interface",
+              "sig": "0771c87f391c2a3f"
+            },
+            "RollbackResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            }
+          }
+        },
+        "./program/test": {
+          "source": "./src/program-test.ts",
+          "exports": {
+            "constantModelLayer": {
+              "kind": "value",
+              "sig": "d7184502ca255593"
+            },
+            "honestByInstructionModelLayer": {
+              "kind": "value",
+              "sig": "e7025b6bd383c2a1"
+            },
+            "honestDataset": {
+              "kind": "value",
+              "sig": "ba8fbb2647fb2a61"
+            },
+            "honestMetric": {
+              "kind": "value",
+              "sig": "95dcce49bf34da69"
+            },
+            "honestProgram": {
+              "kind": "value",
+              "sig": "b032330bef63728c"
+            },
+            "honestSplitIds": {
+              "kind": "value",
+              "sig": "a7f7a7f8b85e367f"
+            },
+            "HONESTY_MARKER": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "invalidThenValidModelLayer": {
+              "kind": "value",
+              "sig": "9158c99cac778386"
+            },
+            "PINNED_NOW": {
+              "kind": "value",
+              "sig": "0dab2baeee790372"
+            },
+            "testDeps": {
+              "kind": "value",
+              "sig": "a8f8b946af4a3b6d"
+            }
+          }
+        },
         "./recall": {
           "source": "./src/recall.ts",
           "exports": {
@@ -8778,7 +10063,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "81859b0c6cf1e645"
+              "sig": "2aba2672faa201b0"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -8862,7 +10147,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "94f47615a0ad8356"
+              "sig": "075d08b0e93e7364"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -9127,7 +10412,7 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "30a7aa7262c77eea"
+              "sig": "f4c665079099c3df"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
@@ -9215,7 +10500,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "224f36bd141b3a24"
+              "sig": "7e119cde07a7c00a"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -9231,7 +10516,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "3506160ac3f18fa3"
+              "sig": "8e9d585e24832108"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -9291,7 +10576,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "ab7086c1be8e1dc1"
+              "sig": "c632f4fd13ccb63e"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -10073,7 +11358,7 @@
             },
             "InferenceProviderDescriptor": {
               "kind": "type",
-              "sig": "78b47c3627429581"
+              "sig": "2b25c72a4eb41f54"
             },
             "KhalaChatTurnEventKind": {
               "kind": "type",
@@ -10617,7 +11902,7 @@
             },
             "ThreadEventAuthorityProjection": {
               "kind": "type",
-              "sig": "a14a17ef31b038a5"
+              "sig": "8ae4bb408e74b2d9"
             },
             "ThreadEventAuthorityRelation": {
               "kind": "type",
@@ -10826,11 +12111,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "7f1a5b28b7b8a66a"
+              "sig": "8a74400ac64a06cd"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "7f1a5b28b7b8a66a"
+              "sig": "8a74400ac64a06cd"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -11268,7 +12553,7 @@
             },
             "khalaModelFallbackFallthroughReasonTags": {
               "kind": "value",
-              "sig": "add51cff02565f31"
+              "sig": "0b30ab9f9701df20"
             },
             "KhalaModelFallbackOutcome": {
               "kind": "type",
@@ -11284,7 +12569,7 @@
             },
             "khalaModelFallbackTransientReasonTags": {
               "kind": "value",
-              "sig": "add51cff02565f31"
+              "sig": "0b30ab9f9701df20"
             },
             "khalaRuntimeEventFromEffectAiStreamPart": {
               "kind": "function",
@@ -11362,7 +12647,7 @@
             },
             "localAiSdkSandboxProviderModuleUrl": {
               "kind": "value",
-              "sig": "0926ee2ed33223b2"
+              "sig": "56373ce7767e712f"
             },
             "LocalAiSdkSandboxProviderOptions": {
               "kind": "type",
@@ -11412,7 +12697,7 @@
             },
             "OpenAgentsSandboxLane": {
               "kind": "type",
-              "sig": "edb282d60d863220"
+              "sig": "a073dafd7cfa5a7c"
             },
             "OpenAgentsSandboxProcessInput": {
               "kind": "type",
@@ -11630,6 +12915,1292 @@
         }
       }
     },
+    "@openagentsinc/dse": {
+      "version": "0.2.0-rc.3",
+      "entrypoints": {
+        ".": {
+          "source": "./src/index.ts",
+          "exports": {
+            "abortCanary": {
+              "kind": "value",
+              "sig": "b512106e3e366602"
+            },
+            "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ActivationDecision": {
+              "kind": "type",
+              "sig": "f1a4010f20377fe6"
+            },
+            "ActivationReceipt": {
+              "kind": "type",
+              "sig": "28bcf4eb4124ba0a"
+            },
+            "ActivationRefusalReason": {
+              "kind": "type",
+              "sig": "70de99b75a397070"
+            },
+            "ActivationResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "ActivationTransition": {
+              "kind": "type",
+              "sig": "82057dd964a7dc3b"
+            },
+            "ArtifactResolutionError": {
+              "kind": "class",
+              "sig": "0e1992eb7efd9ad7"
+            },
+            "BASELINE_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "BaselinePointer": {
+              "kind": "type",
+              "sig": "b63b4e61acaedabc"
+            },
+            "beginCanary": {
+              "kind": "value",
+              "sig": "d2d34a9dac898aa5"
+            },
+            "beginShadow": {
+              "kind": "value",
+              "sig": "177478974435edcd"
+            },
+            "bindProgram": {
+              "kind": "value",
+              "sig": "0bc6bef9835df688"
+            },
+            "BindProgramResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "buildDatasetSplit": {
+              "kind": "value",
+              "sig": "b2d11b6acf187a81"
+            },
+            "CANARY_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "CanaryPlan": {
+              "kind": "type",
+              "sig": "3d85a49bdff0ea84"
+            },
+            "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "CandidateArtifact": {
+              "kind": "type",
+              "sig": "4afe7156f6df6eb8"
+            },
+            "candidateArtifactDigest": {
+              "kind": "value",
+              "sig": "e9882a1267a11cb0"
+            },
+            "candidateId": {
+              "kind": "value",
+              "sig": "b4170070fa6f7abb"
+            },
+            "CandidateId": {
+              "kind": "type",
+              "sig": "c1e9050575c2b39d"
+            },
+            "catalogClaimHolds": {
+              "kind": "value",
+              "sig": "7c86ce4a6fa3a89e"
+            },
+            "ClaimedAction": {
+              "kind": "type",
+              "sig": "f0152825b6a5c9b0"
+            },
+            "COMPILED_PROGRAM_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "CompiledProgram": {
+              "kind": "type",
+              "sig": "9a21bdaa7d363b3f"
+            },
+            "DATASET_REVISION_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "DATASET_SPLIT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "datasetId": {
+              "kind": "value",
+              "sig": "88720406c001ac7d"
+            },
+            "DatasetId": {
+              "kind": "type",
+              "sig": "ac1f5a4c163a9019"
+            },
+            "DatasetRevision": {
+              "kind": "type",
+              "sig": "076d901a3d31c261"
+            },
+            "datasetRevisionId": {
+              "kind": "value",
+              "sig": "085ca8a50f10183d"
+            },
+            "DatasetRevisionId": {
+              "kind": "type",
+              "sig": "6dc5dc70443ae053"
+            },
+            "DatasetSplit": {
+              "kind": "type",
+              "sig": "3abcf688a570e3cd"
+            },
+            "DatasetSplitFailure": {
+              "kind": "type",
+              "sig": "70de99b75a397070"
+            },
+            "DatasetSplitName": {
+              "kind": "type",
+              "sig": "2c05c830b6a90d73"
+            },
+            "DatasetSplitResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "DecodePolicy": {
+              "kind": "type",
+              "sig": "208d4e468db93197"
+            },
+            "DEFAULT_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "defaultResourceBudget": {
+              "kind": "value",
+              "sig": "a6b008fa76e607bb"
+            },
+            "deriveSignatureCatalog": {
+              "kind": "value",
+              "sig": "2dba2f46580113fa"
+            },
+            "DseCompletion": {
+              "kind": "interface",
+              "sig": "8b657a781c0cdb05"
+            },
+            "DseDecodeError": {
+              "kind": "class",
+              "sig": "257ba7574a581594"
+            },
+            "DseModel": {
+              "kind": "class",
+              "sig": "b818ae08511be0e8"
+            },
+            "DseModelError": {
+              "kind": "class",
+              "sig": "4e9723b42c4f3d92"
+            },
+            "DseModelInterface": {
+              "kind": "interface",
+              "sig": "b65f0a8351cd19a0"
+            },
+            "DsePredictUsageCounts": {
+              "kind": "type",
+              "sig": "b4ce59dc740f5c1b"
+            },
+            "DseProgram": {
+              "kind": "interface",
+              "sig": "bf526e31593807b5"
+            },
+            "DseSignature": {
+              "kind": "interface",
+              "sig": "240260cce0efbe34"
+            },
+            "DseTimestamp": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "DseUsageTruth": {
+              "kind": "type",
+              "sig": "a4da4b53cb61b7d7"
+            },
+            "EVALUATION_REPORT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "EvaluationReport": {
+              "kind": "type",
+              "sig": "8f3187b5211ee66a"
+            },
+            "exampleId": {
+              "kind": "value",
+              "sig": "7c7449b9d7c9e44e"
+            },
+            "ExampleId": {
+              "kind": "type",
+              "sig": "ad787db064eb2fcd"
+            },
+            "ExampleScore": {
+              "kind": "type",
+              "sig": "1a9d38322fd65581"
+            },
+            "FieldDescriptor": {
+              "kind": "type",
+              "sig": "4a4f4b72c865222e"
+            },
+            "HonestChatReplyInput": {
+              "kind": "type",
+              "sig": "04b0f57603cabbef"
+            },
+            "HonestChatReplyOutput": {
+              "kind": "type",
+              "sig": "6d315e8e50bd46b2"
+            },
+            "honestChatReplySignature": {
+              "kind": "value",
+              "sig": "4449c13d59b065c5"
+            },
+            "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "IndependentReviewResult": {
+              "kind": "type",
+              "sig": "9967904c86d11710"
+            },
+            "indexExamples": {
+              "kind": "value",
+              "sig": "fbe796ba8f143789"
+            },
+            "LabeledExample": {
+              "kind": "type",
+              "sig": "2347504fad1895e1"
+            },
+            "makeBaselinePointer": {
+              "kind": "value",
+              "sig": "8a34fc1aa7ee03e8"
+            },
+            "makeCandidateArtifact": {
+              "kind": "value",
+              "sig": "237cb1d8e152f255"
+            },
+            "makeDatasetRevision": {
+              "kind": "value",
+              "sig": "3769a2084b4e0d5a"
+            },
+            "makeSearchPlan": {
+              "kind": "value",
+              "sig": "893819061eb28048"
+            },
+            "makeSignature": {
+              "kind": "value",
+              "sig": "17db4c27a92bae92"
+            },
+            "MakeSignatureArgs": {
+              "kind": "interface",
+              "sig": "8e5da158952a3d74"
+            },
+            "MAX_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "Metric": {
+              "kind": "interface",
+              "sig": "3c0fcb46759afbda"
+            },
+            "MetricComponent": {
+              "kind": "type",
+              "sig": "9915306f2197c101"
+            },
+            "predict": {
+              "kind": "value",
+              "sig": "0ebbfb2641706d66"
+            },
+            "PREDICT_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "PredictArgs": {
+              "kind": "interface",
+              "sig": "4497007cffbad38f"
+            },
+            "PredictDeps": {
+              "kind": "interface",
+              "sig": "a8f8b946af4a3b6d"
+            },
+            "PredictEventProjectionContext": {
+              "kind": "interface",
+              "sig": "734798586fe73cfa"
+            },
+            "PredictOutcome": {
+              "kind": "interface",
+              "sig": "729d4992148c47ad"
+            },
+            "PredictReceipt": {
+              "kind": "type",
+              "sig": "067f4e567f46e751"
+            },
+            "predictReceiptToRuntimeEvents": {
+              "kind": "value",
+              "sig": "0fceaced6b3112ef"
+            },
+            "producerId": {
+              "kind": "value",
+              "sig": "62c9edb5b5014d0b"
+            },
+            "ProducerId": {
+              "kind": "type",
+              "sig": "6c578ec93bef435f"
+            },
+            "ProducerIdentity": {
+              "kind": "type",
+              "sig": "23ce12db309941c6"
+            },
+            "Program": {
+              "kind": "type",
+              "sig": "bf526e31593807b5"
+            },
+            "promoteActivation": {
+              "kind": "value",
+              "sig": "b512106e3e366602"
+            },
+            "PROMOTION_REQUEST_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "promotionId": {
+              "kind": "value",
+              "sig": "262ae16a8641c3b5"
+            },
+            "PromotionId": {
+              "kind": "type",
+              "sig": "d35ab54427cebc04"
+            },
+            "PromotionRefusalReason": {
+              "kind": "type",
+              "sig": "70de99b75a397070"
+            },
+            "PromotionRequest": {
+              "kind": "type",
+              "sig": "30eab03e4df4e3af"
+            },
+            "PROMPT_IR_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "PromptIr": {
+              "kind": "type",
+              "sig": "ff21ca556480f58c"
+            },
+            "receiptId": {
+              "kind": "value",
+              "sig": "9a2c4d8d32c1b9d2"
+            },
+            "ReceiptId": {
+              "kind": "type",
+              "sig": "88c9aa990f6f254e"
+            },
+            "RELEASE_CHANNEL_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ReleaseChannel": {
+              "kind": "type",
+              "sig": "56612f94f8e147cd"
+            },
+            "RELEASED_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ReleasedArtifactPointer": {
+              "kind": "type",
+              "sig": "83b1dcb9eac35c1f"
+            },
+            "releasedArtifactRefFor": {
+              "kind": "value",
+              "sig": "7d811d7e43635309"
+            },
+            "ReleasedArtifactType": {
+              "kind": "alias",
+              "sig": "9df18d655b5c8580"
+            },
+            "ReleaseMode": {
+              "kind": "type",
+              "sig": "0362b54dd4b9a982"
+            },
+            "renderPrompt": {
+              "kind": "value",
+              "sig": "731cc71aa52b5c09"
+            },
+            "resolveActivation": {
+              "kind": "value",
+              "sig": "c1759a6fe5cca382"
+            },
+            "ResolveActivationArgs": {
+              "kind": "interface",
+              "sig": "b1622cba853ac782"
+            },
+            "ResolveArgs": {
+              "kind": "interface",
+              "sig": "2fa35c66c58af413"
+            },
+            "ResolvedArtifact": {
+              "kind": "interface",
+              "sig": "630b4609b05619e1"
+            },
+            "resolveReleasedArtifact": {
+              "kind": "value",
+              "sig": "4656df57b1c6d364"
+            },
+            "RESOURCE_BUDGET_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ResourceBudget": {
+              "kind": "type",
+              "sig": "e35bf3557e85f3f1"
+            },
+            "reviewerId": {
+              "kind": "value",
+              "sig": "42f8231cf64f8e6a"
+            },
+            "ReviewerId": {
+              "kind": "type",
+              "sig": "5f19d02e136390c8"
+            },
+            "ReviewerIdentity": {
+              "kind": "type",
+              "sig": "a09098b94d00597d"
+            },
+            "rewardBundle": {
+              "kind": "value",
+              "sig": "68cf66c18ed78112"
+            },
+            "rollback": {
+              "kind": "value",
+              "sig": "b1ac5bd9a1bc940e"
+            },
+            "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "rollbackActivation": {
+              "kind": "value",
+              "sig": "b512106e3e366602"
+            },
+            "RollbackArgs": {
+              "kind": "interface",
+              "sig": "0771c87f391c2a3f"
+            },
+            "RollbackReceipt": {
+              "kind": "type",
+              "sig": "58da7e5e98d27e66"
+            },
+            "RollbackResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "RouteDecision": {
+              "kind": "type",
+              "sig": "60863c46a3b1744e"
+            },
+            "SEARCH_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "SearchAlgorithm": {
+              "kind": "type",
+              "sig": "b50e2a5c9e088761"
+            },
+            "SearchPlan": {
+              "kind": "type",
+              "sig": "0c2eaf0c21850749"
+            },
+            "Sha256Hex": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "SIGNATURE_CATALOG": {
+              "kind": "value",
+              "sig": "bbfc2aab7860424d"
+            },
+            "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "SIGNATURE_REGISTRY": {
+              "kind": "value",
+              "sig": "d67e65fc1bf6555a"
+            },
+            "SignatureCatalog": {
+              "kind": "type",
+              "sig": "5bda45b05e9f7cae"
+            },
+            "SignatureCatalogEntry": {
+              "kind": "type",
+              "sig": "7e4e8939b403bead"
+            },
+            "SignatureContract": {
+              "kind": "type",
+              "sig": "f89f5457801a96ff"
+            },
+            "signatureId": {
+              "kind": "value",
+              "sig": "a2ba61f26e7896c0"
+            },
+            "SignatureId": {
+              "kind": "type",
+              "sig": "e784ee7bd7ec0e7c"
+            },
+            "SignatureRegistryEntry": {
+              "kind": "interface",
+              "sig": "9d5c95bc58d34d9a"
+            },
+            "ThermalLevel": {
+              "kind": "type",
+              "sig": "e9bf843ab767e8f0"
+            },
+            "TriageRouteInput": {
+              "kind": "type",
+              "sig": "09400550488b9dd8"
+            },
+            "TriageRouteOutput": {
+              "kind": "type",
+              "sig": "df6f8852aa18c125"
+            },
+            "triageRouteSignature": {
+              "kind": "value",
+              "sig": "499e933226ad232f"
+            },
+            "TurnRouteInput": {
+              "kind": "type",
+              "sig": "4cef581c30059735"
+            },
+            "TurnRouteOutput": {
+              "kind": "type",
+              "sig": "7a76e9aa9c428aa7"
+            },
+            "turnRouteSignature": {
+              "kind": "value",
+              "sig": "f5565400088533b7"
+            },
+            "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "UncertaintyMethod": {
+              "kind": "type",
+              "sig": "79c0841140b8c21a"
+            },
+            "UncertaintyRecord": {
+              "kind": "type",
+              "sig": "885587c8ee22eaa7"
+            }
+          }
+        },
+        "./contract": {
+          "source": "./src/contract/index.ts",
+          "exports": {
+            "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ActivationReceipt": {
+              "kind": "type",
+              "sig": "28bcf4eb4124ba0a"
+            },
+            "ActivationTransition": {
+              "kind": "type",
+              "sig": "82057dd964a7dc3b"
+            },
+            "BASELINE_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "BaselinePointer": {
+              "kind": "type",
+              "sig": "b63b4e61acaedabc"
+            },
+            "bindProgram": {
+              "kind": "value",
+              "sig": "0bc6bef9835df688"
+            },
+            "BindProgramResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "buildDatasetSplit": {
+              "kind": "value",
+              "sig": "b2d11b6acf187a81"
+            },
+            "CANARY_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "CanaryPlan": {
+              "kind": "type",
+              "sig": "3d85a49bdff0ea84"
+            },
+            "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "CandidateArtifact": {
+              "kind": "type",
+              "sig": "4afe7156f6df6eb8"
+            },
+            "candidateArtifactDigest": {
+              "kind": "value",
+              "sig": "e9882a1267a11cb0"
+            },
+            "candidateId": {
+              "kind": "value",
+              "sig": "b4170070fa6f7abb"
+            },
+            "CandidateId": {
+              "kind": "type",
+              "sig": "c1e9050575c2b39d"
+            },
+            "catalogClaimHolds": {
+              "kind": "value",
+              "sig": "7c86ce4a6fa3a89e"
+            },
+            "ClaimedAction": {
+              "kind": "type",
+              "sig": "f0152825b6a5c9b0"
+            },
+            "COMPILED_PROGRAM_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "CompiledProgram": {
+              "kind": "type",
+              "sig": "9a21bdaa7d363b3f"
+            },
+            "DATASET_REVISION_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "DATASET_SPLIT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "datasetId": {
+              "kind": "value",
+              "sig": "88720406c001ac7d"
+            },
+            "DatasetId": {
+              "kind": "type",
+              "sig": "ac1f5a4c163a9019"
+            },
+            "DatasetRevision": {
+              "kind": "type",
+              "sig": "076d901a3d31c261"
+            },
+            "datasetRevisionId": {
+              "kind": "value",
+              "sig": "085ca8a50f10183d"
+            },
+            "DatasetRevisionId": {
+              "kind": "type",
+              "sig": "6dc5dc70443ae053"
+            },
+            "DatasetSplit": {
+              "kind": "type",
+              "sig": "3abcf688a570e3cd"
+            },
+            "DatasetSplitFailure": {
+              "kind": "type",
+              "sig": "70de99b75a397070"
+            },
+            "DatasetSplitName": {
+              "kind": "type",
+              "sig": "2c05c830b6a90d73"
+            },
+            "DatasetSplitResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "DecodePolicy": {
+              "kind": "type",
+              "sig": "208d4e468db93197"
+            },
+            "DEFAULT_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "defaultResourceBudget": {
+              "kind": "value",
+              "sig": "a6b008fa76e607bb"
+            },
+            "deriveSignatureCatalog": {
+              "kind": "value",
+              "sig": "2dba2f46580113fa"
+            },
+            "DseProgram": {
+              "kind": "interface",
+              "sig": "bf526e31593807b5"
+            },
+            "DseSignature": {
+              "kind": "interface",
+              "sig": "240260cce0efbe34"
+            },
+            "DseTimestamp": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "DseUsageTruth": {
+              "kind": "type",
+              "sig": "a4da4b53cb61b7d7"
+            },
+            "EVALUATION_REPORT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "EvaluationReport": {
+              "kind": "type",
+              "sig": "8f3187b5211ee66a"
+            },
+            "exampleId": {
+              "kind": "value",
+              "sig": "7c7449b9d7c9e44e"
+            },
+            "ExampleId": {
+              "kind": "type",
+              "sig": "ad787db064eb2fcd"
+            },
+            "ExampleScore": {
+              "kind": "type",
+              "sig": "1a9d38322fd65581"
+            },
+            "FieldDescriptor": {
+              "kind": "type",
+              "sig": "4a4f4b72c865222e"
+            },
+            "HonestChatReplyInput": {
+              "kind": "type",
+              "sig": "04b0f57603cabbef"
+            },
+            "HonestChatReplyOutput": {
+              "kind": "type",
+              "sig": "6d315e8e50bd46b2"
+            },
+            "honestChatReplySignature": {
+              "kind": "value",
+              "sig": "4449c13d59b065c5"
+            },
+            "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "IndependentReviewResult": {
+              "kind": "type",
+              "sig": "9967904c86d11710"
+            },
+            "indexExamples": {
+              "kind": "value",
+              "sig": "fbe796ba8f143789"
+            },
+            "LabeledExample": {
+              "kind": "type",
+              "sig": "2347504fad1895e1"
+            },
+            "makeBaselinePointer": {
+              "kind": "value",
+              "sig": "8a34fc1aa7ee03e8"
+            },
+            "makeCandidateArtifact": {
+              "kind": "value",
+              "sig": "237cb1d8e152f255"
+            },
+            "makeDatasetRevision": {
+              "kind": "value",
+              "sig": "3769a2084b4e0d5a"
+            },
+            "makeSearchPlan": {
+              "kind": "value",
+              "sig": "893819061eb28048"
+            },
+            "makeSignature": {
+              "kind": "value",
+              "sig": "17db4c27a92bae92"
+            },
+            "MakeSignatureArgs": {
+              "kind": "interface",
+              "sig": "8e5da158952a3d74"
+            },
+            "MAX_CANDIDATE_CAP": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "Metric": {
+              "kind": "interface",
+              "sig": "3c0fcb46759afbda"
+            },
+            "MetricComponent": {
+              "kind": "type",
+              "sig": "9915306f2197c101"
+            },
+            "PREDICT_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "PredictReceipt": {
+              "kind": "type",
+              "sig": "067f4e567f46e751"
+            },
+            "producerId": {
+              "kind": "value",
+              "sig": "62c9edb5b5014d0b"
+            },
+            "ProducerId": {
+              "kind": "type",
+              "sig": "6c578ec93bef435f"
+            },
+            "ProducerIdentity": {
+              "kind": "type",
+              "sig": "23ce12db309941c6"
+            },
+            "Program": {
+              "kind": "type",
+              "sig": "bf526e31593807b5"
+            },
+            "PROMOTION_REQUEST_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "promotionId": {
+              "kind": "value",
+              "sig": "262ae16a8641c3b5"
+            },
+            "PromotionId": {
+              "kind": "type",
+              "sig": "d35ab54427cebc04"
+            },
+            "PromotionRefusalReason": {
+              "kind": "type",
+              "sig": "70de99b75a397070"
+            },
+            "PromotionRequest": {
+              "kind": "type",
+              "sig": "30eab03e4df4e3af"
+            },
+            "PROMPT_IR_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "PromptIr": {
+              "kind": "type",
+              "sig": "ff21ca556480f58c"
+            },
+            "receiptId": {
+              "kind": "value",
+              "sig": "9a2c4d8d32c1b9d2"
+            },
+            "ReceiptId": {
+              "kind": "type",
+              "sig": "88c9aa990f6f254e"
+            },
+            "RELEASE_CHANNEL_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ReleaseChannel": {
+              "kind": "type",
+              "sig": "56612f94f8e147cd"
+            },
+            "RELEASED_POINTER_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ReleasedArtifactPointer": {
+              "kind": "type",
+              "sig": "83b1dcb9eac35c1f"
+            },
+            "releasedArtifactRefFor": {
+              "kind": "value",
+              "sig": "7d811d7e43635309"
+            },
+            "ReleasedArtifactType": {
+              "kind": "alias",
+              "sig": "9df18d655b5c8580"
+            },
+            "ReleaseMode": {
+              "kind": "type",
+              "sig": "0362b54dd4b9a982"
+            },
+            "RESOURCE_BUDGET_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "ResourceBudget": {
+              "kind": "type",
+              "sig": "e35bf3557e85f3f1"
+            },
+            "reviewerId": {
+              "kind": "value",
+              "sig": "42f8231cf64f8e6a"
+            },
+            "ReviewerId": {
+              "kind": "type",
+              "sig": "5f19d02e136390c8"
+            },
+            "ReviewerIdentity": {
+              "kind": "type",
+              "sig": "a09098b94d00597d"
+            },
+            "rewardBundle": {
+              "kind": "value",
+              "sig": "68cf66c18ed78112"
+            },
+            "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "RollbackReceipt": {
+              "kind": "type",
+              "sig": "58da7e5e98d27e66"
+            },
+            "RouteDecision": {
+              "kind": "type",
+              "sig": "60863c46a3b1744e"
+            },
+            "SEARCH_PLAN_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "SearchAlgorithm": {
+              "kind": "type",
+              "sig": "b50e2a5c9e088761"
+            },
+            "SearchPlan": {
+              "kind": "type",
+              "sig": "0c2eaf0c21850749"
+            },
+            "Sha256Hex": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "SIGNATURE_CATALOG": {
+              "kind": "value",
+              "sig": "bbfc2aab7860424d"
+            },
+            "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "SIGNATURE_REGISTRY": {
+              "kind": "value",
+              "sig": "d67e65fc1bf6555a"
+            },
+            "SignatureCatalog": {
+              "kind": "type",
+              "sig": "5bda45b05e9f7cae"
+            },
+            "SignatureCatalogEntry": {
+              "kind": "type",
+              "sig": "7e4e8939b403bead"
+            },
+            "SignatureContract": {
+              "kind": "type",
+              "sig": "f89f5457801a96ff"
+            },
+            "signatureId": {
+              "kind": "value",
+              "sig": "a2ba61f26e7896c0"
+            },
+            "SignatureId": {
+              "kind": "type",
+              "sig": "e784ee7bd7ec0e7c"
+            },
+            "SignatureRegistryEntry": {
+              "kind": "interface",
+              "sig": "9d5c95bc58d34d9a"
+            },
+            "ThermalLevel": {
+              "kind": "type",
+              "sig": "e9bf843ab767e8f0"
+            },
+            "TriageRouteInput": {
+              "kind": "type",
+              "sig": "09400550488b9dd8"
+            },
+            "TriageRouteOutput": {
+              "kind": "type",
+              "sig": "df6f8852aa18c125"
+            },
+            "triageRouteSignature": {
+              "kind": "value",
+              "sig": "499e933226ad232f"
+            },
+            "TurnRouteInput": {
+              "kind": "type",
+              "sig": "4cef581c30059735"
+            },
+            "TurnRouteOutput": {
+              "kind": "type",
+              "sig": "7a76e9aa9c428aa7"
+            },
+            "turnRouteSignature": {
+              "kind": "value",
+              "sig": "f5565400088533b7"
+            },
+            "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "UncertaintyMethod": {
+              "kind": "type",
+              "sig": "79c0841140b8c21a"
+            },
+            "UncertaintyRecord": {
+              "kind": "type",
+              "sig": "885587c8ee22eaa7"
+            }
+          }
+        },
+        "./optimizer": {
+          "source": "./src/optimizer/index.ts",
+          "exports": {
+            "CandidateKnobs": {
+              "kind": "interface",
+              "sig": "24cdd552e085b1b1"
+            },
+            "CompileArgs": {
+              "kind": "interface",
+              "sig": "c55d20505740c777"
+            },
+            "CompileError": {
+              "kind": "class",
+              "sig": "9c2e945173f6fe48"
+            },
+            "CompileResult": {
+              "kind": "interface",
+              "sig": "bbedffc2e060bc00"
+            },
+            "compileSignature": {
+              "kind": "value",
+              "sig": "fa74fc9e83876117"
+            },
+            "computeUncertainty": {
+              "kind": "value",
+              "sig": "9e12a6837331d1e7"
+            },
+            "EvaluateArgs": {
+              "kind": "interface",
+              "sig": "d781a2f29257e4ef"
+            },
+            "evaluateCandidate": {
+              "kind": "value",
+              "sig": "6ed00ecc8f903fc3"
+            },
+            "EvaluationError": {
+              "kind": "class",
+              "sig": "b0e965d2e757b0d3"
+            },
+            "generateCandidates": {
+              "kind": "value",
+              "sig": "a69d384f44ffbced"
+            },
+            "MIN_NORMAL_APPROX_SAMPLE": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "promote": {
+              "kind": "value",
+              "sig": "51f028325fe71b6c"
+            },
+            "PromoteArgs": {
+              "kind": "interface",
+              "sig": "d6f7c5a3b6beedf5"
+            },
+            "PromotionOutcome": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            }
+          }
+        },
+        "./runtime": {
+          "source": "./src/runtime/index.ts",
+          "exports": {
+            "abortCanary": {
+              "kind": "value",
+              "sig": "b512106e3e366602"
+            },
+            "ActivationDecision": {
+              "kind": "type",
+              "sig": "f1a4010f20377fe6"
+            },
+            "ActivationRefusalReason": {
+              "kind": "type",
+              "sig": "70de99b75a397070"
+            },
+            "ActivationResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            },
+            "ArtifactResolutionError": {
+              "kind": "class",
+              "sig": "0e1992eb7efd9ad7"
+            },
+            "beginCanary": {
+              "kind": "value",
+              "sig": "d2d34a9dac898aa5"
+            },
+            "beginShadow": {
+              "kind": "value",
+              "sig": "177478974435edcd"
+            },
+            "DseCompletion": {
+              "kind": "interface",
+              "sig": "8b657a781c0cdb05"
+            },
+            "DseDecodeError": {
+              "kind": "class",
+              "sig": "257ba7574a581594"
+            },
+            "DseModel": {
+              "kind": "class",
+              "sig": "b818ae08511be0e8"
+            },
+            "DseModelError": {
+              "kind": "class",
+              "sig": "4e9723b42c4f3d92"
+            },
+            "DseModelInterface": {
+              "kind": "interface",
+              "sig": "b65f0a8351cd19a0"
+            },
+            "DsePredictUsageCounts": {
+              "kind": "type",
+              "sig": "b4ce59dc740f5c1b"
+            },
+            "predict": {
+              "kind": "value",
+              "sig": "0ebbfb2641706d66"
+            },
+            "PredictArgs": {
+              "kind": "interface",
+              "sig": "4497007cffbad38f"
+            },
+            "PredictDeps": {
+              "kind": "interface",
+              "sig": "a8f8b946af4a3b6d"
+            },
+            "PredictEventProjectionContext": {
+              "kind": "interface",
+              "sig": "734798586fe73cfa"
+            },
+            "PredictOutcome": {
+              "kind": "interface",
+              "sig": "729d4992148c47ad"
+            },
+            "predictReceiptToRuntimeEvents": {
+              "kind": "value",
+              "sig": "0fceaced6b3112ef"
+            },
+            "promoteActivation": {
+              "kind": "value",
+              "sig": "b512106e3e366602"
+            },
+            "renderPrompt": {
+              "kind": "value",
+              "sig": "731cc71aa52b5c09"
+            },
+            "resolveActivation": {
+              "kind": "value",
+              "sig": "c1759a6fe5cca382"
+            },
+            "ResolveActivationArgs": {
+              "kind": "interface",
+              "sig": "b1622cba853ac782"
+            },
+            "ResolveArgs": {
+              "kind": "interface",
+              "sig": "2fa35c66c58af413"
+            },
+            "ResolvedArtifact": {
+              "kind": "interface",
+              "sig": "630b4609b05619e1"
+            },
+            "resolveReleasedArtifact": {
+              "kind": "value",
+              "sig": "4656df57b1c6d364"
+            },
+            "rollback": {
+              "kind": "value",
+              "sig": "b1ac5bd9a1bc940e"
+            },
+            "rollbackActivation": {
+              "kind": "value",
+              "sig": "b512106e3e366602"
+            },
+            "RollbackArgs": {
+              "kind": "interface",
+              "sig": "0771c87f391c2a3f"
+            },
+            "RollbackResult": {
+              "kind": "type",
+              "sig": "6246ddaf8e4d8903"
+            }
+          }
+        },
+        "./test": {
+          "source": "./src/test-support.ts",
+          "exports": {
+            "constantModelLayer": {
+              "kind": "value",
+              "sig": "d7184502ca255593"
+            },
+            "honestByInstructionModelLayer": {
+              "kind": "value",
+              "sig": "e7025b6bd383c2a1"
+            },
+            "honestDataset": {
+              "kind": "value",
+              "sig": "ba8fbb2647fb2a61"
+            },
+            "honestMetric": {
+              "kind": "value",
+              "sig": "95dcce49bf34da69"
+            },
+            "honestProgram": {
+              "kind": "value",
+              "sig": "b032330bef63728c"
+            },
+            "honestSplitIds": {
+              "kind": "value",
+              "sig": "a7f7a7f8b85e367f"
+            },
+            "HONESTY_MARKER": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "invalidThenValidModelLayer": {
+              "kind": "value",
+              "sig": "9158c99cac778386"
+            },
+            "PINNED_NOW": {
+              "kind": "value",
+              "sig": "70de99b75a397070"
+            },
+            "testDeps": {
+              "kind": "value",
+              "sig": "a8f8b946af4a3b6d"
+            }
+          }
+        }
+      }
+    },
     "@openagentsinc/history-corpus": {
       "version": "0.2.0-rc.3",
       "entrypoints": {
@@ -11674,7 +14245,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -11694,7 +14265,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "29ad0c8adba8c962"
+              "sig": "5fa99f938a2ccb21"
             },
             "HistoryCorpusEventReader": {
               "kind": "interface",
@@ -11718,7 +14289,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "c8aec3045a94e250"
+              "sig": "b3e47824640c23f2"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -11802,7 +14373,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "6c664f385bbd3178"
+              "sig": "9dd1fc69c12b44b5"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -11826,7 +14397,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "30fe13aaddffd8a2"
+              "sig": "48db0ceafa48ecfd"
             },
             "NeutralThreadNote": {
               "kind": "interface",
@@ -11850,7 +14421,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -11870,11 +14441,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "539b5beaea1c9775"
+              "sig": "1ae2c3d268a0fc30"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -11882,11 +14453,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "4c640a2d92e33c6c"
+              "sig": "bd1642ecd4909223"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -11946,11 +14517,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "timeSliceRecursiveRecallCorpus": {
               "kind": "value",
@@ -11991,11 +14562,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             }
           }
         },
@@ -12008,7 +14579,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -12028,7 +14599,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "29ad0c8adba8c962"
+              "sig": "5fa99f938a2ccb21"
             },
             "HistoryCorpusExclusions": {
               "kind": "interface",
@@ -12048,7 +14619,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "30fe13aaddffd8a2"
+              "sig": "48db0ceafa48ecfd"
             }
           }
         },
@@ -12089,7 +14660,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "6c664f385bbd3178"
+              "sig": "9dd1fc69c12b44b5"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -12175,7 +14746,7 @@
           "exports": {
             "HistoryRecall": {
               "kind": "class",
-              "sig": "c8aec3045a94e250"
+              "sig": "b3e47824640c23f2"
             },
             "HistoryRecallCorpusProvider": {
               "kind": "interface",
@@ -12228,7 +14799,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -12248,11 +14819,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "539b5beaea1c9775"
+              "sig": "1ae2c3d268a0fc30"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -12260,11 +14831,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "4c640a2d92e33c6c"
+              "sig": "bd1642ecd4909223"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -12385,7 +14956,7 @@
             },
             "HistoryRecall": {
               "kind": "alias",
-              "sig": "c8aec3045a94e250"
+              "sig": "b3e47824640c23f2"
             },
             "INLINE_CORPUS_BYTE_CEILING": {
               "kind": "value",
@@ -12433,19 +15004,19 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "46d8499310cb0368"
+              "sig": "e5a28389e8f07bee"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -12521,7 +15092,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "37e0f1e51ed8debf"
+              "sig": "516c9405bf1138c4"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -12537,7 +15108,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "9939dda61d6cce39"
+              "sig": "faaba02d78d61143"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -12597,7 +15168,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "62079da7e5e8b893"
+              "sig": "6a81f7a730e0466b"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -12809,7 +15380,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -12825,7 +15396,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "62f7dc683b29b21e"
+              "sig": "da5b7cde23e9ff18"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -12987,19 +15558,19 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "e71b4d5087c95581"
+              "sig": "963890404234879d"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -13075,7 +15646,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "f1b91b1cf83a2b4f"
+              "sig": "f5b1b639d16d7b69"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -13091,7 +15662,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "cf65d5885a92ebd0"
+              "sig": "1d0ff27fffcac1ba"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -13151,7 +15722,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "971e20363ce8d8be"
+              "sig": "435535051825a224"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -13363,7 +15934,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -13379,7 +15950,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -13472,7 +16043,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "f1b91b1cf83a2b4f"
+              "sig": "f5b1b639d16d7b69"
             },
             "RlmCorpusSourceShape": {
               "kind": "interface",
@@ -13480,7 +16051,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "971e20363ce8d8be"
+              "sig": "435535051825a224"
             },
             "RlmValidatedSourceAddress": {
               "kind": "interface",
@@ -13509,11 +16080,11 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "e71b4d5087c95581"
+              "sig": "963890404234879d"
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "cf65d5885a92ebd0"
+              "sig": "1d0ff27fffcac1ba"
             },
             "rlmLayer": {
               "kind": "value",
@@ -13554,7 +16125,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             }
           }
         },
@@ -13629,15 +16200,15 @@
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -13994,7 +16565,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "b93deccb50fa8c64"
+              "sig": "60d19c242b80aeec"
             },
             "RlmToolParams": {
               "kind": "type",

@@ -3,7 +3,8 @@
 This directory holds the committed public export-surface snapshots for the
 `@openagentsinc/ai` roster, one file per **train** (the shared roster version):
 `docs/api-surface/<train>.json`. The current baseline is
-[`0.2.0-rc.1.json`](./0.2.0-rc.1.json).
+[`0.2.0-rc.3.json`](./0.2.0-rc.3.json). It includes the DSE package and the
+umbrella `program` entry points.
 
 The gate (P1-2, issue #16) is the automated version of the AISDK-02
 collision audit: it enumerates every package's exported symbols through the

@@ -32,6 +32,8 @@ L3  SANDBOX       sandbox-provider contract + local + interop providers
 L2  DURABLE LOG   event-log: seq-cursor append, replay, attach, rerun
 L1  VOCABULARY    @openagentsinc/agent-runtime-schema (KhalaRuntimeEvent)
 L0  MODEL CALL    effect/unstable/ai (upstream) + @openagentsinc/ai-model
+P   PROGRAMS      @openagentsinc/dse (typed signatures, immutable artifacts,
+                  portable runtime; explicit offline optimizer)
 ```
 
 **The one rule.** Every layer speaks `KhalaRuntimeEvent` upward. One event
@@ -47,6 +49,7 @@ union. One durable cursor.
 | `@openagentsinc/ai-model`                  | L0 model-call bridge                |
 | `@openagentsinc/history-corpus`            | L6 recall (history adapter)         |
 | `@openagentsinc/rlm`                       | L6 recursive engine (Tier D + S)    |
+| `@openagentsinc/dse`                       | typed model programs                |
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                          |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                          |
 
@@ -77,7 +80,7 @@ git config core.hooksPath .githooks   # enable pre-push gate
 
 - First-class Recursive Language Model specification:
   [`rlm/README.md`](rlm/README.md)
-- DSE (Declarative Self-Improving Effect) compile-side introduction:
+- DSE normative contract and public API:
   [`dse/README.md`](dse/README.md)
 - Monorepo consumer: https://github.com/OpenAgentsInc/openagents
 - Monorepo pointer doc (after swap): `docs/ai-sdk/README.md` in openagents

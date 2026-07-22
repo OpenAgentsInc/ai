@@ -22,6 +22,8 @@ L3  SANDBOX       sandbox-provider contract + local + interop providers
 L2  DURABLE LOG   event-log: seq-cursor append, replay, attach, rerun
 L1  VOCABULARY    @openagentsinc/agent-runtime-schema (KhalaRuntimeEvent)
 L0  MODEL CALL    effect/unstable/ai (upstream) + @openagentsinc/ai-model
+P   PROGRAMS      @openagentsinc/dse (typed signatures, immutable artifacts,
+                  portable runtime; optimizer is an explicit subpath)
 ```
 
 Every layer speaks `KhalaRuntimeEvent` upward. One event union. One durable
@@ -37,6 +39,7 @@ cursor.
 | `@openagentsinc/ai-model`                  | L0 model-call bridge          |
 | `@openagentsinc/history-corpus`            | L6 recall                     |
 | `@openagentsinc/rlm`                       | L6 recursive engine           |
+| `@openagentsinc/dse`                       | typed model programs          |
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                    |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                    |
 
@@ -71,6 +74,15 @@ validation, exposed as one typed service and an Effect `Tool` adapter for
 harness consumption. An RLM result is evidence, not authority: a completed
 answer is a cited candidate, never an authorization. Spec, architecture, and
 conformance gates: [`docs/rlm/`](docs/rlm/README.md).
+
+## DSE Programs
+
+The SDK uses DSE as its one typed model-program contract. A `Program<I, O>`
+binds an Effect Schema signature to one immutable candidate artifact. Runtime
+prediction performs bounded Schema repair and emits receipts. The event adapter
+projects prediction lifecycle and honest usage onto `KhalaRuntimeEvent`. Offline
+compile and promotion stay on the explicit `@openagentsinc/dse/optimizer`
+subpath. Contract and API docs: [`docs/dse/`](docs/dse/README.md).
 
 ## Train policy
 

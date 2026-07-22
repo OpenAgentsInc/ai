@@ -79,6 +79,9 @@ importers:
       '@openagentsinc/ai-model':
         specifier: workspace:*
         version: link:../ai-model
+      '@openagentsinc/dse':
+        specifier: workspace:*
+        version: link:../dse
       '@openagentsinc/history-corpus':
         specifier: workspace:*
         version: link:../history-corpus
@@ -179,6 +182,25 @@ importers:
       '@openagentsinc/rlm':
         specifier: workspace:*
         version: link:../rlm
+      effect:
+        specifier: 4.0.0-beta.94
+        version: 4.0.0-beta.94
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.1
+      '@types/vite-plus-matchers':
+        specifier: workspace:*
+        version: link:../../types/vite-plus-matchers
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/dse:
+    dependencies:
+      '@openagentsinc/agent-runtime-schema':
+        specifier: workspace:*
+        version: link:../agent-runtime-schema
       effect:
         specifier: 4.0.0-beta.94
         version: 4.0.0-beta.94

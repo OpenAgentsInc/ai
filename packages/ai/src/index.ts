@@ -16,6 +16,8 @@
  * - L5 UI STREAM    — `@openagentsinc/agent-harness-contract` (UI message
  *   chunks and reducer)
  * - L6 RECALL       — `@openagentsinc/history-corpus`
+ * - PROGRAMS        — `@openagentsinc/dse` (typed signatures, immutable
+ *   artifacts, portable runtime; optimizer stays on its explicit subpath)
  *
  * The layer map and the publishable roster live in
  * `docs/fable/2026-07-21-effect-native-openagents-ai-sdk-analysis.md` §1.
@@ -31,3 +33,4 @@ export * from "@openagentsinc/agent-runtime-schema";
 export * from "@openagentsinc/agent-harness-contract";
 export * from "@openagentsinc/history-corpus";
 export * from "@openagentsinc/ai-model";
+export * as Dse from "@openagentsinc/dse";
