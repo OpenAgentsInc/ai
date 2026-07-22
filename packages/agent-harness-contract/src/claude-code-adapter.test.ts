@@ -392,18 +392,34 @@ describe("claude-code adapter — identity, isolation, and turn semantics", () =
     expect(adapter.builtinTools.map((tool) => tool.nativeName)).toContain("Bash");
   });
 
-  test("the owner's live ~/.claude home is refused at start", async () => {
+  test("a live-home or omitted configDir selects owner-local mode (no CLAUDE_CONFIG_DIR)", async () => {
     expect(isLiveClaudeHome("/Users/owner/.claude")).toBe(true);
     expect(isLiveClaudeHome("/custom/root/.claude", "/custom/root")).toBe(true);
     expect(isLiveClaudeHome("/tmp/claude-homes/s1")).toBe(false);
 
-    const { query } = makeScriptedQuery([REPRESENTATIVE_SCRIPT]);
+    const { calls, query } = makeScriptedQuery([REPRESENTATIVE_SCRIPT]);
     const adapter = makeClaudeCodeHarnessAdapter({ query, configDir: "/Users/owner/.claude" });
-    const error = await Effect.runPromise(
-      adapter.start({ sessionId: "s1", source: SOURCE }).pipe(Effect.flip),
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        yield* collect(control.events);
+        yield* control.done;
+      }),
     );
-    expect(error).toBeInstanceOf(HarnessStartError);
-    expect(error.failureClass).toBe("live_claude_home_refused");
+    expect(calls[0]?.options.env?.CLAUDE_CONFIG_DIR).toBeUndefined();
+
+    const omitted = makeScriptedQuery([REPRESENTATIVE_SCRIPT]);
+    const omittedAdapter = makeClaudeCodeHarnessAdapter({ query: omitted.query });
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const session = yield* omittedAdapter.start({ sessionId: "s2", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        yield* collect(control.events);
+        yield* control.done;
+      }),
+    );
+    expect(omitted.calls[0]?.options.env?.CLAUDE_CONFIG_DIR).toBeUndefined();
   });
 
   test("a full turn streams turn.started -> ... -> turn.finished with contiguous sequences", async () => {

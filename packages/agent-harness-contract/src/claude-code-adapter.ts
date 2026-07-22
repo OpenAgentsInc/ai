@@ -535,6 +535,11 @@ export const claudeCodeMessageToKhalaEvents = (
         }),
       ];
     }
+    // The live SDK emits message types beyond the modeled set (for example
+    // rate-limit and progress notices). Unknown types project to no neutral
+    // event instead of crashing the stream (found by the live smoke).
+    default:
+      return [];
   }
 };
 
@@ -778,9 +783,10 @@ const LIVE_CLAUDE_HOME_PATTERN = /^(?:\/(?:Users|home)\/[^/]+|~)\/\.claude$/;
 
 /**
  * True when `configDir` is the owner's LIVE Claude Code home rather than an
- * isolated per-session/per-account home. The adapter refuses to start against
- * it: pointing the SDK at the live `~/.claude` risks the owner's real session
- * (the monorepo's do-not-clobber invariant), so isolation is the only default.
+ * isolated per-session/per-account home. The adapter treats a live-home value
+ * the same as an omitted one: OWNER-LOCAL mode, reached by leaving
+ * `CLAUDE_CONFIG_DIR` unset rather than pointing the runtime at an explicit
+ * copy of the live home.
  */
 export const isLiveClaudeHome = (configDir: string, homeDir?: string): boolean => {
   const normalized = configDir.replace(/\/+$/, "");
@@ -819,11 +825,15 @@ export interface ClaudeCodeAdapterConfig {
   /** The injected structural `query()` seam (the real SDK's `query` in production). */
   readonly query: ClaudeCodeQuery;
   /**
-   * Isolated Claude settings/home directory, exported to the runtime as
-   * `CLAUDE_CONFIG_DIR`. REQUIRED: the owner's live `~/.claude` is refused at
-   * `start` — per-session/per-account isolated homes only.
+   * Claude settings/home directory, exported to the runtime as
+   * `CLAUDE_CONFIG_DIR`. Omit it (or pass the live-home path) for OWNER-LOCAL
+   * mode: CLAUDE_CONFIG_DIR is then left unset so the runtime uses the
+   * developer's currently-authenticated default Claude home. The adapter only
+   * drives query turns — never a login flow — so owner-local mode cannot
+   * clobber the live session (owner decision 2026-07-22, openagents#9161).
+   * Fleet and multi-account callers keep passing isolated homes.
    */
-  readonly configDir: string;
+  readonly configDir?: string;
   /** The owner's home directory, for the live-home guard (injectable for tests). */
   readonly homeDir?: string;
   /** Working directory for the session's turns. */
@@ -864,17 +874,14 @@ export const makeClaudeCodeHarnessAdapter = (config: ClaudeCodeAdapterConfig): A
       const source: KhalaRuntimeSource = options.source;
       const sessionId = options.sessionId;
 
-      if (config.configDir.trim() === "" || isLiveClaudeHome(config.configDir, config.homeDir)) {
-        return yield* Effect.fail(
-          new HarnessStartError({
-            harnessId,
-            sessionId,
-            failureClass: "live_claude_home_refused",
-            detail:
-              "configDir must be an isolated Claude home; the owner's live ~/.claude is never used by default",
-          }),
-        );
-      }
+      // Owner-local mode: an omitted, empty, or live-home configDir means the
+      // currently-authenticated default Claude home (CLAUDE_CONFIG_DIR unset).
+      const effectiveConfigDir =
+        config.configDir === undefined ||
+        config.configDir.trim() === "" ||
+        isLiveClaudeHome(config.configDir, config.homeDir)
+          ? undefined
+          : config.configDir;
 
       // Session-closure state. Mutable boxes (not Refs) because the projection
       // allocates sequences SYNCHRONOUSLY while the SDK iterable is consumed
@@ -987,7 +994,12 @@ export const makeClaudeCodeHarnessAdapter = (config: ClaudeCodeAdapterConfig): A
           prompt: params.prompt,
           options: {
             ...(config.cwd === undefined ? {} : { cwd: config.cwd }),
-            env: { ...(config.env ?? {}), CLAUDE_CONFIG_DIR: config.configDir },
+            env: {
+              ...(config.env ?? {}),
+              ...(effectiveConfigDir === undefined
+                ? {}
+                : { CLAUDE_CONFIG_DIR: effectiveConfigDir }),
+            },
             ...(config.model === undefined ? {} : { model: config.model }),
             abortController: abort,
             // Never "bypassPermissions": it would skip the canUseTool handler
