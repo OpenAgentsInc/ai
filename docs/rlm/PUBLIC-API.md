@@ -75,7 +75,12 @@ host must admit that registry before composition.
 A manifest has an explicit `RlmCorpusPolicy`. It records admitted visibility
 and redaction sets. A composite manifest also has `RlmCorpusComposition`. This
 record contains ordered child identity triples, the composite policy, the
-ordering rule, and child-qualified exclusions.
+ordering rule, child-qualified exclusions, and the projection digest.
+
+`RlmCompositeProjection` supplies a digest-bound summary and bounded pointer
+operations. `makeCompositeCorpusHandle` does not read pointer rows during
+construction. `buildInMemoryCompositeProjection` is a hard-capped helper for
+small fixtures. It is not the durable large-corpus index.
 
 `Source` resolution goes through `RlmCorpusSource` and returns an immutable
 `RlmCorpusHandle` with bounded range/scan methods. Inline corpora are decoded,

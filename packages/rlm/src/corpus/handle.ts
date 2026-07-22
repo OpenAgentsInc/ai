@@ -111,6 +111,12 @@ export const makeInlineCorpusHandle = (
     const addressKeys = new Set<string>();
     for (let index = 0; index < entries.length; index++) {
       const entry = entries[index]!;
+      if (entry.scopeRef !== manifest.scopeRef) {
+        return yield* new RlmCorpusError({
+          reason: "invalid_inline",
+          detailSafe: "inline manifest and entry scopes differ",
+        });
+      }
       if (entry.ordinal !== index) {
         return yield* new RlmCorpusError({
           reason: "invalid_inline",

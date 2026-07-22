@@ -16,11 +16,14 @@ export interface DeterministicObservation {
   readonly observationText: string;
 }
 
-const corpusError = (detailSafe?: string): RlmError =>
+export const mapRlmCorpusError = (error: {
+  readonly reason: string;
+  readonly detailSafe?: string;
+}): RlmError =>
   new RlmError({
-    reason: "corpus_unavailable",
+    reason: error.reason === "changed" ? "corpus_changed" : "corpus_unavailable",
     retryable: false,
-    ...(detailSafe === undefined ? {} : { detailSafe }),
+    ...(error.detailSafe === undefined ? {} : { detailSafe: error.detailSafe }),
   });
 
 /** Collect at most maxEntries from a bounded corpus scan. */
@@ -31,7 +34,7 @@ export const collectBoundedScan = (
   handle.scan({ maxEntries }).pipe(
     Stream.runCollect,
     Effect.map((entries) => [...entries]),
-    Effect.mapError((error) => corpusError(error.detailSafe)),
+    Effect.mapError(mapRlmCorpusError),
   );
 
 const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -107,7 +110,7 @@ export const runDeterministicOperation = (
             { start: operation.start, endInclusive: operation.endInclusive },
             { maxEntries: allowedCount, maxCharsPerEntry: limits.maxCharsPerSpan },
           )
-          .pipe(Effect.mapError((error) => corpusError(error.detailSafe)));
+          .pipe(Effect.mapError(mapRlmCorpusError));
         if (requestedCount > allowedCount) capsHit.push("maxEntriesScanned");
         for (const entry of takeScan(entries)) {
           if (findings.length >= limits.maxSpans) {

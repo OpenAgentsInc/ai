@@ -5,7 +5,11 @@ import type { RlmEvent } from "../schemas/events.ts";
 import { RlmError } from "../schemas/errors.ts";
 import type { RlmCorpusHandle } from "../corpus/handle.ts";
 import type { RlmEnvironment } from "../environment/values.ts";
-import { collectBoundedScan, grepEntries } from "../interpreter/deterministic.ts";
+import {
+  collectBoundedScan,
+  grepEntries,
+  mapRlmCorpusError,
+} from "../interpreter/deterministic.ts";
 import { topologicalNodes, validateProgram } from "./validate.ts";
 import type { RlmCitation } from "../schemas/corpus.ts";
 import { citationFromEntry } from "../corpus/citations.ts";
@@ -137,16 +141,7 @@ export const executeProgram = (
                   maxCharsPerEntry: deps.budget.maxCharsPerSpan,
                 },
               )
-              .pipe(
-                Effect.mapError(
-                  (error) =>
-                    new RlmError({
-                      reason: "corpus_unavailable",
-                      retryable: false,
-                      ...(error.detailSafe === undefined ? {} : { detailSafe: error.detailSafe }),
-                    }),
-                ),
-              );
+              .pipe(Effect.mapError(mapRlmCorpusError));
             const citations = slice.map((h) => citationFromEntry(deps.handle, h));
             yield* deps.env.publish({
               valueRef: node.outputValueRef,

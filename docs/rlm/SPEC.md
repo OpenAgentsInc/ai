@@ -208,6 +208,16 @@ A composite entry MUST preserve the source plane and exact child source
 locator. A citation MUST bind the selected composite digest and the exact child
 content digest. A derived entry MAY include more supporting source locators.
 
+A trusted projection MUST bind the complete ordered pointer index to a digest.
+Its summary MUST bind scope, ordered children, policy, coverage, exclusions,
+source planes, and duplicate count. The constructor MUST verify this summary
+and projection freshness. It MUST NOT read or scan entry pointers.
+
+A bounded operation MUST verify each pointer against the exact child entry.
+The operation MUST reject a pointer with a different scope, ordinal, entry ref,
+plane, address, origin, or policy. It MUST reject an address or ordinal replay.
+It MUST fail if a bounded pointer read or scan ends before declared coverage.
+
 ### 3.4 Text is untrusted data
 
 Corpus text may contain prompt injection, forged role labels, JSON resembling
@@ -247,8 +257,9 @@ re-read under the original run identity.
 
 Engine operations and citation validation MUST use bounded reads, bounded
 scans, or source lookup. They MUST NOT require `materializeAll`. Composite
-construction MAY scan bounded child entries to build an address index. It MUST
-NOT retain all child text as a second corpus copy.
+construction MUST NOT scan child entries or projection pointers. A separate
+fixture helper MAY build a hard-capped in-memory pointer index. A durable
+application SHOULD supply an out-of-core projection.
 
 ## 4. Request modes
 

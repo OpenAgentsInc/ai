@@ -64,10 +64,15 @@ caller authority. The request does not carry a visibility allowlist that can
 widen access.
 
 `makeCompositeCorpusHandle` is a trusted in-process constructor. The
-application supplies exact child handles and expected identities. The
-constructor applies a canonical policy, preserves child source locators, and
+application supplies exact child handles, expected identities, and a trusted
+`RlmCompositeProjection`. The projection binds its ordered pointer index to a
+digest. The constructor verifies metadata and does not enumerate entries. It
 returns one immutable handle. It does not add a composite policy to tool or
 model request data.
+
+`buildInMemoryCompositeProjection` is only for small fixtures. It counts the
+entries that it reads and stops at its hard cap. A durable application can use
+an out-of-core index that implements the same bounded projection contract.
 
 ```ts
 interface RlmCorpusSourceShape {

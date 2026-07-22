@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import type { RlmCitation, RlmCorpusEntry, RlmSourceLocator } from "../schemas/corpus.ts";
 import { RlmError } from "../schemas/errors.ts";
-import { excerptDigest } from "./digest.ts";
+import { canonicalJson, excerptDigest } from "./digest.ts";
 import type { RlmCorpusHandle } from "./handle.ts";
 
 export interface CitationValidation {
@@ -13,10 +13,22 @@ const sameLocator = (left: RlmSourceLocator, right: RlmSourceLocator): boolean =
   left.corpusRef === right.corpusRef &&
   left.contentDigest === right.contentDigest &&
   left.entryRef === right.entryRef &&
-  JSON.stringify(left.sourcePlane) === JSON.stringify(right.sourcePlane) &&
+  canonicalJson(left.sourcePlane) === canonicalJson(right.sourcePlane) &&
   left.sourceKind === right.sourceKind &&
   left.sourceAddress.addressSchemaId === right.sourceAddress.addressSchemaId &&
   left.sourceAddress.encodedAddress === right.sourceAddress.encodedAddress;
+
+const samePlane = (
+  left: RlmCorpusEntry["sourcePlane"],
+  right: RlmCorpusEntry["sourcePlane"],
+): boolean => canonicalJson(left) === canonicalJson(right);
+
+const corpusError = (error: { readonly reason: string; readonly detailSafe?: string }): RlmError =>
+  new RlmError({
+    reason: error.reason === "changed" ? "corpus_changed" : "corpus_unavailable",
+    retryable: false,
+    ...(error.detailSafe === undefined ? {} : { detailSafe: error.detailSafe }),
+  });
 
 /** Validate citations by bounded source lookup. This function never materializes a corpus. */
 export const validateCitations = (
@@ -26,16 +38,7 @@ export const validateCitations = (
   Effect.gen(function* () {
     const validated: Array<RlmCitation> = [];
     const invalid: Array<{ citation: RlmCitation; reason: string }> = [];
-    yield* handle.assertUnchanged().pipe(
-      Effect.mapError(
-        (error) =>
-          new RlmError({
-            reason: error.reason === "changed" ? "corpus_changed" : "corpus_unavailable",
-            retryable: false,
-            ...(error.detailSafe === undefined ? {} : { detailSafe: error.detailSafe }),
-          }),
-      ),
-    );
+    yield* handle.assertUnchanged().pipe(Effect.mapError(corpusError));
 
     for (const citation of citations) {
       if (citation.corpusRef !== handle.identity.corpusRef) {
@@ -64,6 +67,40 @@ export const validateCitations = (
         invalid.push({ citation, reason: "unsupported_entry_range" });
         continue;
       }
+      const excerptPairPresent =
+        citation.excerpt !== undefined && citation.excerptDigest !== undefined;
+      if (
+        (citation.excerpt === undefined) !== (citation.excerptDigest === undefined) ||
+        (citation.excerpt?.length ?? 0) > 512 ||
+        (excerptPairPresent && excerptDigest(citation.excerpt!) !== citation.excerptDigest)
+      ) {
+        invalid.push({ citation, reason: "excerpt_mismatch" });
+        continue;
+      }
+      const entries = yield* handle
+        .read(
+          { start: lookup.value.ordinal, endInclusive: lookup.value.ordinal },
+          { maxEntries: 1, maxCharsPerEntry: citation.excerpt?.length ?? 0 },
+        )
+        .pipe(Effect.mapError(corpusError));
+      const entry = entries[0];
+      if (
+        entry === undefined ||
+        entry.entryRef !== citation.entryRefStart ||
+        entry.scopeRef !== citation.scopeRef ||
+        !samePlane(entry.sourcePlane, citation.sourcePlane) ||
+        entry.sourceAddress.addressSchemaId !== citation.sourceAddress.addressSchemaId ||
+        entry.sourceAddress.encodedAddress !== citation.sourceAddress.encodedAddress ||
+        !sameLocator(entry.sourceOrigin ?? lookup.value.origin, citation.sourceOrigin) ||
+        canonicalJson(entry.supportingSources ?? []) !== canonicalJson(citation.supportingSources)
+      ) {
+        invalid.push({ citation, reason: "source_mismatch" });
+        continue;
+      }
+      if (citation.excerpt !== undefined && (entry.text ?? "") !== citation.excerpt) {
+        invalid.push({ citation, reason: "excerpt_mismatch" });
+        continue;
+      }
       let supportingValid = true;
       for (const source of citation.supportingSources) {
         const result = yield* handle.validateSourceLocator(source).pipe(Effect.option);
@@ -74,14 +111,6 @@ export const validateCitations = (
       }
       if (!supportingValid) {
         invalid.push({ citation, reason: "invalid_supporting_source" });
-        continue;
-      }
-      if (
-        citation.excerpt !== undefined &&
-        citation.excerptDigest !== undefined &&
-        excerptDigest(citation.excerpt) !== citation.excerptDigest
-      ) {
-        invalid.push({ citation, reason: "excerpt_mismatch" });
         continue;
       }
       validated.push(citation);

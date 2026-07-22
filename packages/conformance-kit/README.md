@@ -30,7 +30,7 @@ is proven to work before anyone points it at a third-party implementation.
 | `@openagentsinc/conformance-kit/reducer`   | `runReducerLaws`           | a progressive UI-message reducer | progressive fold, tool state machine, transient bypass, fail-loud-never-corrupt                                                                        |
 | `@openagentsinc/conformance-kit/recall`    | `runRecallLaws`            | a `HistoryRecall` Tier D source  | correctness anchor, caps truncate + report, `cost.modelCalls === 0`, coverage-note carry-through, typed invalid input                                  |
 | `@openagentsinc/conformance-kit/rlm`       | `runRlmCapLaws`            | the RLM engine + corpus source   | every cap → honest `Partial`, generous → `Completed`, no laundering, deterministic never touches a model                                               |
-| `@openagentsinc/conformance-kit/corpus`    | `runCorpusCompositionLaws` | an RLM composite constructor     | deterministic identity, semantic child order, policy non-widening                                                                                      |
+| `@openagentsinc/conformance-kit/corpus`    | `runCorpusCompositionLaws` | a constructor and projection     | identity, order, policy, scope, freshness, citations, duplicates, planes, coverage, exclusions, bounded access                                         |
 
 Everything is re-exported from the package root too
 (`@openagentsinc/conformance-kit`).

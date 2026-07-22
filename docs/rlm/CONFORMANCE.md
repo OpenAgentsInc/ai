@@ -399,9 +399,10 @@ required for integration changes.
 
 `@openagentsinc/conformance-kit/corpus` publishes the corpus composition laws.
 The laws check deterministic identity, semantic child order, and policy
-non-widening. The reference tests also check duplicate source refusal, stale
-child refusal, exact child citation resolution, explicit v1 migration, and a
-large lazy child that cannot materialize all entries.
+non-widening. They also check scope isolation, duplicate source refusal,
+unsupported planes, stale children and projections, exact child citations,
+coverage and exclusion digests, and bounded out-of-core access. The constructor
+must not read, scan, or materialize a large child.
 
 ## 16. Dense-recall evaluation
 

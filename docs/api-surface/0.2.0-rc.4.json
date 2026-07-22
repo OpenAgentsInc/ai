@@ -10510,6 +10510,10 @@
               "kind": "interface",
               "sig": "87aadac70d5d79be"
             },
+            "buildInMemoryCompositeProjection": {
+              "kind": "value",
+              "sig": "37f4a9777c9477cf"
+            },
             "canonicalizeRlmCorpusPolicy": {
               "kind": "value",
               "sig": "0cec1f7a453312da"
@@ -10520,11 +10524,11 @@
             },
             "citationFromEntry": {
               "kind": "value",
-              "sig": "b7523460d1bc3e8f"
+              "sig": "b1f26ae0597a3f8f"
             },
             "CitationValidation": {
               "kind": "interface",
-              "sig": "8c1499f79443ca68"
+              "sig": "08059a3a975df1be"
             },
             "collectBoundedScan": {
               "kind": "value",
@@ -10532,7 +10536,11 @@
             },
             "computeCompositeContentDigest": {
               "kind": "value",
-              "sig": "1dee5ea0deaf2468"
+              "sig": "3e23a1016f49ff2e"
+            },
+            "computeCompositeProjectionDigest": {
+              "kind": "value",
+              "sig": "641102b84c43b92b"
             },
             "computeContentDigest": {
               "kind": "value",
@@ -10560,7 +10568,7 @@
             },
             "DeterministicObservation": {
               "kind": "interface",
-              "sig": "22475de24060eb43"
+              "sig": "e9738a9b38e77730"
             },
             "emptyRlmTokenUsage": {
               "kind": "value",
@@ -10578,6 +10586,10 @@
               "kind": "value",
               "sig": "ffdd3fe3f7fcaaf8"
             },
+            "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
             "INLINE_CORPUS_BYTE_CEILING": {
               "kind": "value",
               "sig": "ceab13d527db7331"
@@ -10592,7 +10604,7 @@
             },
             "MakeCompositeCorpusHandleInput": {
               "kind": "interface",
-              "sig": "26892ce2daacc312"
+              "sig": "1aba14fea0b50866"
             },
             "makeInlineCorpusHandle": {
               "kind": "value",
@@ -10617,6 +10629,10 @@
             "MakeRlmToolHandlerOptions": {
               "kind": "interface",
               "sig": "225f413f0cc8eab0"
+            },
+            "mapRlmCorpusError": {
+              "kind": "value",
+              "sig": "a954c8bed3f6ba49"
             },
             "migrateRlmCorpusV1": {
               "kind": "value",
@@ -10688,11 +10704,11 @@
             },
             "RlmCitation": {
               "kind": "type",
-              "sig": "6e7e99229fa06f97"
+              "sig": "df0257cdec985559"
             },
             "RlmCitationV1": {
               "kind": "type",
-              "sig": "3252abfc9ef655dc"
+              "sig": "462ddfd43f40d8b7"
             },
             "RlmCommitNode": {
               "kind": "type",
@@ -10700,7 +10716,11 @@
             },
             "RlmCompleted": {
               "kind": "type",
-              "sig": "f2d967faee159585"
+              "sig": "e92201fe8fe2131c"
+            },
+            "RlmCompositeAddressLookup": {
+              "kind": "type",
+              "sig": "d1123556aca8260e"
             },
             "RlmCompositeChild": {
               "kind": "interface",
@@ -10710,13 +10730,25 @@
               "kind": "type",
               "sig": "055cdcab4f97f039"
             },
+            "RlmCompositeEntryPointer": {
+              "kind": "interface",
+              "sig": "533f9a4d4362b2e4"
+            },
+            "RlmCompositeProjection": {
+              "kind": "interface",
+              "sig": "47da74d744f079e6"
+            },
+            "RlmCompositeProjectionSummary": {
+              "kind": "interface",
+              "sig": "41cb050e2042be73"
+            },
             "RlmCompositionExclusion": {
               "kind": "type",
               "sig": "fa4c3fd123967bb2"
             },
             "RlmCorpusComposition": {
               "kind": "type",
-              "sig": "c4a4338986180f4d"
+              "sig": "de939ebbd66e7755"
             },
             "RlmCorpusCoverage": {
               "kind": "type",
@@ -10740,7 +10772,7 @@
             },
             "RlmCorpusHandle": {
               "kind": "interface",
-              "sig": "997f17f3cf79ca81"
+              "sig": "bd94ea6fb6ddb2ec"
             },
             "RlmCorpusIdentity": {
               "kind": "type",
@@ -10752,7 +10784,7 @@
             },
             "RlmCorpusInput": {
               "kind": "type",
-              "sig": "468d77d4a447a6b4"
+              "sig": "e28fc97cebee0106"
             },
             "RlmCorpusInputV1": {
               "kind": "type",
@@ -10760,7 +10792,7 @@
             },
             "RlmCorpusManifest": {
               "kind": "type",
-              "sig": "6b6dbfba3345ab85"
+              "sig": "03085fe08d66ce7c"
             },
             "RlmCorpusManifestV1": {
               "kind": "type",
@@ -10812,7 +10844,7 @@
             },
             "RlmDeterministicRequest": {
               "kind": "type",
-              "sig": "eb14a59765068f60"
+              "sig": "f8e5999170761b9f"
             },
             "RlmDigest": {
               "kind": "type",
@@ -10836,7 +10868,7 @@
             },
             "RlmEvent": {
               "kind": "type",
-              "sig": "b82197da1f641406"
+              "sig": "5277f2cd690b412c"
             },
             "RlmEventBase": {
               "kind": "value",
@@ -10856,7 +10888,7 @@
             },
             "RlmFinding": {
               "kind": "type",
-              "sig": "1dca61daec0697ec"
+              "sig": "094326444375a24a"
             },
             "RlmHonesty": {
               "kind": "type",
@@ -10864,7 +10896,7 @@
             },
             "RlmInlineCorpusInputV2": {
               "kind": "interface",
-              "sig": "bb5a338177fdf8a1"
+              "sig": "dc953200bced48f2"
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
@@ -10940,11 +10972,11 @@
             },
             "RlmOutput": {
               "kind": "type",
-              "sig": "cec4eb01ca7acfe7"
+              "sig": "e49c32db03daea7a"
             },
             "RlmPartial": {
               "kind": "type",
-              "sig": "53bee5f91b497e52"
+              "sig": "73ccea6c86993fb3"
             },
             "RlmPartialReason": {
               "kind": "type",
@@ -11004,7 +11036,7 @@
             },
             "RlmRequest": {
               "kind": "type",
-              "sig": "1147154b26154c4c"
+              "sig": "811215bbec3bc096"
             },
             "RlmRunRef": {
               "kind": "type",
@@ -11032,7 +11064,7 @@
             },
             "RlmSemanticRequest": {
               "kind": "type",
-              "sig": "3acde59b12cbf011"
+              "sig": "d92bd3fbaa57dd74"
             },
             "RlmShape": {
               "kind": "interface",
@@ -11060,7 +11092,7 @@
             },
             "RlmStoredValue": {
               "kind": "interface",
-              "sig": "5e884a3349830040"
+              "sig": "10fb0210664cd8cc"
             },
             "RlmStrategyProfile": {
               "kind": "type",
@@ -11072,11 +11104,11 @@
             },
             "RlmTerminalEvent": {
               "kind": "type",
-              "sig": "f55dc77fb57f0bdb"
+              "sig": "a27c1ccf9621e9be"
             },
             "RlmTerminalResult": {
               "kind": "type",
-              "sig": "3c75abb759c0bc95"
+              "sig": "6e9be327986d5eff"
             },
             "RlmTokenUsage": {
               "kind": "type",
@@ -11148,7 +11180,7 @@
             },
             "validateCitations": {
               "kind": "value",
-              "sig": "faae06d9120161af"
+              "sig": "dd4bfe291bdbf166"
             },
             "validateProgram": {
               "kind": "value",
@@ -12861,7 +12893,7 @@
             },
             "khalaModelFallbackFallthroughReasonTags": {
               "kind": "value",
-              "sig": "c26e9b8e4bb87415"
+              "sig": "9125a3ff6ca67aad"
             },
             "KhalaModelFallbackOutcome": {
               "kind": "type",
@@ -12877,7 +12909,7 @@
             },
             "khalaModelFallbackTransientReasonTags": {
               "kind": "value",
-              "sig": "c26e9b8e4bb87415"
+              "sig": "9125a3ff6ca67aad"
             },
             "khalaRuntimeEventFromEffectAiStreamPart": {
               "kind": "function",
@@ -12955,7 +12987,7 @@
             },
             "localAiSdkSandboxProviderModuleUrl": {
               "kind": "value",
-              "sig": "48267b537cd18c18"
+              "sig": "90043ae4ad8f0390"
             },
             "LocalAiSdkSandboxProviderOptions": {
               "kind": "type",
@@ -13005,7 +13037,7 @@
             },
             "OpenAgentsSandboxLane": {
               "kind": "type",
-              "sig": "32fc335fa2fcf423"
+              "sig": "f004d7c7a351ae6f"
             },
             "OpenAgentsSandboxProcessInput": {
               "kind": "type",
@@ -13067,7 +13099,7 @@
             },
             "CorpusCompositionLawsConfig": {
               "kind": "alias",
-              "sig": "faa585628d4ba452"
+              "sig": "5f11e8523daeda3f"
             },
             "EventLogLawsConfig": {
               "kind": "alias",
@@ -13145,7 +13177,7 @@
           "exports": {
             "CorpusCompositionLawsConfig": {
               "kind": "interface",
-              "sig": "faa585628d4ba452"
+              "sig": "5f11e8523daeda3f"
             },
             "runCorpusCompositionLaws": {
               "kind": "value",
@@ -13256,7 +13288,7 @@
             },
             "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ActivationDecision": {
               "kind": "type",
@@ -13268,7 +13300,7 @@
             },
             "ActivationRefusalReason": {
               "kind": "type",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ActivationResult": {
               "kind": "type",
@@ -13284,7 +13316,7 @@
             },
             "BASELINE_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "BaselinePointer": {
               "kind": "type",
@@ -13312,7 +13344,7 @@
             },
             "CANARY_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "CanaryPlan": {
               "kind": "type",
@@ -13320,7 +13352,7 @@
             },
             "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "CandidateArtifact": {
               "kind": "type",
@@ -13348,7 +13380,7 @@
             },
             "COMPILED_PROGRAM_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "CompiledProgram": {
               "kind": "type",
@@ -13356,11 +13388,11 @@
             },
             "DATASET_REVISION_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "DATASET_SPLIT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "datasetId": {
               "kind": "value",
@@ -13388,7 +13420,7 @@
             },
             "DatasetSplitFailure": {
               "kind": "type",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "DatasetSplitName": {
               "kind": "type",
@@ -13424,7 +13456,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "13054fe6da49ec68"
+              "sig": "4c9c8ae2a1e0a48b"
             },
             "DseModelError": {
               "kind": "class",
@@ -13456,7 +13488,7 @@
             },
             "EVALUATION_REPORT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "EvaluationReport": {
               "kind": "type",
@@ -13492,7 +13524,7 @@
             },
             "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "IndependentReviewResult": {
               "kind": "type",
@@ -13548,7 +13580,7 @@
             },
             "PREDICT_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "PredictArgs": {
               "kind": "interface",
@@ -13596,7 +13628,7 @@
             },
             "PROMOTION_REQUEST_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "promotionId": {
               "kind": "value",
@@ -13608,7 +13640,7 @@
             },
             "PromotionRefusalReason": {
               "kind": "type",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "PromotionRequest": {
               "kind": "type",
@@ -13616,7 +13648,7 @@
             },
             "PROMPT_IR_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "PromptIr": {
               "kind": "type",
@@ -13632,7 +13664,7 @@
             },
             "RELEASE_CHANNEL_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ReleaseChannel": {
               "kind": "type",
@@ -13640,7 +13672,7 @@
             },
             "RELEASED_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ReleasedArtifactPointer": {
               "kind": "type",
@@ -13684,7 +13716,7 @@
             },
             "RESOURCE_BUDGET_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ResourceBudget": {
               "kind": "type",
@@ -13712,7 +13744,7 @@
             },
             "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "rollbackActivation": {
               "kind": "value",
@@ -13736,7 +13768,7 @@
             },
             "SEARCH_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "SearchAlgorithm": {
               "kind": "type",
@@ -13756,15 +13788,15 @@
             },
             "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "SIGNATURE_REGISTRY": {
               "kind": "value",
-              "sig": "aba45cfd781f4da7"
+              "sig": "5e5ea3f8e694965d"
             },
             "SignatureCatalog": {
               "kind": "type",
@@ -13820,7 +13852,7 @@
             },
             "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "UncertaintyMethod": {
               "kind": "type",
@@ -13837,7 +13869,7 @@
           "exports": {
             "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ActivationReceipt": {
               "kind": "type",
@@ -13849,7 +13881,7 @@
             },
             "BASELINE_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "BaselinePointer": {
               "kind": "type",
@@ -13869,7 +13901,7 @@
             },
             "CANARY_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "CanaryPlan": {
               "kind": "type",
@@ -13877,7 +13909,7 @@
             },
             "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "CandidateArtifact": {
               "kind": "type",
@@ -13905,7 +13937,7 @@
             },
             "COMPILED_PROGRAM_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "CompiledProgram": {
               "kind": "type",
@@ -13913,11 +13945,11 @@
             },
             "DATASET_REVISION_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "DATASET_SPLIT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "datasetId": {
               "kind": "value",
@@ -13945,7 +13977,7 @@
             },
             "DatasetSplitFailure": {
               "kind": "type",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "DatasetSplitName": {
               "kind": "type",
@@ -13989,7 +14021,7 @@
             },
             "EVALUATION_REPORT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "EvaluationReport": {
               "kind": "type",
@@ -14025,7 +14057,7 @@
             },
             "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "IndependentReviewResult": {
               "kind": "type",
@@ -14077,7 +14109,7 @@
             },
             "PREDICT_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "PredictReceipt": {
               "kind": "type",
@@ -14101,7 +14133,7 @@
             },
             "PROMOTION_REQUEST_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "promotionId": {
               "kind": "value",
@@ -14113,7 +14145,7 @@
             },
             "PromotionRefusalReason": {
               "kind": "type",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "PromotionRequest": {
               "kind": "type",
@@ -14121,7 +14153,7 @@
             },
             "PROMPT_IR_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "PromptIr": {
               "kind": "type",
@@ -14137,7 +14169,7 @@
             },
             "RELEASE_CHANNEL_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ReleaseChannel": {
               "kind": "type",
@@ -14145,7 +14177,7 @@
             },
             "RELEASED_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ReleasedArtifactPointer": {
               "kind": "type",
@@ -14165,7 +14197,7 @@
             },
             "RESOURCE_BUDGET_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ResourceBudget": {
               "kind": "type",
@@ -14189,7 +14221,7 @@
             },
             "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "RollbackReceipt": {
               "kind": "type",
@@ -14201,7 +14233,7 @@
             },
             "SEARCH_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "SearchAlgorithm": {
               "kind": "type",
@@ -14221,15 +14253,15 @@
             },
             "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "SIGNATURE_REGISTRY": {
               "kind": "value",
-              "sig": "aba45cfd781f4da7"
+              "sig": "5e5ea3f8e694965d"
             },
             "SignatureCatalog": {
               "kind": "type",
@@ -14285,7 +14317,7 @@
             },
             "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "UncertaintyMethod": {
               "kind": "type",
@@ -14371,7 +14403,7 @@
             },
             "ActivationRefusalReason": {
               "kind": "type",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "ActivationResult": {
               "kind": "type",
@@ -14399,7 +14431,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "13054fe6da49ec68"
+              "sig": "4c9c8ae2a1e0a48b"
             },
             "DseModelError": {
               "kind": "class",
@@ -14512,7 +14544,7 @@
             },
             "HONESTY_MARKER": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "invalidThenValidModelLayer": {
               "kind": "value",
@@ -14520,7 +14552,7 @@
             },
             "PINNED_NOW": {
               "kind": "value",
-              "sig": "f836416e37117552"
+              "sig": "4f9a13c9dfbac31c"
             },
             "testDeps": {
               "kind": "value",
@@ -14574,7 +14606,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -14594,7 +14626,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "5031d3ec8d0c6c52"
+              "sig": "eaa3c4c3ff90b958"
             },
             "HistoryCorpusEventReader": {
               "kind": "interface",
@@ -14618,7 +14650,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "c80438ea67d65200"
+              "sig": "14e667e791e48418"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -14702,7 +14734,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "250b962ae07ef90a"
+              "sig": "57e2896219b92d26"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -14726,7 +14758,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "1b7cec5bb94aee14"
+              "sig": "2cc93ce83f223cfe"
             },
             "NeutralThreadNote": {
               "kind": "interface",
@@ -14750,7 +14782,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -14770,11 +14802,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "39085c1e4f1d803f"
+              "sig": "b8c89992413f8470"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -14782,11 +14814,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "8617f8b2ab06cc48"
+              "sig": "7e45d9daf9c9adf4"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -14846,11 +14878,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "timeSliceRecursiveRecallCorpus": {
               "kind": "value",
@@ -14891,11 +14923,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             }
           }
         },
@@ -14908,7 +14940,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -14928,7 +14960,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "5031d3ec8d0c6c52"
+              "sig": "eaa3c4c3ff90b958"
             },
             "HistoryCorpusExclusions": {
               "kind": "interface",
@@ -14948,7 +14980,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "1b7cec5bb94aee14"
+              "sig": "2cc93ce83f223cfe"
             }
           }
         },
@@ -14989,7 +15021,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "250b962ae07ef90a"
+              "sig": "57e2896219b92d26"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -15075,7 +15107,7 @@
           "exports": {
             "HistoryRecall": {
               "kind": "class",
-              "sig": "c80438ea67d65200"
+              "sig": "14e667e791e48418"
             },
             "HistoryRecallCorpusProvider": {
               "kind": "interface",
@@ -15128,7 +15160,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -15148,11 +15180,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "39085c1e4f1d803f"
+              "sig": "b8c89992413f8470"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -15160,11 +15192,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "8617f8b2ab06cc48"
+              "sig": "7e45d9daf9c9adf4"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -15219,6 +15251,10 @@
               "kind": "interface",
               "sig": "9461f3c14c37d337"
             },
+            "buildInMemoryCompositeProjection": {
+              "kind": "value",
+              "sig": "37f4a9777c9477cf"
+            },
             "canonicalizeRlmCorpusPolicy": {
               "kind": "value",
               "sig": "0cec1f7a453312da"
@@ -15229,11 +15265,11 @@
             },
             "citationFromEntry": {
               "kind": "value",
-              "sig": "b7523460d1bc3e8f"
+              "sig": "b1f26ae0597a3f8f"
             },
             "CitationValidation": {
               "kind": "interface",
-              "sig": "8c1499f79443ca68"
+              "sig": "08059a3a975df1be"
             },
             "collectBoundedScan": {
               "kind": "value",
@@ -15241,7 +15277,11 @@
             },
             "computeCompositeContentDigest": {
               "kind": "value",
-              "sig": "1dee5ea0deaf2468"
+              "sig": "3e23a1016f49ff2e"
+            },
+            "computeCompositeProjectionDigest": {
+              "kind": "value",
+              "sig": "641102b84c43b92b"
             },
             "computeContentDigest": {
               "kind": "value",
@@ -15269,11 +15309,11 @@
             },
             "DeterministicObservation": {
               "kind": "interface",
-              "sig": "22475de24060eb43"
+              "sig": "e9738a9b38e77730"
             },
             "emptyRlmTokenUsage": {
               "kind": "value",
-              "sig": "ca532d81fb7bb95e"
+              "sig": "e789e69cb8547b24"
             },
             "excerptDigest": {
               "kind": "value",
@@ -15289,11 +15329,11 @@
             },
             "HISTORY_EVENT_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "HISTORY_NOTE_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "HistoryCorpusEntry": {
               "kind": "alias",
@@ -15313,7 +15353,11 @@
             },
             "HistoryRecall": {
               "kind": "alias",
-              "sig": "c80438ea67d65200"
+              "sig": "14e667e791e48418"
+            },
+            "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
             },
             "INLINE_CORPUS_BYTE_CEILING": {
               "kind": "value",
@@ -15329,7 +15373,7 @@
             },
             "MakeCompositeCorpusHandleInput": {
               "kind": "interface",
-              "sig": "26892ce2daacc312"
+              "sig": "1aba14fea0b50866"
             },
             "makeInlineCorpusHandle": {
               "kind": "value",
@@ -15355,6 +15399,10 @@
               "kind": "interface",
               "sig": "225f413f0cc8eab0"
             },
+            "mapRlmCorpusError": {
+              "kind": "value",
+              "sig": "a954c8bed3f6ba49"
+            },
             "migrateRlmCorpusV1": {
               "kind": "value",
               "sig": "49a6583ceba8c9be"
@@ -15373,39 +15421,39 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "350fdb0af7fd21b6"
+              "sig": "694c0a332f93a55e"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "c12fa95c279396fe"
+              "sig": "617981218de98fcf"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "2c48a1b65733ef7b"
+              "sig": "eb9fa0027251eeeb"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -15425,11 +15473,11 @@
             },
             "RlmCitation": {
               "kind": "type",
-              "sig": "6e7e99229fa06f97"
+              "sig": "df0257cdec985559"
             },
             "RlmCitationV1": {
               "kind": "type",
-              "sig": "3252abfc9ef655dc"
+              "sig": "462ddfd43f40d8b7"
             },
             "RlmCommitNode": {
               "kind": "type",
@@ -15437,7 +15485,11 @@
             },
             "RlmCompleted": {
               "kind": "type",
-              "sig": "7d192e9b020c7b91"
+              "sig": "f7118f8d4e575a8e"
+            },
+            "RlmCompositeAddressLookup": {
+              "kind": "type",
+              "sig": "d1123556aca8260e"
             },
             "RlmCompositeChild": {
               "kind": "interface",
@@ -15447,13 +15499,25 @@
               "kind": "type",
               "sig": "055cdcab4f97f039"
             },
+            "RlmCompositeEntryPointer": {
+              "kind": "interface",
+              "sig": "533f9a4d4362b2e4"
+            },
+            "RlmCompositeProjection": {
+              "kind": "interface",
+              "sig": "47da74d744f079e6"
+            },
+            "RlmCompositeProjectionSummary": {
+              "kind": "interface",
+              "sig": "41cb050e2042be73"
+            },
             "RlmCompositionExclusion": {
               "kind": "type",
               "sig": "fa4c3fd123967bb2"
             },
             "RlmCorpusComposition": {
               "kind": "type",
-              "sig": "c4a4338986180f4d"
+              "sig": "de939ebbd66e7755"
             },
             "RlmCorpusCoverage": {
               "kind": "type",
@@ -15477,7 +15541,7 @@
             },
             "RlmCorpusHandle": {
               "kind": "interface",
-              "sig": "997f17f3cf79ca81"
+              "sig": "bd94ea6fb6ddb2ec"
             },
             "RlmCorpusIdentity": {
               "kind": "type",
@@ -15489,7 +15553,7 @@
             },
             "RlmCorpusInput": {
               "kind": "type",
-              "sig": "fd61372cda3e1d69"
+              "sig": "cb2b90b0746b6bda"
             },
             "RlmCorpusInputV1": {
               "kind": "type",
@@ -15497,7 +15561,7 @@
             },
             "RlmCorpusManifest": {
               "kind": "type",
-              "sig": "6b6dbfba3345ab85"
+              "sig": "03085fe08d66ce7c"
             },
             "RlmCorpusManifestV1": {
               "kind": "type",
@@ -15521,7 +15585,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "edc703221fd85d0a"
+              "sig": "82855fd8fb64b6fb"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -15537,7 +15601,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "d3b529d64bc21907"
+              "sig": "15b5237e6e4120c2"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -15549,7 +15613,7 @@
             },
             "RlmDeterministicRequest": {
               "kind": "type",
-              "sig": "7f0046b651a4c1c1"
+              "sig": "a1db46ff0d234051"
             },
             "RlmDigest": {
               "kind": "type",
@@ -15573,7 +15637,7 @@
             },
             "RlmEvent": {
               "kind": "type",
-              "sig": "faa0f089600d4b94"
+              "sig": "edfd8570d78007c7"
             },
             "RlmEventBase": {
               "kind": "value",
@@ -15593,19 +15657,19 @@
             },
             "RlmFinding": {
               "kind": "type",
-              "sig": "1dca61daec0697ec"
+              "sig": "094326444375a24a"
             },
             "RlmHonesty": {
               "kind": "type",
-              "sig": "98433805e574ffc9"
+              "sig": "01ce538c99e40ec8"
             },
             "RlmInlineCorpusInputV2": {
               "kind": "interface",
-              "sig": "4684eec0665d051f"
+              "sig": "b9604c0b8db30c98"
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "a764ba1c22aec57f"
+              "sig": "8e9d08c9f7238210"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -15677,11 +15741,11 @@
             },
             "RlmOutput": {
               "kind": "type",
-              "sig": "8eb48c2d86016cd0"
+              "sig": "7916a841868eab06"
             },
             "RlmPartial": {
               "kind": "type",
-              "sig": "6dc25022e7f2666b"
+              "sig": "6195ea91035a7b6e"
             },
             "RlmPartialReason": {
               "kind": "type",
@@ -15737,11 +15801,11 @@
             },
             "RlmRefused": {
               "kind": "type",
-              "sig": "84aa2e4043b6889b"
+              "sig": "080079a5efea2a17"
             },
             "RlmRequest": {
               "kind": "type",
-              "sig": "7de870a02ec4c34a"
+              "sig": "eb977e80bdfbbec3"
             },
             "RlmRunRef": {
               "kind": "type",
@@ -15769,7 +15833,7 @@
             },
             "RlmSemanticRequest": {
               "kind": "type",
-              "sig": "f2b37c54c33a2b02"
+              "sig": "ab156fd3e8e900fa"
             },
             "RlmShape": {
               "kind": "interface",
@@ -15797,7 +15861,7 @@
             },
             "RlmStoredValue": {
               "kind": "interface",
-              "sig": "5e884a3349830040"
+              "sig": "10fb0210664cd8cc"
             },
             "RlmStrategyProfile": {
               "kind": "type",
@@ -15809,15 +15873,15 @@
             },
             "RlmTerminalEvent": {
               "kind": "type",
-              "sig": "61360eaffc0140e1"
+              "sig": "9a475828bd9a92aa"
             },
             "RlmTerminalResult": {
               "kind": "type",
-              "sig": "99fb0133f945e565"
+              "sig": "6e0ff27069bf179f"
             },
             "RlmTokenUsage": {
               "kind": "type",
-              "sig": "980becd329a33ff1"
+              "sig": "78e240131eb250d2"
             },
             "RlmToolAuthorizationDecision": {
               "kind": "interface",
@@ -15833,7 +15897,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -15849,7 +15913,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "ea1edc248b6ae7e5"
+              "sig": "e4a480cd1f29b7a3"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -15889,7 +15953,7 @@
             },
             "validateCitations": {
               "kind": "value",
-              "sig": "faae06d9120161af"
+              "sig": "dd4bfe291bdbf166"
             },
             "validateProgram": {
               "kind": "value",
@@ -15913,6 +15977,10 @@
               "kind": "interface",
               "sig": "7aeb2a830ca95c88"
             },
+            "buildInMemoryCompositeProjection": {
+              "kind": "value",
+              "sig": "37f4a9777c9477cf"
+            },
             "canonicalizeRlmCorpusPolicy": {
               "kind": "value",
               "sig": "0cec1f7a453312da"
@@ -15923,11 +15991,11 @@
             },
             "citationFromEntry": {
               "kind": "value",
-              "sig": "cb048aa7bca09fa8"
+              "sig": "47da7c132a8785b9"
             },
             "CitationValidation": {
               "kind": "interface",
-              "sig": "94b1586160fe578f"
+              "sig": "1335ce9b2fbda5d5"
             },
             "collectBoundedScan": {
               "kind": "value",
@@ -15935,7 +16003,11 @@
             },
             "computeCompositeContentDigest": {
               "kind": "value",
-              "sig": "1dee5ea0deaf2468"
+              "sig": "3e23a1016f49ff2e"
+            },
+            "computeCompositeProjectionDigest": {
+              "kind": "value",
+              "sig": "641102b84c43b92b"
             },
             "computeContentDigest": {
               "kind": "value",
@@ -15963,11 +16035,11 @@
             },
             "DeterministicObservation": {
               "kind": "interface",
-              "sig": "22475de24060eb43"
+              "sig": "e9738a9b38e77730"
             },
             "emptyRlmTokenUsage": {
               "kind": "value",
-              "sig": "c071617a97faabe4"
+              "sig": "ce7db5e95298ad85"
             },
             "excerptDigest": {
               "kind": "value",
@@ -15980,6 +16052,10 @@
             "grepEntries": {
               "kind": "value",
               "sig": "cb5f4d3d25716f83"
+            },
+            "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
             },
             "INLINE_CORPUS_BYTE_CEILING": {
               "kind": "value",
@@ -15995,7 +16071,7 @@
             },
             "MakeCompositeCorpusHandleInput": {
               "kind": "interface",
-              "sig": "26892ce2daacc312"
+              "sig": "1aba14fea0b50866"
             },
             "makeInlineCorpusHandle": {
               "kind": "value",
@@ -16021,6 +16097,10 @@
               "kind": "interface",
               "sig": "225f413f0cc8eab0"
             },
+            "mapRlmCorpusError": {
+              "kind": "value",
+              "sig": "a954c8bed3f6ba49"
+            },
             "migrateRlmCorpusV1": {
               "kind": "value",
               "sig": "49a6583ceba8c9be"
@@ -16039,39 +16119,39 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "d5d4cfde50549a39"
+              "sig": "8d03614ab9d9c0f5"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "aa12e204d5c29911"
+              "sig": "1410d7d1ab7b54c4"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "c376b689dfee83c5"
+              "sig": "b7fb45372eb96efc"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -16091,11 +16171,11 @@
             },
             "RlmCitation": {
               "kind": "type",
-              "sig": "193f40f1e21e7283"
+              "sig": "0f05b8ac8c10681e"
             },
             "RlmCitationV1": {
               "kind": "type",
-              "sig": "8c9a5579890c478a"
+              "sig": "2cb35973edeb017c"
             },
             "RlmCommitNode": {
               "kind": "type",
@@ -16103,7 +16183,11 @@
             },
             "RlmCompleted": {
               "kind": "type",
-              "sig": "0a2266a23eac563e"
+              "sig": "e57367910ead528c"
+            },
+            "RlmCompositeAddressLookup": {
+              "kind": "type",
+              "sig": "d1123556aca8260e"
             },
             "RlmCompositeChild": {
               "kind": "interface",
@@ -16113,13 +16197,25 @@
               "kind": "type",
               "sig": "055cdcab4f97f039"
             },
+            "RlmCompositeEntryPointer": {
+              "kind": "interface",
+              "sig": "533f9a4d4362b2e4"
+            },
+            "RlmCompositeProjection": {
+              "kind": "interface",
+              "sig": "47da74d744f079e6"
+            },
+            "RlmCompositeProjectionSummary": {
+              "kind": "interface",
+              "sig": "41cb050e2042be73"
+            },
             "RlmCompositionExclusion": {
               "kind": "type",
               "sig": "fa4c3fd123967bb2"
             },
             "RlmCorpusComposition": {
               "kind": "type",
-              "sig": "c4a4338986180f4d"
+              "sig": "de939ebbd66e7755"
             },
             "RlmCorpusCoverage": {
               "kind": "type",
@@ -16143,7 +16239,7 @@
             },
             "RlmCorpusHandle": {
               "kind": "interface",
-              "sig": "904d5b573456c4f4"
+              "sig": "ef6f9720344dac33"
             },
             "RlmCorpusIdentity": {
               "kind": "type",
@@ -16155,7 +16251,7 @@
             },
             "RlmCorpusInput": {
               "kind": "type",
-              "sig": "02248b1cc3877737"
+              "sig": "ad3e2e85bc193b67"
             },
             "RlmCorpusInputV1": {
               "kind": "type",
@@ -16163,7 +16259,7 @@
             },
             "RlmCorpusManifest": {
               "kind": "type",
-              "sig": "9e985a8d1c82d34e"
+              "sig": "558b041fd2acf012"
             },
             "RlmCorpusManifestV1": {
               "kind": "type",
@@ -16187,7 +16283,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "ab30a1028015764c"
+              "sig": "ec9c21ec4ae2c1f2"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -16203,7 +16299,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "043988a7ff0274a6"
+              "sig": "85878eaab5fd2df2"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -16215,7 +16311,7 @@
             },
             "RlmDeterministicRequest": {
               "kind": "type",
-              "sig": "948ba9f6b1771ef4"
+              "sig": "ff200e2d17d530d4"
             },
             "RlmDigest": {
               "kind": "type",
@@ -16239,7 +16335,7 @@
             },
             "RlmEvent": {
               "kind": "type",
-              "sig": "2083184a383f0561"
+              "sig": "25d0b165a1459387"
             },
             "RlmEventBase": {
               "kind": "value",
@@ -16259,19 +16355,19 @@
             },
             "RlmFinding": {
               "kind": "type",
-              "sig": "1dca61daec0697ec"
+              "sig": "094326444375a24a"
             },
             "RlmHonesty": {
               "kind": "type",
-              "sig": "98433805e574ffc9"
+              "sig": "01ce538c99e40ec8"
             },
             "RlmInlineCorpusInputV2": {
               "kind": "interface",
-              "sig": "d79733442d553517"
+              "sig": "9bc5d981dc5e05cc"
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "b857faefdf9b5dd9"
+              "sig": "676bd6d282309df3"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -16343,11 +16439,11 @@
             },
             "RlmOutput": {
               "kind": "type",
-              "sig": "8eb48c2d86016cd0"
+              "sig": "7916a841868eab06"
             },
             "RlmPartial": {
               "kind": "type",
-              "sig": "1c3e4762999ab1a8"
+              "sig": "2ff4f636d0ec84d6"
             },
             "RlmPartialReason": {
               "kind": "type",
@@ -16403,11 +16499,11 @@
             },
             "RlmRefused": {
               "kind": "type",
-              "sig": "8a23e2928194448f"
+              "sig": "690a5efb051c4d22"
             },
             "RlmRequest": {
               "kind": "type",
-              "sig": "02c11c542e1797d6"
+              "sig": "37168519e2d73701"
             },
             "RlmRunRef": {
               "kind": "type",
@@ -16435,7 +16531,7 @@
             },
             "RlmSemanticRequest": {
               "kind": "type",
-              "sig": "c456cfe7d6104764"
+              "sig": "ab14d88f0d3fec98"
             },
             "RlmShape": {
               "kind": "interface",
@@ -16463,7 +16559,7 @@
             },
             "RlmStoredValue": {
               "kind": "interface",
-              "sig": "3f2b7a07d68dc081"
+              "sig": "58c3ac5c6f79280b"
             },
             "RlmStrategyProfile": {
               "kind": "type",
@@ -16475,15 +16571,15 @@
             },
             "RlmTerminalEvent": {
               "kind": "type",
-              "sig": "a87f0d04c8e2d73c"
+              "sig": "e02dd0a4031d8259"
             },
             "RlmTerminalResult": {
               "kind": "type",
-              "sig": "19cc1fd32e8f0719"
+              "sig": "25d18f1d642abb24"
             },
             "RlmTokenUsage": {
               "kind": "type",
-              "sig": "5c03aaad903961c8"
+              "sig": "6f5803f731e14b9e"
             },
             "RlmToolAuthorizationDecision": {
               "kind": "interface",
@@ -16499,7 +16595,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -16515,7 +16611,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -16551,7 +16647,7 @@
             },
             "validateCitations": {
               "kind": "value",
-              "sig": "591e626762ddd5df"
+              "sig": "7ae4ce7c157cc118"
             },
             "validateProgram": {
               "kind": "value",
@@ -16574,6 +16670,10 @@
               "kind": "interface",
               "sig": "7aeb2a830ca95c88"
             },
+            "buildInMemoryCompositeProjection": {
+              "kind": "value",
+              "sig": "37f4a9777c9477cf"
+            },
             "canonicalizeRlmCorpusPolicy": {
               "kind": "value",
               "sig": "0cec1f7a453312da"
@@ -16584,15 +16684,19 @@
             },
             "citationFromEntry": {
               "kind": "value",
-              "sig": "cb048aa7bca09fa8"
+              "sig": "47da7c132a8785b9"
             },
             "CitationValidation": {
               "kind": "interface",
-              "sig": "94b1586160fe578f"
+              "sig": "1335ce9b2fbda5d5"
             },
             "computeCompositeContentDigest": {
               "kind": "value",
-              "sig": "1dee5ea0deaf2468"
+              "sig": "3e23a1016f49ff2e"
+            },
+            "computeCompositeProjectionDigest": {
+              "kind": "value",
+              "sig": "641102b84c43b92b"
             },
             "computeContentDigest": {
               "kind": "value",
@@ -16606,6 +16710,10 @@
               "kind": "value",
               "sig": "29513a152fbea524"
             },
+            "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
             "INLINE_CORPUS_BYTE_CEILING": {
               "kind": "value",
               "sig": "ceab13d527db7331"
@@ -16616,7 +16724,7 @@
             },
             "MakeCompositeCorpusHandleInput": {
               "kind": "interface",
-              "sig": "26892ce2daacc312"
+              "sig": "1aba14fea0b50866"
             },
             "makeInlineCorpusHandle": {
               "kind": "value",
@@ -16628,23 +16736,39 @@
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "aa12e204d5c29911"
+              "sig": "1410d7d1ab7b54c4"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "c376b689dfee83c5"
+              "sig": "b7fb45372eb96efc"
+            },
+            "RlmCompositeAddressLookup": {
+              "kind": "type",
+              "sig": "d1123556aca8260e"
             },
             "RlmCompositeChild": {
               "kind": "interface",
               "sig": "89994e0e07554423"
             },
+            "RlmCompositeEntryPointer": {
+              "kind": "interface",
+              "sig": "533f9a4d4362b2e4"
+            },
+            "RlmCompositeProjection": {
+              "kind": "interface",
+              "sig": "47da74d744f079e6"
+            },
+            "RlmCompositeProjectionSummary": {
+              "kind": "interface",
+              "sig": "41cb050e2042be73"
+            },
             "RlmCorpusHandle": {
               "kind": "interface",
-              "sig": "904d5b573456c4f4"
+              "sig": "ef6f9720344dac33"
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "ab30a1028015764c"
+              "sig": "ec9c21ec4ae2c1f2"
             },
             "RlmCorpusSourceShape": {
               "kind": "interface",
@@ -16652,11 +16776,11 @@
             },
             "RlmInlineCorpusInputV2": {
               "kind": "interface",
-              "sig": "d79733442d553517"
+              "sig": "9bc5d981dc5e05cc"
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "b857faefdf9b5dd9"
+              "sig": "676bd6d282309df3"
             },
             "RlmValidatedSourceAddress": {
               "kind": "interface",
@@ -16668,7 +16792,7 @@
             },
             "validateCitations": {
               "kind": "value",
-              "sig": "591e626762ddd5df"
+              "sig": "7ae4ce7c157cc118"
             }
           }
         },
@@ -16685,11 +16809,11 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "d5d4cfde50549a39"
+              "sig": "8d03614ab9d9c0f5"
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "043988a7ff0274a6"
+              "sig": "85878eaab5fd2df2"
             },
             "rlmLayer": {
               "kind": "value",
@@ -16726,11 +16850,11 @@
             },
             "RlmStoredValue": {
               "kind": "interface",
-              "sig": "3f2b7a07d68dc081"
+              "sig": "58c3ac5c6f79280b"
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             }
           }
         },
@@ -16743,11 +16867,15 @@
             },
             "DeterministicObservation": {
               "kind": "interface",
-              "sig": "22475de24060eb43"
+              "sig": "e9738a9b38e77730"
             },
             "grepEntries": {
               "kind": "value",
               "sig": "cb5f4d3d25716f83"
+            },
+            "mapRlmCorpusError": {
+              "kind": "value",
+              "sig": "a954c8bed3f6ba49"
             },
             "runDeterministicOperation": {
               "kind": "value",
@@ -16805,31 +16933,31 @@
             },
             "emptyRlmTokenUsage": {
               "kind": "value",
-              "sig": "c071617a97faabe4"
+              "sig": "ce7db5e95298ad85"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -16849,11 +16977,11 @@
             },
             "RlmCitation": {
               "kind": "type",
-              "sig": "193f40f1e21e7283"
+              "sig": "0f05b8ac8c10681e"
             },
             "RlmCitationV1": {
               "kind": "type",
-              "sig": "8c9a5579890c478a"
+              "sig": "2cb35973edeb017c"
             },
             "RlmCommitNode": {
               "kind": "type",
@@ -16861,7 +16989,7 @@
             },
             "RlmCompleted": {
               "kind": "type",
-              "sig": "0a2266a23eac563e"
+              "sig": "e57367910ead528c"
             },
             "RlmCompositeChildIdentity": {
               "kind": "type",
@@ -16873,7 +17001,7 @@
             },
             "RlmCorpusComposition": {
               "kind": "type",
-              "sig": "c4a4338986180f4d"
+              "sig": "de939ebbd66e7755"
             },
             "RlmCorpusCoverage": {
               "kind": "type",
@@ -16905,7 +17033,7 @@
             },
             "RlmCorpusInput": {
               "kind": "type",
-              "sig": "02248b1cc3877737"
+              "sig": "ad3e2e85bc193b67"
             },
             "RlmCorpusInputV1": {
               "kind": "type",
@@ -16913,7 +17041,7 @@
             },
             "RlmCorpusManifest": {
               "kind": "type",
-              "sig": "9e985a8d1c82d34e"
+              "sig": "558b041fd2acf012"
             },
             "RlmCorpusManifestV1": {
               "kind": "type",
@@ -16953,7 +17081,7 @@
             },
             "RlmDeterministicRequest": {
               "kind": "type",
-              "sig": "948ba9f6b1771ef4"
+              "sig": "ff200e2d17d530d4"
             },
             "RlmDigest": {
               "kind": "type",
@@ -16973,7 +17101,7 @@
             },
             "RlmEvent": {
               "kind": "type",
-              "sig": "2083184a383f0561"
+              "sig": "25d0b165a1459387"
             },
             "RlmEventBase": {
               "kind": "value",
@@ -16993,11 +17121,11 @@
             },
             "RlmFinding": {
               "kind": "type",
-              "sig": "1dca61daec0697ec"
+              "sig": "094326444375a24a"
             },
             "RlmHonesty": {
               "kind": "type",
-              "sig": "98433805e574ffc9"
+              "sig": "01ce538c99e40ec8"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -17061,11 +17189,11 @@
             },
             "RlmOutput": {
               "kind": "type",
-              "sig": "8eb48c2d86016cd0"
+              "sig": "7916a841868eab06"
             },
             "RlmPartial": {
               "kind": "type",
-              "sig": "1c3e4762999ab1a8"
+              "sig": "2ff4f636d0ec84d6"
             },
             "RlmPartialReason": {
               "kind": "type",
@@ -17121,11 +17249,11 @@
             },
             "RlmRefused": {
               "kind": "type",
-              "sig": "8a23e2928194448f"
+              "sig": "690a5efb051c4d22"
             },
             "RlmRequest": {
               "kind": "type",
-              "sig": "02c11c542e1797d6"
+              "sig": "37168519e2d73701"
             },
             "RlmRunRef": {
               "kind": "type",
@@ -17153,7 +17281,7 @@
             },
             "RlmSemanticRequest": {
               "kind": "type",
-              "sig": "c456cfe7d6104764"
+              "sig": "ab14d88f0d3fec98"
             },
             "RlmSourceAddress": {
               "kind": "type",
@@ -17185,15 +17313,15 @@
             },
             "RlmTerminalEvent": {
               "kind": "type",
-              "sig": "a87f0d04c8e2d73c"
+              "sig": "e02dd0a4031d8259"
             },
             "RlmTerminalResult": {
               "kind": "type",
-              "sig": "19cc1fd32e8f0719"
+              "sig": "25d18f1d642abb24"
             },
             "RlmTokenUsage": {
               "kind": "type",
-              "sig": "5c03aaad903961c8"
+              "sig": "6f5803f731e14b9e"
             },
             "RlmTransformNode": {
               "kind": "type",
@@ -17242,7 +17370,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "3be81995135d6ff9"
+              "sig": "62187ec259aa7c06"
             },
             "RlmToolParams": {
               "kind": "type",

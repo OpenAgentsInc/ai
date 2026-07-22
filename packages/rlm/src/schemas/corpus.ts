@@ -173,6 +173,7 @@ export const RlmCorpusComposition = S.Struct({
   policy: RlmCorpusPolicy,
   orderingRule: S.Literal("composite_child_then_ordinal"),
   exclusions: S.Array(RlmCompositionExclusion),
+  projectionDigest: RlmDigest,
 });
 export type RlmCorpusComposition = typeof RlmCorpusComposition.Type;
 
@@ -244,19 +245,26 @@ export const RlmScanRequest = S.Struct({
 });
 export type RlmScanRequest = typeof RlmScanRequest.Type;
 
-export const RlmCitationV1 = S.Struct({
+const RlmCitationV1Fields = {
   corpusRef: RlmCorpusRef,
   contentDigest: RlmCorpusDigest,
   scopeRef: RlmScopeRef,
   sourceAddress: RlmSourceAddress,
   entryRefStart: RlmEntryRef,
   entryRefEnd: S.optionalKey(RlmEntryRef),
-  excerpt: S.optionalKey(RlmBoundedText),
-  excerptDigest: S.optionalKey(RlmDigest),
-});
+};
+const RlmCitationExcerptText = S.String.check(S.isMaxLength(512));
+export const RlmCitationV1 = S.Union([
+  S.Struct({ ...RlmCitationV1Fields, excerpt: RlmCitationExcerptText, excerptDigest: RlmDigest }),
+  S.Struct({
+    ...RlmCitationV1Fields,
+    excerpt: S.optionalKey(S.Never),
+    excerptDigest: S.optionalKey(S.Never),
+  }),
+]);
 export type RlmCitationV1 = typeof RlmCitationV1.Type;
 
-export const RlmCitation = S.Struct({
+const RlmCitationFields = {
   corpusRef: RlmCorpusRef,
   contentDigest: RlmCorpusDigest,
   scopeRef: RlmScopeRef,
@@ -266,7 +274,13 @@ export const RlmCitation = S.Struct({
   supportingSources: S.Array(RlmSourceLocator),
   entryRefStart: RlmEntryRef,
   entryRefEnd: S.optionalKey(RlmEntryRef),
-  excerpt: S.optionalKey(RlmBoundedText),
-  excerptDigest: S.optionalKey(RlmDigest),
-});
+};
+export const RlmCitation = S.Union([
+  S.Struct({ ...RlmCitationFields, excerpt: RlmCitationExcerptText, excerptDigest: RlmDigest }),
+  S.Struct({
+    ...RlmCitationFields,
+    excerpt: S.optionalKey(S.Never),
+    excerptDigest: S.optionalKey(S.Never),
+  }),
+]);
 export type RlmCitation = typeof RlmCitation.Type;

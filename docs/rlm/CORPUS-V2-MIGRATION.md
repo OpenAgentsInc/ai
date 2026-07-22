@@ -36,4 +36,7 @@ An application handle must implement `assertUnchanged` and
 method `materializeAll` remains in v2, but the engine does not require it.
 
 An application must resolve a stored v1 source through an explicit migration
-step. A composite constructor accepts v2 child handles only.
+step. A composite constructor accepts v2 child handles only. It also requires
+a trusted `RlmCompositeProjection`. The projection summary and pointer index
+must have digest bindings. Use the hard-capped in-memory builder only for small
+fixtures.

@@ -58,6 +58,33 @@ export const computeCompositeContentDigest = (input: {
     }),
   );
 
+/** Bind a bounded composite projection summary without reading its entry pointers. */
+export const computeCompositeProjectionDigest = (input: {
+  readonly scopeRef: string;
+  readonly orderedChildren: RlmCorpusComposition["children"];
+  readonly policy: RlmCorpusComposition["policy"];
+  readonly orderingRule: RlmCorpusComposition["orderingRule"];
+  readonly coverage: RlmCorpusManifest["coverage"];
+  readonly exclusions: RlmCorpusComposition["exclusions"];
+  readonly sourcePlanes: ReadonlyArray<unknown>;
+  readonly duplicateSourceCount: number;
+  readonly pointerIndexDigest: RlmDigest;
+}): RlmDigest =>
+  sha256Hex(
+    canonicalJson({
+      schemaId: "openagents.ai.rlm_composite_projection.v1",
+      scopeRef: input.scopeRef,
+      orderedChildren: input.orderedChildren,
+      policy: input.policy,
+      orderingRule: input.orderingRule,
+      coverage: input.coverage,
+      exclusions: input.exclusions,
+      sourcePlanes: input.sourcePlanes,
+      duplicateSourceCount: input.duplicateSourceCount,
+      pointerIndexDigest: input.pointerIndexDigest,
+    }),
+  );
+
 /** Manifest digest includes policy, coverage, exclusions, and composition facts. */
 export const computeManifestDigest = (input: {
   readonly contentDigest: RlmDigest;

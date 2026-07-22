@@ -94,10 +94,11 @@ candidates, never authority.
 
 The v2 corpus contract separates `sourcePlane` from adapter-specific
 `sourceKind`. A manifest records the admitted policy. A composite policy can
-be narrower than a child policy. It cannot be wider. Composite construction
-rejects duplicate source addresses and stale child identities. Engine scans
-and citation checks use bounded handle operations. They do not require full
-corpus materialization.
+be narrower than a child policy. It cannot be wider. A trusted, digest-bound
+projection supplies bounded entry pointers. The constructor reads only child
+and projection metadata. It rejects duplicate source addresses, unsupported
+planes, and stale identities. Engine scans and citation checks use bounded
+handle operations. They do not require full corpus materialization.
 
 See [the v1 migration note](../../docs/rlm/CORPUS-V2-MIGRATION.md) before you
 upgrade stored corpus bytes.
