@@ -354,6 +354,16 @@ export interface GraphRlmProjection {
 }
 
 const digest = (value: unknown): GraphDigest => graphDigest(sha256Hex(canonicalJson(value)));
+const freezeUnknown = (value: unknown): void => {
+  if (typeof value !== "object" || value === null || Object.isFrozen(value)) return;
+  for (const child of Object.values(value)) freezeUnknown(child);
+  Object.freeze(value);
+};
+const cloneFrozen = <A>(value: A): A => {
+  const clone = structuredClone(value);
+  freezeUnknown(clone);
+  return clone;
+};
 const compareRef = (
   left: { readonly elementRef: string },
   right: { readonly elementRef: string },
@@ -467,8 +477,10 @@ export const makeGraphRlmRetrievalInventory = Effect.fn("GraphCorpus.makeRlmRetr
     const vectors = new Map<string, GraphCompleteArtifactInventory["vectors"][number]>(
       inventory.vectors.map((item) => [item.artifactRef, item]),
     );
+    const elements = new Map(allElements(handle).map((element) => [element.elementRef, element]));
     for (const binding of canonicalBindings) {
       const vector = vectors.get(binding.artifactRef);
+      const owner = elements.get(binding.ownerElementRef);
       const descriptors = handle.snapshot.embeddingProjections.filter(
         ({ descriptorRef }) => descriptorRef === binding.descriptorRef,
       );
@@ -478,7 +490,9 @@ export const makeGraphRlmRetrievalInventory = Effect.fn("GraphCorpus.makeRlmRetr
         descriptors.length !== 1 ||
         descriptor === undefined ||
         descriptor.projectionSchemaId !== binding.projectionSchemaId ||
-        descriptor.dimensions !== binding.dimensions
+        descriptor.dimensions !== binding.dimensions ||
+        owner === undefined ||
+        !descriptor.elementKinds.includes(owner.elementKind)
       ) {
         return yield* fail("invalid_inventory", "A retrieval binding is dangling or substituted.");
       }
@@ -681,10 +695,12 @@ const makeResult = (
     observationCharacters,
     observations,
   };
-  return S.decodeUnknownSync(GraphRlmOperationResultSchema)(
-    hitCaps.length === 0
-      ? { _tag: "Complete", ...common, hitCaps: [] }
-      : { _tag: "Truncated", ...common, hitCaps },
+  return cloneFrozen(
+    S.decodeUnknownSync(GraphRlmOperationResultSchema)(
+      hitCaps.length === 0
+        ? { _tag: "Complete", ...common, hitCaps: [] }
+        : { _tag: "Truncated", ...common, hitCaps },
+    ),
   );
 };
 
@@ -918,7 +934,7 @@ const makeOperators = (
         kinds: new Set(descriptor.elementKinds),
       };
     });
-  return {
+  return Object.freeze({
     lookup: (elementRef, limits) =>
       Effect.gen(function* () {
         yield* requireGraphAdapterCapability(capabilities, "graph_read").pipe(
@@ -1152,7 +1168,7 @@ const makeOperators = (
           scored.scores,
         );
       }),
-  };
+  } satisfies GraphRlmOperators);
 };
 
 export interface MakeGraphRlmProjectionInput {
@@ -1167,13 +1183,53 @@ export interface MakeGraphRlmProjectionInput {
   readonly supportingCorpora: ReadonlyArray<RlmCorpusHandle>;
 }
 
+const snapshotCorpusHandle = (source: RlmCorpusHandle): RlmCorpusHandle => {
+  const identity = cloneFrozen(source.identity);
+  const manifest = cloneFrozen(source.manifest);
+  const assertUnchanged = Effect.fn("GraphCorpus.Rlm.support.assertUnchanged")(function* () {
+    yield* source.assertUnchanged();
+    if (
+      canonicalJson(source.identity) !== canonicalJson(identity) ||
+      canonicalJson(source.manifest) !== canonicalJson(manifest)
+    ) {
+      return yield* new RlmCorpusError({
+        reason: "changed",
+        detailSafe: "A supporting corpus identity or manifest changed.",
+      });
+    }
+  });
+  return Object.freeze({
+    identity,
+    manifest,
+    assertUnchanged,
+    read: (range, limits) =>
+      assertUnchanged().pipe(Effect.andThen(source.read(range, limits)), Effect.map(cloneFrozen)),
+    scan: (request) =>
+      Stream.unwrap(
+        assertUnchanged().pipe(Effect.as(source.scan(request).pipe(Stream.map(cloneFrozen)))),
+      ),
+    validateSourceAddress: (address, plane) =>
+      assertUnchanged().pipe(
+        Effect.andThen(source.validateSourceAddress(address, plane)),
+        Effect.map(cloneFrozen),
+      ),
+    validateSourceLocator: (locator) =>
+      assertUnchanged().pipe(
+        Effect.andThen(source.validateSourceLocator(locator)),
+        Effect.map(cloneFrozen),
+      ),
+    materializeAll: () =>
+      assertUnchanged().pipe(Effect.andThen(source.materializeAll()), Effect.map(cloneFrozen)),
+  } satisfies RlmCorpusHandle);
+};
+
 /** Adapt one immutable graph snapshot to an immutable RLM v2 corpus and graph operator surface. */
 export const makeGraphRlmProjection = Effect.fn("GraphCorpus.makeRlmProjection")(function* (
   input: MakeGraphRlmProjectionInput,
 ) {
   yield* requireGraphAdapterCapability(input.capabilities, "rlm_v2_projection");
   yield* input.handle.assertUnchanged();
-  const supportingCorpora = [...input.supportingCorpora];
+  const supportingCorpora = input.supportingCorpora.map(snapshotCorpusHandle);
   const classifications = yield* validateClassification(
     input.handle,
     input.classification,
@@ -1199,16 +1255,20 @@ export const makeGraphRlmProjection = Effect.fn("GraphCorpus.makeRlmProjection")
       };
     }),
   );
-  const inline = buildInlineCorpusInput({
-    corpusRef: input.corpusRef,
-    scopeRef: input.handle.snapshot.scopeRef,
-    policy: input.handle.snapshot.policy as GraphCorpusPolicy,
-    orderingRule: "explicit_array",
-    orderingNote: "Canonical graph element reference order.",
-    coverageNote: "Complete readable graph projection.",
-    entries: entryInputs,
-  });
+  const inline = cloneFrozen(
+    buildInlineCorpusInput({
+      corpusRef: input.corpusRef,
+      scopeRef: input.handle.snapshot.scopeRef,
+      policy: input.handle.snapshot.policy as GraphCorpusPolicy,
+      orderingRule: "explicit_array",
+      orderingNote: "Canonical graph element reference order.",
+      coverageNote: "Complete readable graph projection.",
+      entries: entryInputs,
+    }),
+  );
   const base = yield* makeInlineCorpusHandle(inline);
+  const expectedIdentity = cloneFrozen(base.identity);
+  const expectedManifest = cloneFrozen(base.manifest);
   for (const entry of inline.entries) {
     const sourceVisibilities: Array<RlmVisibility> = [];
     const sourceRedactions: Array<RlmRedactionClass> = [];
@@ -1292,14 +1352,33 @@ export const makeGraphRlmProjection = Effect.fn("GraphCorpus.makeRlmProjection")
     yield* Effect.forEach(supportingCorpora, (handle) => handle.assertUnchanged(), {
       discard: true,
     });
+    const rebuilt = yield* makeInlineCorpusHandle(inline);
+    if (
+      canonicalJson(rebuilt.identity) !== canonicalJson(expectedIdentity) ||
+      canonicalJson(rebuilt.manifest) !== canonicalJson(expectedManifest)
+    ) {
+      return yield* new RlmCorpusError({
+        reason: "changed",
+        detailSafe: "The graph RLM corpus identity or manifest changed.",
+      });
+    }
   });
   const corpus: RlmCorpusHandle = {
     ...base,
+    identity: expectedIdentity,
+    manifest: expectedManifest,
     assertUnchanged,
-    read: (range, limits) => assertUnchanged().pipe(Effect.andThen(base.read(range, limits))),
-    scan: (request) => Stream.unwrap(assertUnchanged().pipe(Effect.as(base.scan(request)))),
+    read: (range, limits) =>
+      assertUnchanged().pipe(Effect.andThen(base.read(range, limits)), Effect.map(cloneFrozen)),
+    scan: (request) =>
+      Stream.unwrap(
+        assertUnchanged().pipe(Effect.as(base.scan(request).pipe(Stream.map(cloneFrozen)))),
+      ),
     validateSourceAddress: (address, plane) =>
-      assertUnchanged().pipe(Effect.andThen(base.validateSourceAddress(address, plane))),
+      assertUnchanged().pipe(
+        Effect.andThen(base.validateSourceAddress(address, plane)),
+        Effect.map(cloneFrozen),
+      ),
     validateSourceLocator: (locator) =>
       assertUnchanged().pipe(
         Effect.andThen(
@@ -1322,9 +1401,12 @@ export const makeGraphRlmProjection = Effect.fn("GraphCorpus.makeRlmProjection")
             }),
           ),
         ),
+        Effect.map(cloneFrozen),
       ),
-    materializeAll: () => assertUnchanged().pipe(Effect.andThen(base.materializeAll())),
+    materializeAll: () =>
+      assertUnchanged().pipe(Effect.andThen(base.materializeAll()), Effect.map(cloneFrozen)),
   };
+  Object.freeze(corpus);
   const sourceAddress: GraphRlmSourceAddress = S.decodeUnknownSync(GraphRlmSourceAddress)({
     schemaId: GRAPH_RLM_SOURCE_ADDRESS_SCHEMA_ID,
     graphRef: input.handle.snapshot.graphRef,
@@ -1346,28 +1428,30 @@ export const makeGraphRlmProjection = Effect.fn("GraphCorpus.makeRlmProjection")
     classificationDigest: input.classification.projectionDigest,
     supportingCorpora: input.classification.supportingCorpora.map(({ identity }) => identity),
   };
-  const capabilities = structuredClone(input.capabilities);
-  const inventory = input.inventory === undefined ? undefined : structuredClone(input.inventory);
+  const capabilities = cloneFrozen(input.capabilities);
+  const inventory = input.inventory === undefined ? undefined : cloneFrozen(input.inventory);
   const retrievalInventory =
-    input.retrievalInventory === undefined ? undefined : structuredClone(input.retrievalInventory);
-  return {
-    classification: input.classification,
+    input.retrievalInventory === undefined ? undefined : cloneFrozen(input.retrievalInventory);
+  const sourceRef = Object.freeze({
+    addressSchemaId: GRAPH_RLM_SOURCE_ADDRESS_SCHEMA_ID,
+    encodedAddress: canonicalJson(sourceAddress),
+  });
+  const operators = makeOperators(
+    input.handle,
+    entries,
+    capabilities,
+    inventory,
+    retrievalInventory,
+    Object.freeze({ ...(input.callbacks ?? {}) }),
+    assertOperatorFresh,
+    projectionBinding,
+  );
+  return Object.freeze({
+    classification: cloneFrozen(input.classification),
     corpus,
-    sourceRef: {
-      addressSchemaId: GRAPH_RLM_SOURCE_ADDRESS_SCHEMA_ID,
-      encodedAddress: canonicalJson(sourceAddress),
-    },
-    operators: makeOperators(
-      input.handle,
-      entries,
-      capabilities,
-      inventory,
-      retrievalInventory,
-      input.callbacks ?? {},
-      assertOperatorFresh,
-      projectionBinding,
-    ),
-  } satisfies GraphRlmProjection;
+    sourceRef,
+    operators,
+  } satisfies GraphRlmProjection);
 });
 
 /** Make a resolver for a fixed set of immutable graph projections. */

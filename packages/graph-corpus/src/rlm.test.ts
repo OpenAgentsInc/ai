@@ -132,6 +132,12 @@ const fixture = async () => {
     embeddableFields: ["identity.canonicalKey"],
     dimensions: 2,
   });
+  const relationOnlyDescriptor = makeEmbeddingProjectionDescriptor({
+    projectionSchemaId: "graph.embedding.relation.v1",
+    elementKinds: ["relation"],
+    embeddableFields: ["identity.canonicalKey"],
+    dimensions: 2,
+  });
   const built = await Effect.runPromise(
     buildGraphCorpus({
       graphRef: "graph.fixture",
@@ -140,7 +146,7 @@ const fixture = async () => {
       mentions: [mentionB, mentionA],
       entities: [organization, person],
       relations: [relation],
-      embeddingProjections: [descriptor],
+      embeddingProjections: [descriptor, relationOnlyDescriptor],
     }),
   );
   const handle = await Effect.runPromise(makeInMemoryGraphSnapshotHandle(built));
@@ -170,6 +176,7 @@ const fixture = async () => {
     organization,
     relation,
     descriptor,
+    relationOnlyDescriptor,
     original,
   };
 };
@@ -189,15 +196,46 @@ describe("graph RLM v2 projection", () => {
   test("keeps graph identity separate and binds exact graph and source addresses", async () => {
     const value = await fixture();
     const projection = await project(value);
+    expect(Object.isFrozen(projection)).toBe(true);
+    expect(Object.isFrozen(projection.corpus)).toBe(true);
+    expect(Object.isFrozen(projection.sourceRef)).toBe(true);
+    expect(Object.isFrozen(projection.operators)).toBe(true);
+    expect(() => Object.defineProperty(projection, "operators", { value: {} })).toThrow();
+    expect(() => Object.defineProperty(projection.corpus, "identity", { value: {} })).toThrow();
+    expect(() =>
+      Object.defineProperty(projection.operators, "lookup", { value: () => {} }),
+    ).toThrow();
+    expect(() =>
+      Object.defineProperty(projection.sourceRef, "encodedAddress", { value: "{}" }),
+    ).toThrow();
     expect(projection.corpus.identity.contentDigest).not.toBe(value.built.snapshot.graphDigest);
     expect(projection.corpus.identity.manifestDigest).not.toBe(value.built.manifest.manifestDigest);
     expect(projection.sourceRef.addressSchemaId).toBe(GRAPH_RLM_SOURCE_ADDRESS_SCHEMA_ID);
     const entries = await Effect.runPromise(projection.corpus.materializeAll());
     expect(entries).toHaveLength(5);
+    expect(Object.isFrozen(entries)).toBe(true);
+    expect(Object.isFrozen(projection.corpus.identity)).toBe(true);
+    expect(Object.isFrozen(projection.corpus.manifest.policy)).toBe(true);
     expect(entries.every(({ sourcePlane }) => sourcePlane === "derived_graph")).toBe(true);
     const relationEntry = entries.find(({ entryRef }) => entryRef === value.relation.elementRef)!;
     expect(relationEntry.sourceKind).toBe("graph_relation");
     expect(relationEntry.supportingSources).toEqual([value.sourceA, value.sourceB]);
+    expect(Object.isFrozen(relationEntry.supportingSources?.[0]?.sourceAddress)).toBe(true);
+    expect(() =>
+      Object.defineProperty(projection.corpus.identity, "contentDigest", { value: "0".repeat(64) }),
+    ).toThrow();
+    expect(() =>
+      Object.defineProperty(projection.corpus.manifest.policy, "includeVisibilities", {
+        value: ["public"],
+      }),
+    ).toThrow();
+    const readBack = await Effect.runPromise(
+      projection.corpus.read(
+        { start: relationEntry.ordinal, endInclusive: relationEntry.ordinal },
+        { maxEntries: 1, maxCharsPerEntry: 2_048 },
+      ),
+    );
+    expect(Object.isFrozen(readBack[0]?.supportingSources?.[0]?.sourceAddress)).toBe(true);
     expect(relationEntry.sourceAddress.addressSchemaId).toBe(GRAPH_ELEMENT_ADDRESS_SCHEMA_ID);
     expect(
       await Effect.runPromise(decodeGraphElementAddress(relationEntry.sourceAddress)),
@@ -357,6 +395,7 @@ describe("graph RLM v2 projection", () => {
       projection.operators.lookup(value.person.elementRef, limits),
     );
     expect(lookup._tag).toBe("Complete");
+    expect(Object.isFrozen(lookup.observations[0]?.sourceAddress)).toBe(true);
     expect(lookup.observations.map(({ elementRef }) => elementRef)).toEqual([
       value.person.elementRef,
     ]);
@@ -515,6 +554,17 @@ describe("graph RLM v2 projection", () => {
       ]).pipe(Effect.flip),
     );
     expect(dangling.reason).toBe("invalid_inventory");
+    const wrongKind = await Effect.runPromise(
+      makeGraphRlmRetrievalInventory(value.handle, inventory, [
+        {
+          ...retrievalBindings[0],
+          descriptorRef: value.relationOnlyDescriptor.descriptorRef,
+          projectionSchemaId: value.relationOnlyDescriptor.projectionSchemaId,
+        },
+        retrievalBindings[1],
+      ]).pipe(Effect.flip),
+    );
+    expect(wrongKind.reason).toBe("invalid_inventory");
     const retrievalInventory = await Effect.runPromise(
       makeGraphRlmRetrievalInventory(value.handle, inventory, retrievalBindings),
     );
