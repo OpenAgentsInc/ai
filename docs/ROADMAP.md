@@ -1,6 +1,6 @@
 # @openagentsinc/ai — Proposed Roadmap
 
-Date: 2026-07-21. Revision: 2. Status: proposed. This roadmap sequences the SDK's own
+Date: 2026-07-22. Revision: 3. Status: active. This roadmap sequences the SDK's own
 engine work. Consumption sequencing for the OpenAgents product lives in the
 monorepo (`openagents/docs/desktop/2026-07-21-chat-runtime-unified-roadmap.md`
 and the division-of-labor audit in `openagents/docs/fable/`). The two must
@@ -10,7 +10,7 @@ monorepo.
 ## Where the SDK is today
 
 Extracted 2026-07-21 from the openagents monorepo. Apache-2.0. Published rc
-trains through `0.2.0-rc.1`. The monorepo consumes the train from npm and
+trains through `0.2.0-rc.5`. The monorepo consumes the train from npm and
 deleted its in-tree copies. Layers L0–L6 are live: the
 `effect/unstable/ai` model bridge (`ai-model`), the `KhalaRuntimeEvent`
 vocabulary (`agent-runtime-schema`), the durable seq-cursor event log, the
@@ -251,6 +251,28 @@ identity, provenance, or embedding bytes. A recall result records the exact
 graph digest, ranking-snapshot digest, query, and used element refs. Equal graph
 and ranking inputs must produce equal order. A consumer can ignore ranking
 state and still traverse the same graph truth.
+
+SDK-MEM-07 (#36) implements this ranking boundary. Feedback, confidence,
+features, snapshots, outcomes, and used-element evidence bind the exact graph
+and RLM identities. All score values use bounded fixed-point micro-units. The
+pure ranker accepts only complete graph operations and uses a stable tuple:
+feedback, confidence, operation-local relevance, and element ref. Missing
+ranking inputs stay explicit and do not remove a candidate. A disabled ranker
+returns `Unranked` and keeps the original order. A truncated operation also
+stays `Unranked` and retains its cap evidence. Used-element evidence contains
+exact bounded addresses and source locators but excludes source text and
+canonical keys. A separate typed operation binding derives the ranking query
+digest without a change to the #35 operation-result schema. It keeps exact
+text queries, descriptor refs, vector digests, and complete retrieval-context
+digests, but excludes raw vector bytes. The #35 vector and hybrid operation
+receipts also bind the descriptor and retrieval-context digests. The caller supplies the trusted
+`expectedOperationDigest` separately. Strict validators reconstruct
+deterministic results, compare each observation with the unchanged projected
+corpus, and reject stale graphs, changed snapshot children, changed operation
+inputs, substituted provider descriptors, and substituted evidence. A content
+hash proves integrity. It does not grant authority or prove who approved the
+operation. Ranking artifact refs connect this snapshot to the source-outward
+delete planner without making ranking state part of graph truth.
 
 #### Portability
 

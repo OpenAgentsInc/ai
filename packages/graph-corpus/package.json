@@ -12,6 +12,7 @@
     "src/handle.ts",
     "src/index.ts",
     "src/rlm.ts",
+    "src/ranking.ts",
     "src/schemas.ts",
     "README.md"
   ],
@@ -22,6 +23,7 @@
     "./capabilities": "./src/capabilities.ts",
     "./deletion": "./src/deletion.ts",
     "./rlm": "./src/rlm.ts",
+    "./ranking": "./src/ranking.ts",
     "./schemas": "./src/schemas.ts"
   },
   "publishConfig": {

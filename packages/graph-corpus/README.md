@@ -17,7 +17,8 @@ The package supplies:
 - digest-bound host execution-result and receipt contracts; and
 - an immutable RLM v2 projection with exact graph and original source
   locators; and
-- bounded graph lookup, traversal, source expansion, and safe text search.
+- bounded graph lookup, traversal, source expansion, and safe text search; and
+- deterministic fixed-point feedback snapshots and bounded ranking evidence.
 
 ```ts
 import {
@@ -136,7 +137,44 @@ is eager. Source resolution does not scan or materialize the RLM corpus and does
 not call an optional search adapter. This package does not claim out-of-core
 graph support.
 
+## Ranking feedback
+
+`makeGraphFeedbackObservation` binds feedback to one exact graph element and
+one complete RLM operation identity. `makeGraphRankingSnapshot` creates a
+separate immutable snapshot from feedback and optional confidence evidence.
+It uses fixed-point micro-units. It does not change graph content, graph
+identity, provenance, embedding descriptors, or vector bytes.
+
+`rankGraphOperationResult` applies ranking state only to a complete operation
+result. With a ranking snapshot, it orders candidates by feedback, confidence,
+operation-local relevance, and element ref. Without a snapshot, it returns an
+explicit `Unranked` result and keeps the operation order. A truncated result
+also stays `Unranked` and keeps its cap evidence. Missing features, confidence,
+and relevance stay explicit. The operation does not remove candidates.
+
+The ranking API accepts a separate `GraphRankingOperationBinding` for all six
+graph operations. Text bindings contain the exact normalized text query.
+Vector bindings contain a descriptor ref and a vector digest, not vector
+bytes. The caller must also supply a trusted `expectedOperationDigest`.
+`verifyGraphRankingOperationResult` checks this expected identity and
+reconstructs the #35 operation receipt. It also checks the current graph, the
+projected RLM corpus, source support, counters, limits, and deterministic result
+membership. Vector and hybrid verification requires the complete vector
+artifact inventory and retrieval inventory. The operation binding includes
+their digests, and the #35 operation receipt binds them. The query binding
+produces a separate domain-specific query digest for ranking evidence. Content
+digests prove integrity. They do not grant authority or prove who approved an
+operation.
+
+Used-element evidence contains exact graph and RLM identity, query, operation,
+result, and limit digests, ordered element refs, exact bounded graph addresses,
+exact supporting source locators, and fixed-point scores. It does not copy
+source text or canonical keys. Use
+`validateGraphUsedElementEvidence` to reject stale or substituted evidence.
+Use `rankingArtifactsFromSnapshot` with the current graph and exact RLM
+projection context to add validated ranking artifacts to a delete-planning
+inventory.
+
 The embedding descriptor identifies fields and dimensions only. This package
 does not store vectors. Natural-language graph queries, Cypher, model calls,
-ranking feedback, storage, delete execution, and product wiring are outside
-this package.
+storage, delete execution, and product wiring are outside this package.

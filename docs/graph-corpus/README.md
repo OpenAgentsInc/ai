@@ -6,7 +6,8 @@ and source-outward delete planning.
 
 The source of truth remains an authorized source corpus. A graph element keeps
 exact `RlmSourceLocator` values. It does not copy source text into provenance.
-Issue #35 owns the later RLM projection and citation adapter.
+Issue #35 adds the RLM projection and citation adapter. Issue #36 adds a
+separate ranking snapshot and used-element evidence.
 
 ## Identity
 
@@ -64,6 +65,19 @@ declaration does not grant authority.
 
 ## Limits
 
-The current handle is for small in-memory snapshots. It gives no owner consent,
-promotion, persistence, delete execution, ranking, archive, database, or query
-authority. Later issues own those contracts.
+The current handle is for small in-memory snapshots. The RLM adapter supplies
+bounded lookup, neighbor, source-expansion, text, vector, and hybrid
+operations. Vector and hybrid operations bind the descriptor ref into the
+operation digest. They also bind the complete vector artifact inventory digest
+and retrieval inventory digest. They require both complete inventories.
+
+The ranking contract accepts one exact operation binding and a separately
+supplied `expectedOperationDigest`. The verifier checks this trusted expected
+identity, reconstructs deterministic operation results, and checks each result
+against the current projected corpus. Vector and hybrid verification also
+requires the complete artifact and retrieval inventories. Ranking changes a
+separate snapshot. It does not change graph truth or remove a result.
+
+Content hashes prove integrity. They do not grant authority or prove who
+approved an operation. The package gives no owner consent, promotion,
+persistence, delete execution, archive, database, or product-query authority.

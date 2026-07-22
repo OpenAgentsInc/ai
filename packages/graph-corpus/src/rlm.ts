@@ -1109,7 +1109,13 @@ const makeOperators = (
             ? ["max_visited_elements"]
             : [];
         return yield* execute(
-          { kind: "vector_search", vectorDigest: digest(vector) },
+          {
+            kind: "vector_search",
+            descriptorRef,
+            vectorDigest: digest(vector),
+            artifactInventoryDigest: selected.binding.inventoryDigest,
+            retrievalDigest: selected.binding.retrievalDigest,
+          },
           scored.elements,
           scored.elements.length,
           decodedLimits,
@@ -1160,7 +1166,14 @@ const makeOperators = (
             ? ["max_visited_elements"]
             : [];
         return yield* execute(
-          { kind: "hybrid_search", vectorDigest: digest(vector), textQuery },
+          {
+            kind: "hybrid_search",
+            descriptorRef,
+            vectorDigest: digest(vector),
+            artifactInventoryDigest: selected.binding.inventoryDigest,
+            retrievalDigest: selected.binding.retrievalDigest,
+            textQuery,
+          },
           scored.elements,
           scored.elements.length,
           decodedLimits,
