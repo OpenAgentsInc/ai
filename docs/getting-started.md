@@ -23,7 +23,7 @@ pnpm add @openagentsinc/ai@rc
 For a production consumer, pin the exact train instead of a floating tag:
 
 ```sh
-pnpm add @openagentsinc/ai@0.2.0-rc.1
+pnpm add @openagentsinc/ai@0.2.1-rc.2
 ```
 
 Two facts about the packages:
@@ -39,16 +39,28 @@ Two facts about the packages:
 The root entry `@openagentsinc/ai` re-exports every layer. Each layer also has
 its own subpath:
 
-| Subpath                       | Layer | Contents                                                     |
-| ----------------------------- | ----- | ------------------------------------------------------------ |
-| `@openagentsinc/ai/model`     | L0    | LanguageModel Layer, StreamPart maps, ExecutionPlan fallback |
-| `@openagentsinc/ai/schema`    | L1    | `KhalaRuntimeEvent` and the runtime vocabulary               |
-| `@openagentsinc/ai/event-log` | L2    | Durable event log and event-log store                        |
-| `@openagentsinc/ai/sandbox`   | L3    | Sandbox contract and the local-process provider              |
-| `@openagentsinc/ai/harness`   | L4    | `AgentHarness` adapters, readiness, host tools               |
-| `@openagentsinc/ai/ui-stream` | L5    | UI chunk projection, reducer, chat transports                |
-| `@openagentsinc/ai/recall`    | L6    | History corpus and Tier D recall                             |
-| `@openagentsinc/ai/rlm`       | RLM   | Recursive recall engine over a corpus source                 |
+| Subpath                           | Layer | Contents                                                     |
+| --------------------------------- | ----- | ------------------------------------------------------------ |
+| `@openagentsinc/ai/model`         | L0    | LanguageModel Layer, StreamPart maps, ExecutionPlan fallback |
+| `@openagentsinc/ai/schema`        | L1    | `KhalaRuntimeEvent` and the runtime vocabulary               |
+| `@openagentsinc/ai/event-log`     | L2    | Durable event log and event-log store                        |
+| `@openagentsinc/ai/sandbox`       | L3    | Sandbox contract and the local-process provider              |
+| `@openagentsinc/ai/harness`       | L4    | `AgentHarness` adapters, readiness, host tools               |
+| `@openagentsinc/ai/ui-stream`     | L5    | UI chunk projection, reducer, chat transports                |
+| `@openagentsinc/ai/recall`        | L6    | History corpus and Tier D recall                             |
+| `@openagentsinc/ai/rlm`           | RLM   | Recursive recall engine over a corpus source                 |
+| `@openagentsinc/ai/graph`         | Graph | Derived graph schemas, projection, and deletion plans        |
+| `@openagentsinc/ai/graph/ranking` | Graph | Feedback ranking and used-element evidence                   |
+| `@openagentsinc/ai/graph/archive` | Graph | Canonical portable graph archive v1                          |
+| `@openagentsinc/ai/program`       | DSE   | Typed model-program contract and portable runtime            |
+| `@openagentsinc/ai/conformance`   | Test  | Optional reusable law runners                                |
+
+The conformance subpath is optional. Install its peer packages when you use
+it:
+
+```sh
+pnpm add -D @openagentsinc/conformance-kit@0.2.1-rc.2 vite-plus@0.2.4
+```
 
 ## Run a harness turn, suspend it, and continue it
 

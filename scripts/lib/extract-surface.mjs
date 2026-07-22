@@ -9,7 +9,7 @@
  */
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
@@ -50,19 +50,49 @@ const TYPE_STRING_FLAGS = () =>
   ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.UseFullyQualifiedType;
 
 /**
+ * Remove checkout-local paths from compiler-rendered type names.
+ *
+ * TypeScript can render an inferred type as `import("/checkout/.../file").T`
+ * when `UseFullyQualifiedType` is active. Keep the module identity, but express
+ * workspace and package paths through stable logical roots.
+ */
+function normalizeSignatureText(text, packageDir) {
+  const normalizedPackageDir = resolve(packageDir).split(sep).join("/");
+  const normalizedRepoRoot = repoRoot.split(sep).join("/");
+  const compilerStable = text.replace(/__@([^@]+)@\d+/g, "__@$1");
+  return compilerStable.replace(/import\((['"])(.*?)\1\)/g, (match, quote, rawPath) => {
+    const path = rawPath.replaceAll("\\", "/");
+    if (!isAbsolute(path)) return match;
+    if (path === normalizedPackageDir || path.startsWith(`${normalizedPackageDir}/`)) {
+      const rel = relative(normalizedPackageDir, path).split(sep).join("/");
+      return `import(${quote}<package>/${rel}${quote})`;
+    }
+    if (path === normalizedRepoRoot || path.startsWith(`${normalizedRepoRoot}/`)) {
+      const rel = relative(normalizedRepoRoot, path).split(sep).join("/");
+      return `import(${quote}<workspace>/${rel}${quote})`;
+    }
+    const nodeModules = path.lastIndexOf("/node_modules/");
+    if (nodeModules >= 0) {
+      return `import(${quote}<node_modules>/${path.slice(nodeModules + 14)}${quote})`;
+    }
+    return `import(${quote}<absolute>/${path.split("/").at(-1)}${quote})`;
+  });
+}
+
+/**
  * Build a structural signature string for one export type, one level deep.
  * Captures call/construct signatures and the sorted property set (with each
  * property's type), so both value shapes (functions, consts) and declared
  * types (interfaces, type aliases, enums) produce a distinct, order-stable
  * descriptor. A removed member or narrowed property type changes the hash.
  */
-function typeSignature(checker, type) {
+function typeSignature(checker, type, packageDir) {
   const parts = [];
   for (const sig of checker.getSignaturesOfType(type, ts.SignatureKind.Call)) {
-    parts.push(`call ${checker.signatureToString(sig)}`);
+    parts.push(`call ${normalizeSignatureText(checker.signatureToString(sig), packageDir)}`);
   }
   for (const sig of checker.getSignaturesOfType(type, ts.SignatureKind.Construct)) {
-    parts.push(`new ${checker.signatureToString(sig)}`);
+    parts.push(`new ${normalizeSignatureText(checker.signatureToString(sig), packageDir)}`);
   }
   const props = [];
   for (const prop of checker.getPropertiesOfType(type)) {
@@ -72,12 +102,16 @@ function typeSignature(checker, type) {
       const pt = decl
         ? checker.getTypeOfSymbolAtLocation(prop, decl)
         : checker.getDeclaredTypeOfSymbol(prop);
-      propType = checker.typeToString(pt, decl, TYPE_STRING_FLAGS());
+      propType = normalizeSignatureText(
+        checker.typeToString(pt, decl, TYPE_STRING_FLAGS()),
+        packageDir,
+      );
     } catch {
       propType = "?";
     }
     const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0 ? "?" : "";
-    props.push(`${prop.getName()}${optional}:${propType}`);
+    const propName = prop.getName().replace(/__@([^@]+)@\d+/g, "__@$1");
+    props.push(`${propName}${optional}:${propType}`);
   }
   props.sort();
   parts.push(`{${props.join(";")}}`);
@@ -85,7 +119,7 @@ function typeSignature(checker, type) {
 }
 
 /** Resolve the descriptive type for an export symbol (value shape, else declared). */
-function symbolSignatureText(checker, sym) {
+function symbolSignatureText(checker, sym, packageDir) {
   const decl = sym.valueDeclaration ?? sym.declarations?.[0];
   let valueType;
   try {
@@ -99,13 +133,13 @@ function symbolSignatureText(checker, sym) {
   if ((valueIsAny || !valueType) && (isTypeOnly || sym.flags & ts.SymbolFlags.Alias)) {
     try {
       const declared = checker.getDeclaredTypeOfSymbol(sym);
-      return typeSignature(checker, declared);
+      return typeSignature(checker, declared, packageDir);
     } catch {
       return `<unresolved:${sym.getName()}>`;
     }
   }
   if (!valueType) return `<unresolved:${sym.getName()}>`;
-  return typeSignature(checker, valueType);
+  return typeSignature(checker, valueType, packageDir);
 }
 
 /**
@@ -133,14 +167,15 @@ export function extractPackageSurface({ dir, pkg }) {
     entries.push({ key, rel, abs });
   }
 
-  const program = ts.createProgram({
-    rootNames: entries.map((e) => e.abs),
-    options: { ...parsed.options, noEmit: true, skipLibCheck: true },
-  });
-  const checker = program.getTypeChecker();
-
   const entrypoints = {};
   for (const entry of entries.sort((a, b) => a.key.localeCompare(b.key))) {
+    // Measure each entry point in its own program. Other export-map entries and
+    // test-only global augmentations must not affect this entry point's names.
+    const program = ts.createProgram({
+      rootNames: [entry.abs],
+      options: { ...parsed.options, noEmit: true, skipLibCheck: true },
+    });
+    const checker = program.getTypeChecker();
     const sf = program.getSourceFile(entry.abs);
     const moduleSymbol = sf ? checker.getSymbolAtLocation(sf) : undefined;
     const exportsOut = {};
@@ -152,7 +187,7 @@ export function extractPackageSurface({ dir, pkg }) {
       for (const sym of symbols) {
         const name = sym.getName();
         if (name === "default" || name === "__esModule") continue;
-        const sigText = symbolSignatureText(checker, sym);
+        const sigText = symbolSignatureText(checker, sym, dir);
         exportsOut[name] = { kind: symbolKind(sym), sig: shortSig(sigText) };
       }
     }

@@ -15,7 +15,7 @@ surface. You can also install each layer package directly.
 ```sh
 npm install @openagentsinc/ai@rc
 # or pin the exact train (pre-stable never takes `latest`):
-npm install @openagentsinc/ai@0.2.0-rc.1
+npm install @openagentsinc/ai@0.2.1-rc.2
 ```
 
 The packages publish TypeScript source directly — use a TypeScript-aware loader
@@ -57,6 +57,8 @@ L0  MODEL CALL    effect/unstable/ai (upstream, consumed, never forked)
 ------------------------------------------------------------------
 P   PROGRAMS      @openagentsinc/dse — typed signatures, immutable
                   artifacts, portable runtime, explicit optimizer
+G   GRAPH         @openagentsinc/graph-corpus — derived RLM/DSE projection
+X   CONFORMANCE   optional reusable test laws
 ```
 
 ## The roster
@@ -71,6 +73,8 @@ P   PROGRAMS      @openagentsinc/dse — typed signatures, immutable
 | `@openagentsinc/agent-harness-contract` | L5 UI stream   | UI message chunks, progressive reducer, smooth stream, partial-object stream                       |
 | `@openagentsinc/history-corpus`         | L6 recall      | Corpus export, `HistoryRecall` contract, deterministic Tier D recall                               |
 | `@openagentsinc/dse`                    | programs       | Effect Schema signatures, immutable artifacts, prediction receipts, bounded offline optimizer      |
+| `@openagentsinc/graph-corpus`           | graph          | Derived graph identity, RLM projection, ranking, deletion, and archive contracts                   |
+| `@openagentsinc/conformance-kit`        | test           | Reusable SDK and graph-memory law runners                                                          |
 
 ## The subpaths
 
@@ -84,11 +88,21 @@ The umbrella exports curated per-layer subpaths that mirror the diagram:
 - `@openagentsinc/ai/harness` — L4
 - `@openagentsinc/ai/ui-stream` — L5
 - `@openagentsinc/ai/recall` — L6
+- `@openagentsinc/ai/rlm` — recursive corpus engine
+- `@openagentsinc/ai/graph` — stable graph projection
+- `@openagentsinc/ai/graph/ranking` — ranking and used-element evidence
+- `@openagentsinc/ai/graph/archive` — portable graph archive v1
+- `@openagentsinc/ai/conformance` — optional reusable laws
 - `@openagentsinc/ai/program` — DSE contract plus portable runtime
 - `@openagentsinc/ai/program/contract` — DSE schemas and pure contracts
 - `@openagentsinc/ai/program/runtime` — prediction, resolution, and event projection
 - `@openagentsinc/ai/program/optimizer` — explicit offline compiler
 - `@openagentsinc/ai/program/test` — deterministic fixtures
+
+The conformance subpath has an optional peer on
+`@openagentsinc/conformance-kit`. Install the exact-train kit and
+`vite-plus@0.2.4` as development dependencies when you use this test-only
+surface. Normal umbrella imports do not load the test runner.
 
 ## Usage
 

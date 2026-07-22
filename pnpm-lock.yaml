@@ -104,6 +104,9 @@ importers:
         specifier: 4.0.0-beta.94
         version: 4.0.0-beta.94
     devDependencies:
+      '@openagentsinc/conformance-kit':
+        specifier: workspace:*
+        version: link:../conformance-kit
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.1
@@ -188,6 +191,12 @@ importers:
       '@openagentsinc/agent-runtime-schema':
         specifier: workspace:*
         version: link:../agent-runtime-schema
+      '@openagentsinc/dse':
+        specifier: workspace:*
+        version: link:../dse
+      '@openagentsinc/graph-corpus':
+        specifier: workspace:*
+        version: link:../graph-corpus
       '@openagentsinc/history-corpus':
         specifier: workspace:*
         version: link:../history-corpus
@@ -207,6 +216,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+      vite-plus:
+        specifier: 0.2.4
+        version: 0.2.4(@opentelemetry/api@1.9.0)(@types/node@24.13.1)(jiti@2.7.0)(typescript@6.0.3)(vite@8.1.5(@types/node@24.13.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
 
   packages/dse:
     dependencies:

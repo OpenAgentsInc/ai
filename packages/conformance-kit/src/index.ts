@@ -17,6 +17,22 @@ export {
   runCorpusCompositionLaws,
   type CorpusCompositionLawsConfig,
 } from "./corpus-composition-laws.ts";
+export { runGraphIdentityLaws, type GraphIdentityLawsConfig } from "./graph-identity-laws.ts";
+export {
+  runGraphCapabilityDeleteLaws,
+  type GraphCapabilityDeleteLawsConfig,
+} from "./graph-capability-delete-laws.ts";
+export { runDseExtractionLaws, type DseExtractionLawsConfig } from "./dse-extraction-laws.ts";
+export { runGraphRlmLaws, type GraphRlmLawsConfig } from "./graph-rlm-laws.ts";
+export { runGraphRankingLaws, type GraphRankingLawsConfig } from "./graph-ranking-laws.ts";
+export { runGraphArchiveLaws, type GraphArchiveLawsConfig } from "./graph-archive-laws.ts";
+export {
+  graphArchiveCorruptionFixtures,
+  graphConformanceDerivation,
+  graphConformancePolicy,
+  graphConformanceSource,
+  graphPromptInjectionFixture,
+} from "./graph-fixtures.ts";
 export {
   assertContiguous,
   attempt,

@@ -1,11 +1,12 @@
 {
   "name": "@openagentsinc/ai",
-  "version": "0.2.0-rc.7",
+  "version": "0.2.1-rc.2",
   "private": false,
   "description": "OpenAgents AI SDK umbrella package. Curated re-exports of the SDK layer entry points.",
   "license": "Apache-2.0",
   "files": [
-    "src",
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
     "README.md"
   ],
   "type": "module",
@@ -21,6 +22,9 @@
     "./recall": "./src/recall.ts",
     "./rlm": "./src/rlm.ts",
     "./graph": "./src/graph.ts",
+    "./graph/ranking": "./src/graph-ranking.ts",
+    "./graph/archive": "./src/graph-archive.ts",
+    "./conformance": "./src/conformance.ts",
     "./program": "./src/program.ts",
     "./program/contract": "./src/program-contract.ts",
     "./program/runtime": "./src/program-runtime.ts",
@@ -45,8 +49,17 @@
     "effect": "catalog:"
   },
   "devDependencies": {
+    "@openagentsinc/conformance-kit": "workspace:*",
     "@types/node": "catalog:",
     "@types/vite-plus-matchers": "workspace:*",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@openagentsinc/conformance-kit": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@openagentsinc/conformance-kit": {
+      "optional": true
+    }
   }
 }

@@ -45,7 +45,8 @@ function buildSnapshot() {
   return {
     train: deriveTrain(roster),
     tool: "scripts/audit-export-surface.mjs",
-    note: "Public export surface per package entry point. Regenerate with `pnpm run audit:surface:update`.",
+    extractorSchema: "openagents.ai.public_export_surface.v2",
+    note: "V2 measures each entry point independently and normalizes compiler paths. Regenerate with `pnpm run audit:surface:update`.",
     packages: extractWorkspaceSurface(roster),
   };
 }

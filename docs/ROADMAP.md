@@ -1,6 +1,6 @@
 # @openagentsinc/ai — Proposed Roadmap
 
-Date: 2026-07-22. Revision: 3. Status: active. This roadmap sequences the SDK's own
+Date: 2026-07-22. Revision: 4. Status: active. This roadmap sequences the SDK's own
 engine work. Consumption sequencing for the OpenAgents product lives in the
 monorepo (`openagents/docs/desktop/2026-07-21-chat-runtime-unified-roadmap.md`
 and the division-of-labor audit in `openagents/docs/fable/`). The two must
@@ -10,7 +10,7 @@ monorepo.
 ## Where the SDK is today
 
 Extracted 2026-07-21 from the openagents monorepo. Apache-2.0. Published rc
-trains through `0.2.0-rc.5`. The monorepo consumes the train from npm and
+trains through `0.2.0-rc.6`. The monorepo consumes the train from npm and
 deleted its in-tree copies. Layers L0–L6 are live: the
 `effect/unstable/ai` model bridge (`ai-model`), the `KhalaRuntimeEvent`
 vocabulary (`agent-runtime-schema`), the durable seq-cursor event log, the
@@ -122,6 +122,11 @@ SDK-MEM-03 (#32) adds the portable graph schemas, canonical identity,
 ref-only provenance, deterministic rebuild, small snapshot handle, and exact
 RLM locator compatibility. It does not add the #35 RLM projection, extraction,
 persistence, ranking, deletion, archive, or query execution.
+
+SDK-MEM-06 (#35) adds the immutable RLM v2 graph projection. It supplies exact
+graph and source citations, bounded typed graph operations, policy-bound
+classification, stale-corpus refusal, and optional vector and hybrid query
+bindings.
 
 Owner direction on 2026-07-21 admits issue decomposition for this ordered
 program. Implementation remains issue-scoped. The source evidence is the
@@ -310,6 +315,15 @@ The published conformance kit must test:
 - deterministic ranking for equal graph and ranking snapshots;
 - capability refusal for unsupported operations; and
 - archive round-trip identity, corruption refusal, and inert import.
+
+SDK-MEM-09 (#38) implements these reusable laws in
+`@openagentsinc/conformance-kit`. Each operation under test is injected into a
+law runner. Public fixtures cover same-name identity, explicit merges, shared
+deletion, prompt injection, stale corpora, unsupported capabilities,
+ranking-only changes, and archive corruption. The `0.2.1-rc.2` candidate train
+adds granular conformance exports, `@openagentsinc/ai/graph/ranking`,
+`@openagentsinc/ai/graph/archive`, and the optional
+`@openagentsinc/ai/conformance` subpath.
 
 The phase is implemented only when the packages and laws are merged and the
 OpenAgents consumer has completed its separate authority and durable-adapter

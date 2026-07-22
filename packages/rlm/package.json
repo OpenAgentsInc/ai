@@ -1,11 +1,12 @@
 {
   "name": "@openagentsinc/rlm",
-  "version": "0.2.0-rc.7",
+  "version": "0.2.1-rc.2",
   "private": false,
   "description": "Effect-native Recursive Language Model engine: symbolic environment, declarative programs, ModelMap/RlmMap, Tier D + Tier S.",
   "license": "Apache-2.0",
   "files": [
-    "src",
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
     "README.md"
   ],
   "type": "module",

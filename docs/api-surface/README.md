@@ -3,8 +3,8 @@
 This directory holds the committed public export-surface snapshots for the
 `@openagentsinc/ai` roster, one file per **train** (the shared roster version):
 `docs/api-surface/<train>.json`. The current baseline is
-[`0.2.0-rc.3.json`](./0.2.0-rc.3.json). It includes the DSE package and the
-umbrella `program` entry points.
+[`0.2.1-rc.2.json`](./0.2.1-rc.2.json). It includes the graph-memory laws and
+the new umbrella subpaths.
 
 The gate (P1-2, issue #16) is the automated version of the AISDK-02
 collision audit: it enumerates every package's exported symbols through the
@@ -16,6 +16,7 @@ name with a `kind` and a hash of its resolved type signature.
 ```jsonc
 {
   "train": "0.2.0-rc.1",
+  "extractorSchema": "openagents.ai.public_export_surface.v2",
   "packages": {
     "@openagentsinc/agent-runtime-schema": {
       "version": "0.2.0-rc.1",
@@ -31,6 +32,12 @@ name with a `kind` and a hash of its resolved type signature.
   },
 }
 ```
+
+Extractor schema v2 measures each entry point in an independent TypeScript
+program. It also replaces checkout-local compiler paths with logical paths.
+Thus, a new entry point or a different worktree cannot change an unrelated
+signature hash. The `0.2.1-rc.2` snapshot is the intentional v1-to-v2 hash
+migration. The published `0.2.0-rc.6` snapshot remains unchanged.
 
 ## Commands
 

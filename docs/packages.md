@@ -21,7 +21,8 @@ model substrate. It exposes DSE as the `Dse` namespace and graph corpus as the
 
 - Key exports: the union of the layer packages below, plus the subpaths
   `./model`, `./schema`, `./event-log`, `./sandbox`, `./harness`, `./ui-stream`,
-  `./recall`, `./rlm`, `./graph`, and the `./program*` family.
+  `./recall`, `./rlm`, `./graph`, `./graph/ranking`, `./graph/archive`, the
+  optional `./conformance` test surface, and the `./program*` family.
 - Use it as the default dependency. Reach for a layer package directly only when
   you want a smaller dependency surface.
 - npm: [@openagentsinc/ai](https://www.npmjs.com/package/@openagentsinc/ai)
@@ -96,6 +97,20 @@ source, deterministically first (Tier D) and recursively second (Tier S).
   (`@openagentsinc/history-corpus`).
 - npm: [@openagentsinc/rlm](https://www.npmjs.com/package/@openagentsinc/rlm)
 
+## @openagentsinc/conformance-kit
+
+This package supplies reusable test laws. The graph-memory suite has six
+granular runners: identity and provenance, capabilities and deletion, DSE
+extraction, graph RLM projection, ranking, and archive portability. The
+`./graph-fixtures` subpath supplies public-safe inputs for these laws. The
+package root re-exports all runners.
+
+The runners register tests through the `vite-plus` peer. Use this package as a
+development dependency, or install it with the optional
+`@openagentsinc/ai/conformance` subpath. A passing law suite proves only the
+tested contract. It does not prove retrieval quality, grant host authority,
+or authorize a release.
+
 ## @openagentsinc/graph-corpus
 
 This package owns the portable derived-graph projection. It keeps mentions,
@@ -116,9 +131,10 @@ and exact source locators in one deterministic snapshot.
 - Direct contract paths: `@openagentsinc/graph-corpus/capabilities` and
   `@openagentsinc/graph-corpus/deletion`, and
   `@openagentsinc/graph-corpus/ranking`.
-- Portable archive path: `@openagentsinc/graph-corpus/archive`. It exports and
-  imports canonical, bounded, inert graph corpus archive v1 data. It is not on
-  the root or AI umbrella surface in this release candidate.
+- Portable archive paths: `@openagentsinc/graph-corpus/archive` and
+  `@openagentsinc/ai/graph/archive`. They export and import canonical, bounded,
+  inert graph corpus archive v1 data. This API is on explicit subpaths only.
+  It is not on either package root or the `Graph` namespace.
 
 ## @openagentsinc/dse
 

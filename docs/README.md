@@ -34,6 +34,9 @@ L1  VOCABULARY    @openagentsinc/agent-runtime-schema (KhalaRuntimeEvent)
 L0  MODEL CALL    effect/unstable/ai (upstream) + @openagentsinc/ai-model
 P   PROGRAMS      @openagentsinc/dse (typed signatures, immutable artifacts,
                   portable runtime; explicit offline optimizer)
+G   GRAPH         @openagentsinc/graph-corpus (derived RLM/DSE projection;
+                  graph truth does not add a runtime event layer)
+X   CONFORMANCE   @openagentsinc/conformance-kit (cross-cutting test laws)
 ```
 
 **The one rule.** Every layer speaks `KhalaRuntimeEvent` upward. One event
@@ -50,6 +53,8 @@ union. One durable cursor.
 | `@openagentsinc/history-corpus`            | L6 recall (history adapter)         |
 | `@openagentsinc/rlm`                       | L6 recursive engine (Tier D + S)    |
 | `@openagentsinc/dse`                       | typed model programs                |
+| `@openagentsinc/graph-corpus`              | derived graph projection            |
+| `@openagentsinc/conformance-kit`           | cross-cutting test laws             |
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                          |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                          |
 
@@ -61,7 +66,7 @@ union. One durable cursor.
 ```sh
 npm install @openagentsinc/ai@rc
 # or pin a version:
-npm install @openagentsinc/agent-harness-contract@0.1.2-rc.1
+npm install @openagentsinc/agent-harness-contract@0.2.1-rc.2
 ```
 
 Pre-stable releases never take the `latest` dist-tag.

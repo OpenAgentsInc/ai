@@ -1,10 +1,11 @@
 {
   "name": "@openagentsinc/conformance-kit",
-  "version": "0.2.0-rc.7",
+  "version": "0.2.1-rc.2",
   "private": false,
   "license": "Apache-2.0",
   "files": [
-    "src",
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
     "README.md"
   ],
   "type": "module",
@@ -16,6 +17,13 @@
     "./recall": "./src/recall-laws.ts",
     "./rlm": "./src/rlm-cap-laws.ts",
     "./corpus": "./src/corpus-composition-laws.ts",
+    "./graph-identity": "./src/graph-identity-laws.ts",
+    "./graph-delete": "./src/graph-capability-delete-laws.ts",
+    "./dse-extraction": "./src/dse-extraction-laws.ts",
+    "./graph-rlm": "./src/graph-rlm-laws.ts",
+    "./graph-ranking": "./src/graph-ranking-laws.ts",
+    "./graph-archive": "./src/graph-archive-laws.ts",
+    "./graph-fixtures": "./src/graph-fixtures.ts",
     "./fixtures": "./src/fixtures.ts"
   },
   "publishConfig": {
@@ -28,6 +36,8 @@
   "dependencies": {
     "@openagentsinc/agent-harness-contract": "workspace:*",
     "@openagentsinc/agent-runtime-schema": "workspace:*",
+    "@openagentsinc/dse": "workspace:*",
+    "@openagentsinc/graph-corpus": "workspace:*",
     "@openagentsinc/history-corpus": "workspace:*",
     "@openagentsinc/rlm": "workspace:*",
     "effect": "catalog:"
@@ -35,6 +45,10 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/vite-plus-matchers": "workspace:*",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite-plus": "0.2.4"
+  },
+  "peerDependencies": {
+    "vite-plus": ">=0.2.4 <1"
   }
 }

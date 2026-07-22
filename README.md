@@ -24,6 +24,9 @@ L1  VOCABULARY    @openagentsinc/agent-runtime-schema (KhalaRuntimeEvent)
 L0  MODEL CALL    effect/unstable/ai (upstream) + @openagentsinc/ai-model
 P   PROGRAMS      @openagentsinc/dse (typed signatures, immutable artifacts,
                   portable runtime; optimizer is an explicit subpath)
+G   GRAPH         @openagentsinc/graph-corpus (derived RLM/DSE projection;
+                  graph truth does not add a runtime event layer)
+X   CONFORMANCE   @openagentsinc/conformance-kit (cross-cutting test laws)
 ```
 
 Every layer speaks `KhalaRuntimeEvent` upward. One event union. One durable
@@ -40,6 +43,8 @@ cursor.
 | `@openagentsinc/history-corpus`            | L6 recall                     |
 | `@openagentsinc/rlm`                       | L6 recursive engine           |
 | `@openagentsinc/dse`                       | typed model programs          |
+| `@openagentsinc/graph-corpus`              | derived graph corpus          |
+| `@openagentsinc/conformance-kit`           | reusable contract laws        |
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                    |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                    |
 
