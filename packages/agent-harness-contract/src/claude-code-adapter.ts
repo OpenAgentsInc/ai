@@ -857,6 +857,15 @@ export interface ClaudeCodeAdapterConfig {
    * host must provide its own durable approval handling in exchange.
    */
   readonly queryOverrides?: Readonly<Record<string, unknown>>;
+  /**
+   * Host raw-message observer (openagents#9167 slice 3), fired for EVERY SDK
+   * message before neutral projection. The neutral core stream covers
+   * text/reasoning/tool/turn; a host that renders richer, display-only events
+   * (effective model, tool progress, sub-agent lifecycle, plan cards)
+   * reconstructs them here from the raw items. Purely observational — it
+   * never alters the neutral stream, cursor, or turn result.
+   */
+  readonly onRawMessage?: (message: ClaudeCodeMessage) => void;
 }
 
 interface ActiveClaudeTurn {
@@ -1042,6 +1051,7 @@ export const makeClaudeCodeHarnessAdapter = (config: ClaudeCodeAdapterConfig): A
                   ) {
                     claudeSession.id = message.session_id;
                   }
+                  config.onRawMessage?.(message);
                 }),
               ),
               Stream.flatMap((message) =>

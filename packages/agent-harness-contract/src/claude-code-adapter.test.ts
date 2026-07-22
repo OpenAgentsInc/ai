@@ -685,3 +685,32 @@ describe("claude code adapter — host query overrides (#9167 slice 2)", () => {
     expect(options.includePartialMessages).toBe(true);
   });
 });
+
+describe("claude code adapter — raw-message observer (#9167 slice 3)", () => {
+  test("onRawMessage fires for every SDK message without altering the neutral stream", async () => {
+    const { query } = makeScriptedQuery([REPRESENTATIVE_SCRIPT]);
+    const seen: string[] = [];
+    const adapter = makeClaudeCodeHarnessAdapter({
+      query,
+      configDir: "/tmp/claude-homes/s1",
+      model: "claude-haiku-4-5-20251001",
+      onRawMessage: (message) => seen.push(message.type),
+    });
+    const neutral = await Effect.runPromise(
+      Effect.gen(function* () {
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        const events = yield* collect(control.events);
+        yield* control.done;
+        return events;
+      }),
+    );
+    // The observer saw the raw system/assistant/result messages.
+    expect(seen).toContain("system");
+    expect(seen).toContain("result");
+    // The neutral stream is unchanged: it still opens turn.started and closes
+    // turn.finished around the core kinds.
+    expect(neutral[0].kind).toBe("turn.started");
+    expect(neutral[neutral.length - 1].kind).toBe("turn.finished");
+  });
+});
