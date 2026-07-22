@@ -39,6 +39,23 @@ cursor.
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                    |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                    |
 
+## Supported harnesses
+
+Every harness implements the one L4 [`AgentHarness`](packages/agent-harness-contract/src/adapter.ts)
+contract and emits `KhalaRuntimeEvent` upward:
+
+| Harness        | Factory                        | Adapter source                                                                         |
+| -------------- | ------------------------------ | -------------------------------------------------------------------------------------- |
+| Claude Code    | `makeClaudeCodeHarnessAdapter` | [`claude-code-adapter.ts`](packages/agent-harness-contract/src/claude-code-adapter.ts) |
+| Codex          | `makeCodexHarnessAdapter`      | [`codex-adapter.ts`](packages/agent-harness-contract/src/codex-adapter.ts)             |
+| OpenCode       | `makeOpencodeAdapter`          | [`opencode-adapter.ts`](packages/agent-harness-contract/src/opencode-adapter.ts)       |
+| Cursor (ACP)   | `makeCursorHarnessAdapter`     | [`cursor-adapter.ts`](packages/agent-harness-contract/src/cursor-adapter.ts)           |
+| Grok CLI (ACP) | `makeAcpHarnessAdapter`        | [`acp-adapter.ts`](packages/agent-harness-contract/src/acp-adapter.ts)                 |
+
+The generic [ACP adapter](packages/agent-harness-contract/src/acp-adapter.ts)
+serves any Agent Client Protocol peer; Grok CLI (`grok_acp`) uses it directly
+and the Cursor adapter (`cursor_acp`) builds on it.
+
 ## Train policy
 
 The roster ships as one **train**: every publishable package carries the same
