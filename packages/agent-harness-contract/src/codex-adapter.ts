@@ -64,7 +64,10 @@ import type { HarnessStreamEvent } from "./stream.ts";
  * event; only bounded display strings and refs do.
  *
  * CODEX_HOME is a required injected config value pointing at an ISOLATED
- * account home (for example `<pylon home>/accounts/codex/<ref>`). The adapter
+ * account home (for example `<pylon home>/accounts/codex/<ref>`), or, for
+ * owner-local use, the developer's currently-authenticated default Codex home
+ * (omit `codexHome`). The adapter runs exec/app-server turns only and NEVER
+ * runs a login flow, so it cannot clobber the owner's session. The adapter
  * never defaults to `~/.codex` and refuses a config that points there, because
  * `codex login` clears `~/.codex/auth.json` and any accidental use of the
  * default home can destroy the owner's live Codex session.
@@ -289,7 +292,7 @@ export type CodexApprovalDecision = (typeof CODEX_APPROVAL_DECISIONS)[number];
 export interface CodexAppServerTransport {
   /** `thread/start` (fresh) or `thread/resume` (with `resumeThreadId`). */
   readonly startThread: (params: {
-    readonly codexHome: string;
+    readonly codexHome?: string;
     readonly workingDirectory?: string;
     readonly model?: string;
     readonly resumeThreadId?: string;
@@ -328,7 +331,7 @@ export interface CodexAppServerTransport {
 export interface CodexExecSpawner {
   readonly spawn: (params: {
     readonly codexBinaryPath: string;
-    readonly codexHome: string;
+    readonly codexHome?: string;
     readonly workingDirectory?: string;
     readonly model?: string;
     readonly prompt: string;
@@ -789,18 +792,26 @@ const APPROVAL_DECISION_TO_CODEX: Readonly<
 // Adapter factory
 // ---------------------------------------------------------------------------
 
-/** Config shared by both modes. `codexHome` MUST be an isolated account home. */
+/**
+ * Config shared by both modes. `codexHome` selects the account: an isolated
+ * account home for fleet use, or omitted for owner-local use of the
+ * currently-authenticated default Codex home.
+ */
 export interface CodexAdapterCommonConfig {
   /** Stable kebab-case slug; defaults to `codex`. */
   readonly harnessId?: string;
   /** Path to the codex binary the transport/spawner should launch. */
   readonly codexBinaryPath: string;
   /**
-   * Isolated CODEX_HOME for the session's account. REQUIRED and validated:
-   * the adapter never defaults to `~/.codex` and refuses a value that points
-   * at the default home (clobbering it destroys the owner's live session).
+   * CODEX_HOME for the session's account. Omit it (or pass a default-home
+   * path) for OWNER-LOCAL mode: the spawner/transport must then leave
+   * CODEX_HOME unset so the codex runtime uses the developer's
+   * currently-authenticated default home. The adapter only runs
+   * exec/app-server turns — never a login flow — so owner-local mode cannot
+   * clobber the live session (owner decision 2026-07-22, #9161). Fleet and
+   * multi-account callers keep passing explicit isolated homes.
    */
-  readonly codexHome: string;
+  readonly codexHome?: string;
   /** Working directory for the session (framework-created; `--cd` / `cwd`). */
   readonly workingDirectory?: string;
   /** Model override (`--model` / `turn/start.model`). */
@@ -848,15 +859,20 @@ interface ActiveTurn {
 }
 
 /**
- * True when the configured CODEX_HOME is refused: empty, the literal default
- * `~/.codex`, or any path whose final segment is `.codex` (the default-home
- * naming — isolated account homes must use a distinct directory name).
+ * Normalize the configured CODEX_HOME. `undefined`, empty, and default-home
+ * shaped paths (`~/.codex`, any `/.codex` final segment) all select
+ * OWNER-LOCAL mode (`undefined`): the currently-authenticated default home,
+ * reached by leaving CODEX_HOME unset in the child environment.
  */
-const isRefusedCodexHome = (codexHome: string): boolean => {
+const normalizeCodexHome = (codexHome: string | undefined): string | undefined => {
+  if (codexHome === undefined) return undefined;
   const trimmed = codexHome.trim();
-  if (trimmed.length === 0) return true;
+  if (trimmed.length === 0) return undefined;
   const normalized = trimmed.replace(/\/+$/, "");
-  return normalized === "~/.codex" || normalized === ".codex" || normalized.endsWith("/.codex");
+  if (normalized === "~/.codex" || normalized === ".codex" || normalized.endsWith("/.codex")) {
+    return undefined;
+  }
+  return trimmed;
 };
 
 const makeControl = (params: {
@@ -955,17 +971,9 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
       const source: KhalaRuntimeSource = options.source;
       const sessionId = options.sessionId;
 
-      if (isRefusedCodexHome(config.codexHome)) {
-        return yield* Effect.fail(
-          new HarnessStartError({
-            harnessId,
-            sessionId,
-            failureClass: "codex_home_not_isolated",
-            detail:
-              "codexHome must be an explicit isolated account home; the default ~/.codex is refused",
-          }),
-        );
-      }
+      // Owner-local mode: an omitted or default-home codexHome means the
+      // currently-authenticated default Codex home (CODEX_HOME left unset).
+      const effectiveCodexHome = normalizeCodexHome(config.codexHome);
 
       // Codex-native thread id for resume, seeded from durable lifecycle state.
       let seedThreadId: string | undefined;
@@ -1008,7 +1016,7 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
       if (config.mode === "app-server") {
         const started = yield* config.transport
           .startThread({
-            codexHome: config.codexHome,
+            ...(effectiveCodexHome === undefined ? {} : { codexHome: effectiveCodexHome }),
             ...(config.workingDirectory === undefined
               ? {}
               : { workingDirectory: config.workingDirectory }),
@@ -1189,7 +1197,7 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
             raw = yield* config.spawner
               .spawn({
                 codexBinaryPath: config.codexBinaryPath,
-                codexHome: config.codexHome,
+                ...(effectiveCodexHome === undefined ? {} : { codexHome: effectiveCodexHome }),
                 ...(config.workingDirectory === undefined
                   ? {}
                   : { workingDirectory: config.workingDirectory }),
@@ -1246,7 +1254,7 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
           const raw = yield* config.spawner
             .spawn({
               codexBinaryPath: config.codexBinaryPath,
-              codexHome: config.codexHome,
+              ...(effectiveCodexHome === undefined ? {} : { codexHome: effectiveCodexHome }),
               ...(config.workingDirectory === undefined
                 ? {}
                 : { workingDirectory: config.workingDirectory }),

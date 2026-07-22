@@ -610,28 +610,36 @@ describe("codex exec mode — degraded suspend/continue and thread resume", () =
   });
 });
 
-describe("codex adapter — isolated CODEX_HOME guard", () => {
+describe("codex adapter — CODEX_HOME selection", () => {
   test.each(["", "~/.codex", "/Users/owner/.codex", "/home/user/.codex/"])(
-    "refuses the default-home shaped codexHome %j",
+    "default-home shaped codexHome %j selects owner-local mode (CODEX_HOME unset)",
     async (codexHome) => {
-      const { transport } = makeScriptedCodexAppServerTransport();
+      const { transport, startThreadCalls } = makeScriptedCodexAppServerTransport();
       const adapter = makeCodexHarnessAdapter({
         mode: "app-server",
         codexBinaryPath: BINARY,
         codexHome,
         transport,
       });
-      const error = await Effect.runPromise(
-        adapter.start({ sessionId: "s1", source: SOURCE }).pipe(Effect.flip),
-      );
-      expect(error).toMatchObject({
-        _tag: "AgentHarness.StartError",
-        failureClass: "codex_home_not_isolated",
-      });
+      const session = await Effect.runPromise(adapter.start({ sessionId: "s1", source: SOURCE }));
+      expect(session.sessionId).toBe("s1");
+      expect(startThreadCalls[0]?.codexHome).toBeUndefined();
     },
   );
 
-  test("an isolated account home is accepted", async () => {
+  test("omitted codexHome selects owner-local mode", async () => {
+    const { transport, startThreadCalls } = makeScriptedCodexAppServerTransport();
+    const adapter = makeCodexHarnessAdapter({
+      mode: "app-server",
+      codexBinaryPath: BINARY,
+      transport,
+    });
+    const session = await Effect.runPromise(adapter.start({ sessionId: "s1", source: SOURCE }));
+    expect(session.sessionId).toBe("s1");
+    expect(startThreadCalls[0]?.codexHome).toBeUndefined();
+  });
+
+  test("an isolated account home is passed through unchanged", async () => {
     const { adapter } = makeExecAdapter();
     const session = await Effect.runPromise(adapter.start({ sessionId: "s1", source: SOURCE }));
     expect(session.sessionId).toBe("s1");

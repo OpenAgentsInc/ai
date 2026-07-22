@@ -100,7 +100,8 @@ export const codexExecTurnScript: ReadonlyArray<CodexEvent> = [
 
 /** One recorded `startThread` call. */
 export interface RecordedStartThread {
-  readonly codexHome: string;
+  /** Absent in owner-local mode (currently-authenticated default home). */
+  readonly codexHome?: string;
   readonly workingDirectory?: string;
   readonly model?: string;
   readonly resumeThreadId?: string;
@@ -121,7 +122,8 @@ export interface RecordedApprovalResponse {
 /** One recorded exec spawn. */
 export interface RecordedSpawn {
   readonly codexBinaryPath: string;
-  readonly codexHome: string;
+  /** Absent in owner-local mode (currently-authenticated default home). */
+  readonly codexHome?: string;
   readonly workingDirectory?: string;
   readonly model?: string;
   readonly prompt: string;

@@ -17,6 +17,7 @@ export * from "./reference-adapter.ts";
 export * from "./acp-adapter.ts";
 export * from "./opencode-adapter.ts";
 export * from "./codex-adapter.ts";
+export * from "./codex-exec-live-spawner.ts";
 export * from "./claude-code-adapter.ts";
 export * from "./pi-adapter.ts";
 export * from "./cursor-adapter.ts";
