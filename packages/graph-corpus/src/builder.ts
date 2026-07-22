@@ -100,6 +100,12 @@ export const makeCanonicalEntity = (input: {
   readonly mentions: ReadonlyArray<GraphMentionType>;
   readonly derivation: GraphDerivation;
 }): GraphCanonicalEntityType => {
+  if (input.mentions.length === 0) {
+    throw new GraphCorpusError({
+      reason: "invalid_graph",
+      detailSafe: "canonical entity requires at least one mention",
+    });
+  }
   if (new Set(input.mentions.map((item) => item.mentionRef)).size !== input.mentions.length) {
     throw new GraphCorpusError({
       reason: "invalid_graph",
@@ -339,6 +345,7 @@ export const buildGraphCorpus = Effect.fn("GraphCorpus.build")(function* (
     [...refs].sort(compareCanonicalText);
   for (const mention of mentions) {
     if (
+      mention.elementKind !== mention.identity.elementKind ||
       mention.elementRef !== expectedElementRef(mention) ||
       mention.mentionRef !== refFromElement("mention", mention.elementRef) ||
       !scopedToSnapshot(mention) ||
@@ -355,6 +362,9 @@ export const buildGraphCorpus = Effect.fn("GraphCorpus.build")(function* (
       entity.mentionRefs.flatMap((ref) => mentionByRef.get(ref)?.memberships ?? []),
     );
     if (
+      entity.elementKind !== entity.identity.elementKind ||
+      entity.mentionRefs.length === 0 ||
+      entity.memberships.length === 0 ||
       entity.elementRef !== expectedElementRef(entity) ||
       entity.entityRef !== refFromElement("entity", entity.elementRef) ||
       !scopedToSnapshot(entity) ||
@@ -371,6 +381,7 @@ export const buildGraphCorpus = Effect.fn("GraphCorpus.build")(function* (
   }
   for (const relation of relations) {
     if (
+      relation.elementKind !== relation.identity.elementKind ||
       relation.elementRef !== expectedElementRef(relation) ||
       relation.relationRef !== refFromElement("relation", relation.elementRef) ||
       !scopedToSnapshot(relation) ||

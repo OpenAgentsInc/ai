@@ -87,7 +87,7 @@ export type GraphDecodeOutcome = typeof GraphDecodeOutcome.Type;
 
 export const GraphDeterministicDerivation = S.TaggedStruct("Deterministic", {
   parserRef: graphRef("GraphParserRef"),
-  parserVersion: S.String.check(S.isMinLength(1), S.isMaxLength(128)),
+  parserVersion: graphRef("GraphParserVersion"),
   extractorKind: S.optionalKey(S.Never),
   dseSignatureRef: S.optionalKey(S.Never),
   compiledProgramDigest: S.optionalKey(S.Never),

@@ -5,7 +5,11 @@
   "description": "Portable deterministic graph corpus projection for the OpenAgents AI SDK.",
   "license": "Apache-2.0",
   "files": [
-    "src",
+    "src/builder.ts",
+    "src/canonical.ts",
+    "src/handle.ts",
+    "src/index.ts",
+    "src/schemas.ts",
     "README.md"
   ],
   "type": "module",

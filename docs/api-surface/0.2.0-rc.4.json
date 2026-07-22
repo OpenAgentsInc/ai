@@ -5122,7 +5122,7 @@
             },
             "Graph": {
               "kind": "alias",
-              "sig": "eb3bda7827697425"
+              "sig": "322323294838aa8d"
             },
             "grepRecursiveRecallCorpus": {
               "kind": "value",
@@ -7192,11 +7192,11 @@
             },
             "BuildGraphCorpusInput": {
               "kind": "interface",
-              "sig": "bd27632f51de2479"
+              "sig": "925f3660fad116f2"
             },
             "BuiltGraphCorpus": {
               "kind": "interface",
-              "sig": "cc89345c79f86b9a"
+              "sig": "49521910316ad4e1"
             },
             "canonicalGraphPolicy": {
               "kind": "value",
@@ -7224,7 +7224,7 @@
             },
             "derivationBytes": {
               "kind": "value",
-              "sig": "ca7027f504f0259a"
+              "sig": "0f2e4ae12d9aa256"
             },
             "deriveGraphElementRef": {
               "kind": "value",
@@ -7256,7 +7256,7 @@
             },
             "GraphCanonicalEntity": {
               "kind": "type",
-              "sig": "bbe3d43eab74c464"
+              "sig": "e3e37f6e4a487d92"
             },
             "GraphCanonicalKey": {
               "kind": "type",
@@ -7280,7 +7280,7 @@
             },
             "GraphDerivation": {
               "kind": "type",
-              "sig": "d1b3f1609ba40cc6"
+              "sig": "a17a1c4e38afeeaf"
             },
             "graphDescriptorRef": {
               "kind": "value",
@@ -7292,7 +7292,7 @@
             },
             "GraphDeterministicDerivation": {
               "kind": "type",
-              "sig": "0207df79fa45c04a"
+              "sig": "484dd815a7ca32f6"
             },
             "graphDigest": {
               "kind": "value",
@@ -7348,7 +7348,7 @@
             },
             "GraphMention": {
               "kind": "type",
-              "sig": "fe9669591975a13b"
+              "sig": "402755141e2e2c84"
             },
             "graphMentionRef": {
               "kind": "value",
@@ -7376,7 +7376,7 @@
             },
             "GraphReadableElement": {
               "kind": "type",
-              "sig": "a83e355830c69c13"
+              "sig": "f216f168de2916bc"
             },
             "GraphRef": {
               "kind": "type",
@@ -7388,7 +7388,7 @@
             },
             "GraphRelation": {
               "kind": "type",
-              "sig": "2e996e1fa7c595c9"
+              "sig": "01a6282d8c53631e"
             },
             "graphRelationRef": {
               "kind": "value",
@@ -7408,11 +7408,11 @@
             },
             "GraphSnapshot": {
               "kind": "type",
-              "sig": "58f2ecda7924079f"
+              "sig": "5b418de887833f77"
             },
             "GraphSnapshotHandle": {
               "kind": "interface",
-              "sig": "90921706ea2db29d"
+              "sig": "9a702675f88af581"
             },
             "GraphSourceMembership": {
               "kind": "type",
@@ -14847,11 +14847,11 @@
             },
             "BuildGraphCorpusInput": {
               "kind": "interface",
-              "sig": "bd27632f51de2479"
+              "sig": "925f3660fad116f2"
             },
             "BuiltGraphCorpus": {
               "kind": "interface",
-              "sig": "cc89345c79f86b9a"
+              "sig": "49521910316ad4e1"
             },
             "canonicalGraphPolicy": {
               "kind": "value",
@@ -14879,7 +14879,7 @@
             },
             "derivationBytes": {
               "kind": "value",
-              "sig": "bb83f652dc54d1c0"
+              "sig": "c446e84dfaf85194"
             },
             "deriveGraphElementRef": {
               "kind": "value",
@@ -14911,7 +14911,7 @@
             },
             "GraphCanonicalEntity": {
               "kind": "type",
-              "sig": "bbe3d43eab74c464"
+              "sig": "e3e37f6e4a487d92"
             },
             "GraphCanonicalKey": {
               "kind": "type",
@@ -14935,7 +14935,7 @@
             },
             "GraphDerivation": {
               "kind": "type",
-              "sig": "5b237be1dbd4cc6b"
+              "sig": "1c4fe7f611ca3b42"
             },
             "graphDescriptorRef": {
               "kind": "value",
@@ -14947,7 +14947,7 @@
             },
             "GraphDeterministicDerivation": {
               "kind": "type",
-              "sig": "86f380c6cffa937b"
+              "sig": "2fb4929ea98d8cdc"
             },
             "graphDigest": {
               "kind": "value",
@@ -15003,7 +15003,7 @@
             },
             "GraphMention": {
               "kind": "type",
-              "sig": "fe9669591975a13b"
+              "sig": "402755141e2e2c84"
             },
             "graphMentionRef": {
               "kind": "value",
@@ -15031,7 +15031,7 @@
             },
             "GraphReadableElement": {
               "kind": "type",
-              "sig": "7989a5f4811f0aaf"
+              "sig": "857ff088030174cf"
             },
             "GraphRef": {
               "kind": "type",
@@ -15043,7 +15043,7 @@
             },
             "GraphRelation": {
               "kind": "type",
-              "sig": "2e996e1fa7c595c9"
+              "sig": "01a6282d8c53631e"
             },
             "graphRelationRef": {
               "kind": "value",
@@ -15063,11 +15063,11 @@
             },
             "GraphSnapshot": {
               "kind": "type",
-              "sig": "58f2ecda7924079f"
+              "sig": "5b418de887833f77"
             },
             "GraphSnapshotHandle": {
               "kind": "interface",
-              "sig": "90921706ea2db29d"
+              "sig": "9a702675f88af581"
             },
             "GraphSourceMembership": {
               "kind": "type",
@@ -15128,7 +15128,7 @@
             },
             "GraphCanonicalEntity": {
               "kind": "type",
-              "sig": "bbe3d43eab74c464"
+              "sig": "e3e37f6e4a487d92"
             },
             "GraphCanonicalKey": {
               "kind": "type",
@@ -15148,7 +15148,7 @@
             },
             "GraphDerivation": {
               "kind": "type",
-              "sig": "5b237be1dbd4cc6b"
+              "sig": "1c4fe7f611ca3b42"
             },
             "graphDescriptorRef": {
               "kind": "value",
@@ -15160,7 +15160,7 @@
             },
             "GraphDeterministicDerivation": {
               "kind": "type",
-              "sig": "86f380c6cffa937b"
+              "sig": "2fb4929ea98d8cdc"
             },
             "graphDigest": {
               "kind": "value",
@@ -15208,7 +15208,7 @@
             },
             "GraphMention": {
               "kind": "type",
-              "sig": "fe9669591975a13b"
+              "sig": "402755141e2e2c84"
             },
             "graphMentionRef": {
               "kind": "value",
@@ -15244,7 +15244,7 @@
             },
             "GraphRelation": {
               "kind": "type",
-              "sig": "2e996e1fa7c595c9"
+              "sig": "01a6282d8c53631e"
             },
             "graphRelationRef": {
               "kind": "value",
@@ -15264,7 +15264,7 @@
             },
             "GraphSnapshot": {
               "kind": "type",
-              "sig": "58f2ecda7924079f"
+              "sig": "5b418de887833f77"
             },
             "GraphSourceMembership": {
               "kind": "type",

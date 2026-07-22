@@ -13,6 +13,7 @@ import {
   GraphMention,
   buildGraphCorpus,
   canonicalJson,
+  deriveGraphElementRef,
   makeCanonicalEntity,
   makeEmbeddingProjectionDescriptor,
   makeGraphMention,
@@ -278,6 +279,13 @@ describe("@openagentsinc/graph-corpus", () => {
         usageReceiptRef: "forged.usage",
       }),
     ).toThrow();
+    expect(() =>
+      S.decodeUnknownSync(GraphDerivation)({
+        _tag: "Deterministic",
+        parserRef: "parser.fixture.v1",
+        parserVersion: "PRIVATE SENTINEL MUST NOT ENTER PROVENANCE",
+      }),
+    ).toThrow();
   });
 
   test("rejects duplicate, cross-scope, dangling, forged, and noncanonical graph facts", async () => {
@@ -288,6 +296,55 @@ describe("@openagentsinc/graph-corpus", () => {
       ),
     );
     expect(duplicate.reason).toBe("invalid_graph");
+
+    expect(() =>
+      makeCanonicalEntity({
+        identityNamespace: "people",
+        canonicalKey: "empty",
+        identityScopeRef: "tenant.a",
+        mentions: [],
+        derivation: deterministic,
+      }),
+    ).toThrow(GraphCorpusError);
+
+    const contradictory = structuredClone(value.mentionA);
+    (contradictory.identity as unknown as { elementKind: string }).elementKind = "entity";
+    const contradictoryRef = deriveGraphElementRef({
+      identity: contradictory.identity,
+      memberships: contradictory.memberships,
+    });
+    (contradictory as unknown as { elementRef: string; mentionRef: string }).elementRef =
+      contradictoryRef;
+    (contradictory as unknown as { mentionRef: string }).mentionRef =
+      `mention.${contradictoryRef.slice(contradictoryRef.lastIndexOf(".") + 1)}`;
+    const discriminantError = await Effect.runPromise(
+      buildGraphCorpus({
+        graphRef: "graph.contradictory",
+        scopeRef: "tenant.a",
+        policy,
+        mentions: [contradictory],
+        entities: [],
+        relations: [],
+      }).pipe(Effect.flip),
+    );
+    expect(discriminantError.reason).toBe("invalid_graph");
+
+    const emptyEntity = structuredClone(value.entity);
+    (emptyEntity as unknown as { mentionRefs: Array<unknown> }).mentionRefs = [];
+    (emptyEntity as unknown as { memberships: Array<unknown> }).memberships = [];
+    const emptyRef = deriveGraphElementRef({
+      identity: emptyEntity.identity,
+      memberships: emptyEntity.memberships,
+    });
+    (emptyEntity as unknown as { elementRef: string; entityRef: string }).elementRef = emptyRef;
+    (emptyEntity as unknown as { entityRef: string }).entityRef =
+      `entity.${emptyRef.slice(emptyRef.lastIndexOf(".") + 1)}`;
+    const emptyEntityError = await Effect.runPromise(
+      buildGraphCorpus({ ...value.input, entities: [emptyEntity, value.organization] }).pipe(
+        Effect.flip,
+      ),
+    );
+    expect(emptyEntityError.reason).toBe("invalid_graph");
 
     const crossScope = makeGraphMention({
       identityNamespace: "people",
