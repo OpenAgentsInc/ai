@@ -154,6 +154,7 @@ Every entry MUST contain:
 - a zero-based, contiguous `ordinal` in corpus order;
 - a stable `entryRef` derived from its source address;
 - a scope reference;
+- its source plane;
 - its source kind;
 - its source address;
 - safe bounded content or safe refs;
@@ -191,6 +192,22 @@ For OpenAgents history, raw owner-local notes are owner-private inputs. A
 public or shared consumer cannot opt into them by setting a request field.
 Authorization is supplied by the corpus source Layer.
 
+### 3.3.1 Corpus composition
+
+A composite corpus MUST bind the ordered child corpus ref, content digest, and
+manifest digest. It MUST bind the composite policy and ordering rule. It MUST
+preserve child exclusions. A changed exclusion record changes the manifest
+digest.
+
+A composite policy MUST be equal to or narrower than every child policy. An
+unsupported source plane, duplicate source address, stale child identity, or
+changed child handle MUST fail closed. Child array order is semantic for the
+`composite_child_then_ordinal` rule.
+
+A composite entry MUST preserve the source plane and exact child source
+locator. A citation MUST bind the selected composite digest and the exact child
+content digest. A derived entry MAY include more supporting source locators.
+
 ### 3.4 Text is untrusted data
 
 Corpus text may contain prompt injection, forged role labels, JSON resembling
@@ -227,6 +244,11 @@ Canonical digests MAY be computed incrementally, but the final digest and
 ordering semantics MUST be identical to canonical inline encoding. A source
 that changes after resolution fails with `corpus_changed`; it is not silently
 re-read under the original run identity.
+
+Engine operations and citation validation MUST use bounded reads, bounded
+scans, or source lookup. They MUST NOT require `materializeAll`. Composite
+construction MAY scan bounded child entries to build an address index. It MUST
+NOT retain all child text as a second corpus copy.
 
 ## 4. Request modes
 

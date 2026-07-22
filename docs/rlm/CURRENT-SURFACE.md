@@ -1,14 +1,18 @@
 # Current surface and implementation gap
 
-**Train:** `0.2.0-rc.1` (first-class `@openagentsinc/rlm`)
+**Train:** workspace `0.2.0-rc.4`
 
-## What ships in 0.2.0-rc.1
+## Current workspace surface
 
 ### `@openagentsinc/rlm` (generic engine)
 
 - Canonical schemas: corpus identity with content/manifest digests, budgets,
   programs, requests/results, events, errors.
 - Inline corpus handles with hard byte ceiling and citation validation.
+- Corpus v2 source planes, policy facts, exact source locators, and explicit v1
+  migration.
+- Deterministic multi-corpus composition with stale-child and policy checks.
+- Bounded engine and citation paths that do not require full materialization.
 - Shared deterministic interpreter (Grep, OrdinalSlice, InspectMetadata).
 - Run-scoped symbolic `RlmEnvironment` (opaque values, digests, byte caps).
 - Declarative program DAG with `CorpusOp`, `Partition`, `Transform`,
@@ -27,7 +31,8 @@
 
 ### Still host-owned / follow-on
 
-- Application `RlmCorpusSource` for out-of-core stores (inline ships).
+- Durable application `RlmCorpusSource` adapters for repositories and evidence
+  stores.
 - Live Effect AI `generateObject` root/leaf Layers (scripted models ship).
 - Artifact sink for oversized output (honest partial ships without sink).
 - Dense OOLONG evaluation harness against live providers (contracts only).

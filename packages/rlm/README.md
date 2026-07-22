@@ -36,6 +36,10 @@ npm install @openagentsinc/ai@rc   # re-exported at @openagentsinc/ai/rlm
 - `RlmCorpusSource` — the service the host application implements to supply a
   corpus; `rlmInlineCorpusSourceLayer` + `buildInlineCorpusInput` serve an inline
   corpus for tests and small cases.
+- `makeCompositeCorpusHandle` — combines authorized child handles. It preserves
+  child identities, source planes, policies, and exclusions.
+- `migrateRlmCorpusV1` — requires the caller to supply a source plane and an
+  authorized policy before it creates v2 bytes.
 
 ```ts
 import { Effect } from "effect";
@@ -52,6 +56,7 @@ const corpus = buildInlineCorpusInput({
   entries: [
     {
       scopeRef: "scope.readme",
+      sourcePlane: "evidence_pack",
       sourceKind: "fixture",
       sourceAddress: { addressSchemaId: "test.addr.v1", encodedAddress: "a0" },
       text: "alpha fact one",
@@ -86,6 +91,16 @@ if (result._tag === "Completed") console.log(result.usage.modelCalls); // 0
 No Python, REPL, `eval`, shell, or arbitrary model-authored code. Operators are
 trusted pure functions registered at Layer construction. Results are cited
 candidates, never authority.
+
+The v2 corpus contract separates `sourcePlane` from adapter-specific
+`sourceKind`. A manifest records the admitted policy. A composite policy can
+be narrower than a child policy. It cannot be wider. Composite construction
+rejects duplicate source addresses and stale child identities. Engine scans
+and citation checks use bounded handle operations. They do not require full
+corpus materialization.
+
+See [the v1 migration note](../../docs/rlm/CORPUS-V2-MIGRATION.md) before you
+upgrade stored corpus bytes.
 
 See [`docs/rlm/`](../../docs/rlm) for the normative specification.
 

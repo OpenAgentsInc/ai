@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Stream } from "effect";
 import type { RlmCorpusEntry } from "../schemas/corpus.ts";
 import type {
   RlmDeterministicLimits,
@@ -16,6 +16,24 @@ export interface DeterministicObservation {
   readonly observationText: string;
 }
 
+const corpusError = (detailSafe?: string): RlmError =>
+  new RlmError({
+    reason: "corpus_unavailable",
+    retryable: false,
+    ...(detailSafe === undefined ? {} : { detailSafe }),
+  });
+
+/** Collect at most maxEntries from a bounded corpus scan. */
+export const collectBoundedScan = (
+  handle: RlmCorpusHandle,
+  maxEntries: number,
+): Effect.Effect<ReadonlyArray<RlmCorpusEntry>, RlmError> =>
+  handle.scan({ maxEntries }).pipe(
+    Stream.runCollect,
+    Effect.map((entries) => [...entries]),
+    Effect.mapError((error) => corpusError(error.detailSafe)),
+  );
+
 const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export const runDeterministicOperation = (
@@ -24,16 +42,6 @@ export const runDeterministicOperation = (
   limits: RlmDeterministicLimits,
 ): Effect.Effect<DeterministicObservation, RlmError> =>
   Effect.gen(function* () {
-    const entries = yield* handle.materializeAll().pipe(
-      Effect.mapError(
-        (e) =>
-          new RlmError({
-            reason: "corpus_unavailable",
-            retryable: false,
-            ...(e.detailSafe !== undefined ? { detailSafe: e.detailSafe } : {}),
-          }),
-      ),
-    );
     const capsHit: Array<string> = [];
     let scanned = 0;
     const findings: Array<RlmFinding> = [];
@@ -53,6 +61,10 @@ export const runDeterministicOperation = (
 
     switch (operation._tag) {
       case "Grep": {
+        const entries = yield* collectBoundedScan(handle, limits.maxEntriesScanned);
+        if (handle.manifest.coverage.entryCount > limits.maxEntriesScanned) {
+          capsHit.push("maxEntriesScanned");
+        }
         let re: RegExp;
         try {
           re = new RegExp(operation.pattern, operation.caseSensitive === false ? "i" : "");
@@ -88,8 +100,16 @@ export const runDeterministicOperation = (
             detailSafe: "OrdinalSlice start > endInclusive",
           });
         }
+        const requestedCount = operation.endInclusive - operation.start + 1;
+        const allowedCount = Math.min(requestedCount, limits.maxEntriesScanned);
+        const entries = yield* handle
+          .read(
+            { start: operation.start, endInclusive: operation.endInclusive },
+            { maxEntries: allowedCount, maxCharsPerEntry: limits.maxCharsPerSpan },
+          )
+          .pipe(Effect.mapError((error) => corpusError(error.detailSafe)));
+        if (requestedCount > allowedCount) capsHit.push("maxEntriesScanned");
         for (const entry of takeScan(entries)) {
-          if (entry.ordinal < operation.start || entry.ordinal > operation.endInclusive) continue;
           if (findings.length >= limits.maxSpans) {
             capsHit.push("maxSpans");
             break;

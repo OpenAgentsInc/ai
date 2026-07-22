@@ -5,7 +5,7 @@ import type { RlmEvent } from "../schemas/events.ts";
 import { RlmError } from "../schemas/errors.ts";
 import type { RlmCorpusHandle } from "../corpus/handle.ts";
 import type { RlmEnvironment } from "../environment/values.ts";
-import { grepEntries } from "../interpreter/deterministic.ts";
+import { collectBoundedScan, grepEntries } from "../interpreter/deterministic.ts";
 import { topologicalNodes, validateProgram } from "./validate.ts";
 import type { RlmCitation } from "../schemas/corpus.ts";
 import { citationFromEntry } from "../corpus/citations.ts";
@@ -91,17 +91,6 @@ export const executeProgram = (
     let valuesPublished = 0;
     let committed: ProgramExecutionResult["committed"];
 
-    const entries = yield* deps.handle.materializeAll().pipe(
-      Effect.mapError(
-        (e) =>
-          new RlmError({
-            reason: "corpus_unavailable",
-            retryable: false,
-            ...(e.detailSafe !== undefined ? { detailSafe: e.detailSafe } : {}),
-          }),
-      ),
-    );
-
     for (const node of order) {
       yield* deps.emit({
         _tag: "ProgramNodeStarted",
@@ -114,6 +103,10 @@ export const executeProgram = (
         case "CorpusOp": {
           if (node.operator === "Grep") {
             const pattern = String(node.params["pattern"] ?? "");
+            const entries = yield* collectBoundedScan(
+              deps.handle,
+              deps.budget.maxEntriesScannedPerOperation,
+            );
             const { hits } = grepEntries(entries, pattern, true, {
               maxScan: deps.budget.maxEntriesScannedPerOperation,
               maxHits: deps.budget.maxSpansPerOperation,
@@ -136,7 +129,24 @@ export const executeProgram = (
           } else if (node.operator === "OrdinalSlice") {
             const start = Number(node.params["start"] ?? 0);
             const endInclusive = Number(node.params["endInclusive"] ?? start);
-            const slice = entries.filter((e) => e.ordinal >= start && e.ordinal <= endInclusive);
+            const slice = yield* deps.handle
+              .read(
+                { start, endInclusive },
+                {
+                  maxEntries: deps.budget.maxEntriesScannedPerOperation,
+                  maxCharsPerEntry: deps.budget.maxCharsPerSpan,
+                },
+              )
+              .pipe(
+                Effect.mapError(
+                  (error) =>
+                    new RlmError({
+                      reason: "corpus_unavailable",
+                      retryable: false,
+                      ...(error.detailSafe === undefined ? {} : { detailSafe: error.detailSafe }),
+                    }),
+                ),
+              );
             const citations = slice.map((h) => citationFromEntry(deps.handle, h));
             yield* deps.env.publish({
               valueRef: node.outputValueRef,
@@ -157,7 +167,7 @@ export const executeProgram = (
               payload: {
                 corpusRef: deps.handle.identity.corpusRef,
                 contentDigest: deps.handle.identity.contentDigest,
-                entryCount: entries.length,
+                entryCount: deps.handle.manifest.coverage.entryCount,
               },
               producingNodeRef: node.nodeRef,
             });

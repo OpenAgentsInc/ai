@@ -76,7 +76,8 @@ never forked.
 **L6** recall. The full history stays durable and a typed service traverses it.
 
 - Key exports: `buildHistoryCorpus`, `recallTierD`, the `HistoryRecall` service,
-  the recursive recall engine, and the `history_recall` host tool.
+  the recursive recall engine, the `history_recall` host tool, and
+  `historyCorpusToRlmInput` from the `./rlm` subpath.
 - Use it for recall instead of compaction. Tier D recall is pure and
   deterministic and reports an honesty record with every answer.
 - npm: [@openagentsinc/history-corpus](https://www.npmjs.com/package/@openagentsinc/history-corpus)
@@ -87,7 +88,8 @@ The **L6** recursive recall engine. It runs typed recall programs over a corpus
 source, deterministically first (Tier D) and recursively second (Tier S).
 
 - Key exports: `makeRlm`, `rlmLayer`, `rlmDeterministicLayer`, `runRlm`,
-  `streamRlm`, `RlmCorpusSource`, and `rlmInlineCorpusSourceLayer`.
+  `streamRlm`, `RlmCorpusSource`, `makeCompositeCorpusHandle`,
+  `migrateRlmCorpusV1`, and `rlmInlineCorpusSourceLayer`.
 - Use it when Tier D questions are not enough and you want a bounded engine that
   composes recall steps. It is generic — history is one adapter
   (`@openagentsinc/history-corpus`).

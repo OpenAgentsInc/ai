@@ -15,6 +15,7 @@
     "./reducer": "./src/reducer-laws.ts",
     "./recall": "./src/recall-laws.ts",
     "./rlm": "./src/rlm-cap-laws.ts",
+    "./corpus": "./src/corpus-composition-laws.ts",
     "./fixtures": "./src/fixtures.ts"
   },
   "publishConfig": {

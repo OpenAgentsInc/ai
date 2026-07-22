@@ -23,13 +23,14 @@ is proven to work before anyone points it at a third-party implementation.
 
 ## The suites
 
-| Import                                     | Runner            | Implementation under test        | Laws                                                                                                                                                   |
-| ------------------------------------------ | ----------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `@openagentsinc/conformance-kit/adapter`   | `runAdapterLaws`  | `AgentHarness`                   | turn framing, capability refusal is fail-closed and named, suspend/continue cursor exactness (with honest lossy degradation)                           |
-| `@openagentsinc/conformance-kit/event-log` | `runEventLogLaws` | `HarnessEventLogStore`           | append monotonicity / dup-free, gap-free replay from a cursor, durable replay after process death, rerun boundaries, live attach, single-flight attach |
-| `@openagentsinc/conformance-kit/reducer`   | `runReducerLaws`  | a progressive UI-message reducer | progressive fold, tool state machine, transient bypass, fail-loud-never-corrupt                                                                        |
-| `@openagentsinc/conformance-kit/recall`    | `runRecallLaws`   | a `HistoryRecall` Tier D source  | correctness anchor, caps truncate + report, `cost.modelCalls === 0`, coverage-note carry-through, typed invalid input                                  |
-| `@openagentsinc/conformance-kit/rlm`       | `runRlmCapLaws`   | the RLM engine + corpus source   | every cap → honest `Partial`, generous → `Completed`, no laundering, deterministic never touches a model                                               |
+| Import                                     | Runner                     | Implementation under test        | Laws                                                                                                                                                   |
+| ------------------------------------------ | -------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@openagentsinc/conformance-kit/adapter`   | `runAdapterLaws`           | `AgentHarness`                   | turn framing, capability refusal is fail-closed and named, suspend/continue cursor exactness (with honest lossy degradation)                           |
+| `@openagentsinc/conformance-kit/event-log` | `runEventLogLaws`          | `HarnessEventLogStore`           | append monotonicity / dup-free, gap-free replay from a cursor, durable replay after process death, rerun boundaries, live attach, single-flight attach |
+| `@openagentsinc/conformance-kit/reducer`   | `runReducerLaws`           | a progressive UI-message reducer | progressive fold, tool state machine, transient bypass, fail-loud-never-corrupt                                                                        |
+| `@openagentsinc/conformance-kit/recall`    | `runRecallLaws`            | a `HistoryRecall` Tier D source  | correctness anchor, caps truncate + report, `cost.modelCalls === 0`, coverage-note carry-through, typed invalid input                                  |
+| `@openagentsinc/conformance-kit/rlm`       | `runRlmCapLaws`            | the RLM engine + corpus source   | every cap → honest `Partial`, generous → `Completed`, no laundering, deterministic never touches a model                                               |
+| `@openagentsinc/conformance-kit/corpus`    | `runCorpusCompositionLaws` | an RLM composite constructor     | deterministic identity, semantic child order, policy non-widening                                                                                      |
 
 Everything is re-exported from the package root too
 (`@openagentsinc/conformance-kit`).

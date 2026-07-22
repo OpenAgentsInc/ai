@@ -63,6 +63,12 @@ input into an immutable corpus handle. Its Layer captures store access and
 caller authority. The request does not carry a visibility allowlist that can
 widen access.
 
+`makeCompositeCorpusHandle` is a trusted in-process constructor. The
+application supplies exact child handles and expected identities. The
+constructor applies a canonical policy, preserves child source locators, and
+returns one immutable handle. It does not add a composite policy to tool or
+model request data.
+
 ```ts
 interface RlmCorpusSourceShape {
   readonly resolve: (input: RlmCorpusInput) => Effect.Effect<RlmCorpusHandle, RlmCorpusError>;

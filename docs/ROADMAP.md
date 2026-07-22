@@ -114,6 +114,10 @@ layers, and connects its runtime receipts to the neutral event stream.
 
 ### Phase 3A — Derived graph-memory corpora (Cognee fast follow)
 
+SDK-MEM-02 (#31) supplies corpus v2 source planes, deterministic composition,
+exact child citations, and explicit v1 migration. Later graph issues consume
+this contract. They do not change its authority boundary.
+
 Owner direction on 2026-07-21 admits issue decomposition for this ordered
 program. Implementation remains issue-scoped. The source evidence is the
 Apache-2.0 Cognee tree at

@@ -35,6 +35,10 @@ export class RlmCorpusError extends S.TaggedErrorClass<RlmCorpusError>()("Rlm.Co
     "byte_ceiling",
     "invalid_range",
     "invalid_address",
+    "unsupported_plane",
+    "policy_widened",
+    "duplicate_source",
+    "legacy_requires_migration",
   ]),
   detailSafe: S.optionalKey(RlmBoundedText),
 }) {}

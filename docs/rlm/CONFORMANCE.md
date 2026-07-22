@@ -395,6 +395,14 @@ The monorepo adds integration oracles for:
 The full desktop typecheck, tests, build, Electron smoke, and React smoke are
 required for integration changes.
 
+### Corpus composition laws
+
+`@openagentsinc/conformance-kit/corpus` publishes the corpus composition laws.
+The laws check deterministic identity, semantic child order, and policy
+non-widening. The reference tests also check duplicate source refusal, stale
+child refusal, exact child citation resolution, explicit v1 migration, and a
+large lazy child that cannot materialize all entries.
+
 ## 16. Dense-recall evaluation
 
 Quality evaluation compares the following systems over the same immutable

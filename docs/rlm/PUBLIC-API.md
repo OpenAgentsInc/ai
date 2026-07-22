@@ -50,7 +50,7 @@ Wire-facing schemas include explicit schema identifiers.
 
 ```ts
 const RlmCorpusIdentity = Schema.Struct({
-  schemaId: Schema.Literal("openagents.ai.rlm_corpus.v1"),
+  schemaId: Schema.Literal("openagents.ai.rlm_corpus.v2"),
   corpusRef: RlmCorpusRef,
   contentDigest: RlmCorpusDigest,
   manifestDigest: RlmManifestDigest,
@@ -67,6 +67,16 @@ const RlmCorpusInput = Schema.Union([
 ]);
 ```
 
+Every v2 entry has a `sourcePlane`. Standard planes are `event_log`,
+`thread_snapshot`, `repository`, `evidence_pack`, `derived_graph`, and
+`profile_memory`. An extension plane has a versioned registry ID. A trusted
+host must admit that registry before composition.
+
+A manifest has an explicit `RlmCorpusPolicy`. It records admitted visibility
+and redaction sets. A composite manifest also has `RlmCorpusComposition`. This
+record contains ordered child identity triples, the composite policy, the
+ordering rule, and child-qualified exclusions.
+
 `Source` resolution goes through `RlmCorpusSource` and returns an immutable
 `RlmCorpusHandle` with bounded range/scan methods. Inline corpora are decoded,
 canonicalized, digest-checked, and limited to a conservative byte ceiling.
@@ -79,6 +89,7 @@ The in-process source service returns a capability, not a wire value:
 interface RlmCorpusHandle {
   readonly identity: RlmCorpusIdentity;
   readonly manifest: RlmCorpusManifest;
+  readonly assertUnchanged: () => Effect.Effect<void, RlmCorpusError>;
   readonly read: (
     range: RlmOrdinalRange,
     limits: RlmReadLimits,
@@ -86,12 +97,19 @@ interface RlmCorpusHandle {
   readonly scan: (request: RlmScanRequest) => Stream.Stream<RlmCorpusEntry, RlmCorpusError>;
   readonly validateSourceAddress: (
     address: RlmSourceAddress,
+    sourcePlane?: RlmSourcePlane,
+  ) => Effect.Effect<RlmValidatedSourceAddress, RlmCorpusError>;
+  readonly validateSourceLocator: (
+    locator: RlmSourceLocator,
   ) => Effect.Effect<RlmValidatedSourceAddress, RlmCorpusError>;
 }
 ```
 
 Every method is bounded. The handle is immutable for the run identity and
 fails `corpus_changed` if the source no longer matches its resolved digest.
+`makeCompositeCorpusHandle` receives authorized child handles and policy from
+trusted application code. The public request does not contain composition
+authority.
 
 ### Deterministic request
 

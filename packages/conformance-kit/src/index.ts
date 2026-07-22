@@ -14,6 +14,10 @@ export { runReducerLaws, type ReducerLawsConfig } from "./reducer-laws.ts";
 export { runRecallLaws, type RecallLawsConfig, type RecallSource } from "./recall-laws.ts";
 export { runRlmCapLaws, type RlmCapLawsConfig } from "./rlm-cap-laws.ts";
 export {
+  runCorpusCompositionLaws,
+  type CorpusCompositionLawsConfig,
+} from "./corpus-composition-laws.ts";
+export {
   assertContiguous,
   attempt,
   type Attempt,

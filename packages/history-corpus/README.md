@@ -119,6 +119,10 @@ The builder reads two sources. It does not write to them.
   child, and notice facts do not reach the neutral log. The manifest
   coverage statement names the kinds that are in the corpus, the kinds that
   are not, and this bound.
+- **Generic RLM adapter.** `historyCorpusToRlmInput` converts a built history
+  corpus to RLM corpus v2. Runtime events use the `event_log` plane. Thread
+  notes use the `thread_snapshot` plane. The adapter preserves exact cursor
+  addresses, policy, and exclusion counts.
 
 ## Tier D recall
 

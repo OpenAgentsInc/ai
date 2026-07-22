@@ -1,5 +1,9 @@
 # Recursive Language Model support
 
+Corpus v2 and multi-corpus composition are described in
+[`CORPUS-V2-MIGRATION.md`](CORPUS-V2-MIGRATION.md),
+[`SPEC.md`](SPEC.md), and [`PUBLIC-API.md`](PUBLIC-API.md).
+
 **Status:** normative design for the first-class RLM surface of the
 OpenAgents AI SDK. The contracts in this folder are the implementation target;
 [`CURRENT-SURFACE.md`](./CURRENT-SURFACE.md) records what `0.1.3-rc.1` already
