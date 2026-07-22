@@ -19,6 +19,7 @@ import * as ProgramContract from "@openagentsinc/ai/program/contract";
 import * as ProgramRuntime from "@openagentsinc/ai/program/runtime";
 import * as ProgramOptimizer from "@openagentsinc/ai/program/optimizer";
 import * as ProgramTest from "@openagentsinc/ai/program/test";
+import * as Graph from "@openagentsinc/ai/graph";
 
 describe("@openagentsinc/ai umbrella root", () => {
   test("re-exports the key symbol of every layer", () => {
@@ -45,6 +46,7 @@ describe("@openagentsinc/ai umbrella root", () => {
     expect(typeof Root.Dse.bindProgram).toBe("function");
     expect(typeof Root.Dse.predict).toBe("function");
     expect(typeof Root.Dse.predictReceiptToRuntimeEvents).toBe("function");
+    expect(typeof Root.Graph.buildGraphCorpus).toBe("function");
   });
 
   test("the one audited shared name resolves to the single schema binding", () => {
@@ -109,5 +111,10 @@ describe("@openagentsinc/ai layer subpaths", () => {
     expect(typeof ProgramTest.honestDataset).toBe("function");
     expect("compileSignature" in Program).toBe(false);
     expect("promote" in ProgramRuntime).toBe(false);
+  });
+
+  test("./graph exports the portable graph projection", () => {
+    expect(Graph.buildGraphCorpus).toBe(Root.Graph.buildGraphCorpus);
+    expect(Graph.GRAPH_SCHEMA_ID).toBe("openagents.ai.graph_snapshot.v1");
   });
 });

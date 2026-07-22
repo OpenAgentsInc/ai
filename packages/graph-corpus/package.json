@@ -1,0 +1,33 @@
+{
+  "name": "@openagentsinc/graph-corpus",
+  "version": "0.2.0-rc.4",
+  "private": false,
+  "description": "Portable deterministic graph corpus projection for the OpenAgents AI SDK.",
+  "license": "Apache-2.0",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./schemas": "./src/schemas.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vp test --run packages/graph-corpus/src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@openagentsinc/rlm": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/vite-plus-matchers": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

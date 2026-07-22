@@ -91,6 +91,9 @@ importers:
       '@openagentsinc/dse':
         specifier: workspace:*
         version: link:../dse
+      '@openagentsinc/graph-corpus':
+        specifier: workspace:*
+        version: link:../graph-corpus
       '@openagentsinc/history-corpus':
         specifier: workspace:*
         version: link:../history-corpus
@@ -210,6 +213,25 @@ importers:
       '@openagentsinc/agent-runtime-schema':
         specifier: workspace:*
         version: link:../agent-runtime-schema
+      effect:
+        specifier: 4.0.0-beta.94
+        version: 4.0.0-beta.94
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.1
+      '@types/vite-plus-matchers':
+        specifier: workspace:*
+        version: link:../../types/vite-plus-matchers
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/graph-corpus:
+    dependencies:
+      '@openagentsinc/rlm':
+        specifier: workspace:*
+        version: link:../rlm
       effect:
         specifier: 4.0.0-beta.94
         version: 4.0.0-beta.94

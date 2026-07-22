@@ -15,12 +15,13 @@ For the L0–L6 diagram and the one-event rule, see the [layer index](./README.m
 
 The umbrella package (**all layers**). It holds no logic. The root entry
 re-exports the L1 vocabulary, the L2–L5 harness contract, L6 recall, and the L0
-model substrate. It exposes DSE as the `Dse` namespace. Each layer also has a curated subpath, for example
+model substrate. It exposes DSE as the `Dse` namespace and graph corpus as the
+`Graph` namespace. Each layer also has a curated subpath, for example
 `@openagentsinc/ai/harness` and `@openagentsinc/ai/recall`.
 
 - Key exports: the union of the layer packages below, plus the subpaths
   `./model`, `./schema`, `./event-log`, `./sandbox`, `./harness`, `./ui-stream`,
-  `./recall`, `./rlm`, and the `./program*` family.
+  `./recall`, `./rlm`, `./graph`, and the `./program*` family.
 - Use it as the default dependency. Reach for a layer package directly only when
   you want a smaller dependency surface.
 - npm: [@openagentsinc/ai](https://www.npmjs.com/package/@openagentsinc/ai)
@@ -94,6 +95,19 @@ source, deterministically first (Tier D) and recursively second (Tier S).
   composes recall steps. It is generic — history is one adapter
   (`@openagentsinc/history-corpus`).
 - npm: [@openagentsinc/rlm](https://www.npmjs.com/package/@openagentsinc/rlm)
+
+## @openagentsinc/graph-corpus
+
+This package owns the portable derived-graph projection. It keeps mentions,
+canonical entities, relations, merge evidence, embedding field descriptors,
+and exact source locators in one deterministic snapshot.
+
+- Key exports: `buildGraphCorpus`, `makeGraphMention`,
+  `makeCanonicalEntity`, `makeGraphRelation`,
+  and `makeInMemoryGraphSnapshotHandle`.
+- Use it to build a ref-only derived graph. It does not call a model, select a
+  database, execute a query, or grant memory authority.
+- Umbrella path: `@openagentsinc/ai/graph` and the `Graph` namespace.
 
 ## @openagentsinc/dse
 

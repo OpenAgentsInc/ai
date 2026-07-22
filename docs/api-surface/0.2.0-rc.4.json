@@ -4366,11 +4366,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "6bc7feb7500042fa"
+              "sig": "2701e67a01ee329a"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "6bc7feb7500042fa"
+              "sig": "2701e67a01ee329a"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -5120,6 +5120,10 @@
               "kind": "value",
               "sig": "a3bc8550b9ab1cdb"
             },
+            "Graph": {
+              "kind": "alias",
+              "sig": "eb3bda7827697425"
+            },
             "grepRecursiveRecallCorpus": {
               "kind": "value",
               "sig": "0e0f3485d96a1359"
@@ -5166,7 +5170,7 @@
             },
             "HarnessAgentStreamError": {
               "kind": "type",
-              "sig": "d46f2790da2fe734"
+              "sig": "5ef226f90516685e"
             },
             "HarnessAgentStreamResult": {
               "kind": "interface",
@@ -5442,7 +5446,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "12c7ea2ad6aba3a1"
+              "sig": "0d75ae84ff18eb99"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -5534,7 +5538,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "de5b395f65e26054"
+              "sig": "a767016aabfb2bbb"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -7179,6 +7183,275 @@
             }
           }
         },
+        "./graph": {
+          "source": "./src/graph.ts",
+          "exports": {
+            "buildGraphCorpus": {
+              "kind": "value",
+              "sig": "dc04ad4beea45317"
+            },
+            "BuildGraphCorpusInput": {
+              "kind": "interface",
+              "sig": "bd27632f51de2479"
+            },
+            "BuiltGraphCorpus": {
+              "kind": "interface",
+              "sig": "cc89345c79f86b9a"
+            },
+            "canonicalGraphPolicy": {
+              "kind": "value",
+              "sig": "0cec1f7a453312da"
+            },
+            "canonicalJson": {
+              "kind": "value",
+              "sig": "3e00f015f787b020"
+            },
+            "canonicalSourceMemberships": {
+              "kind": "value",
+              "sig": "0d87612e8f566023"
+            },
+            "compareCanonicalText": {
+              "kind": "value",
+              "sig": "7e017276ff71c757"
+            },
+            "computeGraphDigest": {
+              "kind": "value",
+              "sig": "b2ae0c65d3585b3f"
+            },
+            "computeGraphManifestDigest": {
+              "kind": "value",
+              "sig": "a00c38ab821542d1"
+            },
+            "derivationBytes": {
+              "kind": "value",
+              "sig": "ca7027f504f0259a"
+            },
+            "deriveGraphElementRef": {
+              "kind": "value",
+              "sig": "cacf36ea934e020f"
+            },
+            "GRAPH_CANONICALIZATION_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_ELEMENT_ADDRESS_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_IN_MEMORY_BYTE_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "GRAPH_IN_MEMORY_ELEMENT_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "GRAPH_MANIFEST_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GraphCanonicalEntity": {
+              "kind": "type",
+              "sig": "bbe3d43eab74c464"
+            },
+            "GraphCanonicalKey": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "GraphCorpusError": {
+              "kind": "class",
+              "sig": "9374543c8f5ad84f"
+            },
+            "GraphCorpusPolicy": {
+              "kind": "type",
+              "sig": "120d97d19eea5afb"
+            },
+            "GraphCoverage": {
+              "kind": "type",
+              "sig": "2c81c3bffa2ce093"
+            },
+            "GraphDecodeOutcome": {
+              "kind": "type",
+              "sig": "beb5658af90099e7"
+            },
+            "GraphDerivation": {
+              "kind": "type",
+              "sig": "d1b3f1609ba40cc6"
+            },
+            "graphDescriptorRef": {
+              "kind": "value",
+              "sig": "b4d9be16de94d920"
+            },
+            "GraphDescriptorRef": {
+              "kind": "type",
+              "sig": "bde3778e2be4a316"
+            },
+            "GraphDeterministicDerivation": {
+              "kind": "type",
+              "sig": "0207df79fa45c04a"
+            },
+            "graphDigest": {
+              "kind": "value",
+              "sig": "5cbec0100b683b8c"
+            },
+            "GraphDigest": {
+              "kind": "type",
+              "sig": "173c597c02018836"
+            },
+            "GraphElementKind": {
+              "kind": "type",
+              "sig": "cffbadb63e0566bc"
+            },
+            "graphElementRef": {
+              "kind": "value",
+              "sig": "11e3863be9b914db"
+            },
+            "GraphElementRef": {
+              "kind": "type",
+              "sig": "21fcf88d8158cfa8"
+            },
+            "GraphEmbeddingProjectionDescriptor": {
+              "kind": "type",
+              "sig": "37cb40ad0e884b31"
+            },
+            "graphEntityRef": {
+              "kind": "value",
+              "sig": "fef5b3d40e6d9272"
+            },
+            "GraphEntityRef": {
+              "kind": "type",
+              "sig": "c215295db9b4663f"
+            },
+            "graphIdentity": {
+              "kind": "value",
+              "sig": "8f33d4987a27a7cf"
+            },
+            "GraphIdentity": {
+              "kind": "type",
+              "sig": "f231280bbac8763b"
+            },
+            "GraphIdentityInput": {
+              "kind": "interface",
+              "sig": "f5e7032cfbc163bd"
+            },
+            "GraphIdentityScope": {
+              "kind": "type",
+              "sig": "bbec508a80729007"
+            },
+            "GraphManifest": {
+              "kind": "type",
+              "sig": "812c488eb1e4b2c8"
+            },
+            "GraphMention": {
+              "kind": "type",
+              "sig": "fe9669591975a13b"
+            },
+            "graphMentionRef": {
+              "kind": "value",
+              "sig": "d602f7971572b71a"
+            },
+            "GraphMentionRef": {
+              "kind": "type",
+              "sig": "bf6ad4fd0d39be14"
+            },
+            "GraphMergeEvidence": {
+              "kind": "type",
+              "sig": "07a9dba8843c8c56"
+            },
+            "graphMergeRef": {
+              "kind": "value",
+              "sig": "467a83bdc0644255"
+            },
+            "GraphMergeRef": {
+              "kind": "type",
+              "sig": "6bfd336bf564fae4"
+            },
+            "GraphModelDerivation": {
+              "kind": "type",
+              "sig": "be500f3efb45d51c"
+            },
+            "GraphReadableElement": {
+              "kind": "type",
+              "sig": "a83e355830c69c13"
+            },
+            "GraphRef": {
+              "kind": "type",
+              "sig": "562d9827ab049cae"
+            },
+            "graphRefValue": {
+              "kind": "value",
+              "sig": "23727a636af2a9be"
+            },
+            "GraphRelation": {
+              "kind": "type",
+              "sig": "2e996e1fa7c595c9"
+            },
+            "graphRelationRef": {
+              "kind": "value",
+              "sig": "fa83eb285fa862a9"
+            },
+            "GraphRelationRef": {
+              "kind": "type",
+              "sig": "945a7ff863f60ac3"
+            },
+            "graphScopeRef": {
+              "kind": "value",
+              "sig": "adddcc00452d395b"
+            },
+            "GraphScopeRef": {
+              "kind": "type",
+              "sig": "e88f78755353cfa3"
+            },
+            "GraphSnapshot": {
+              "kind": "type",
+              "sig": "58f2ecda7924079f"
+            },
+            "GraphSnapshotHandle": {
+              "kind": "interface",
+              "sig": "90921706ea2db29d"
+            },
+            "GraphSourceMembership": {
+              "kind": "type",
+              "sig": "22da7196c96ef943"
+            },
+            "makeCanonicalEntity": {
+              "kind": "value",
+              "sig": "8367cc5248c176ac"
+            },
+            "makeEmbeddingProjectionDescriptor": {
+              "kind": "value",
+              "sig": "622ac8d7a15c9f1d"
+            },
+            "makeGraphMention": {
+              "kind": "value",
+              "sig": "f34362dda2d3f29b"
+            },
+            "makeGraphRelation": {
+              "kind": "value",
+              "sig": "b778fcdd5af0f66a"
+            },
+            "makeInMemoryGraphSnapshotHandle": {
+              "kind": "value",
+              "sig": "20f399c773c68c80"
+            },
+            "makeMergeEvidence": {
+              "kind": "value",
+              "sig": "19dd566e6791c89d"
+            },
+            "sha256Hex": {
+              "kind": "value",
+              "sig": "18e003e8aa90dcad"
+            },
+            "verifyBuiltGraphCorpus": {
+              "kind": "value",
+              "sig": "0fc7a75c5c76621f"
+            }
+          }
+        },
         "./harness": {
           "source": "./src/harness.ts",
           "exports": {
@@ -7296,11 +7569,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "6bc7feb7500042fa"
+              "sig": "2701e67a01ee329a"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "6bc7feb7500042fa"
+              "sig": "2701e67a01ee329a"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -7900,7 +8173,7 @@
             },
             "HarnessAgentStreamError": {
               "kind": "type",
-              "sig": "d46f2790da2fe734"
+              "sig": "5ef226f90516685e"
             },
             "HarnessAgentStreamResult": {
               "kind": "interface",
@@ -9070,7 +9343,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "6e6ad298d6634493"
+              "sig": "d57d4d10e77f0905"
             },
             "DseModelError": {
               "kind": "class",
@@ -10045,7 +10318,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "6e6ad298d6634493"
+              "sig": "d57d4d10e77f0905"
             },
             "DseModelError": {
               "kind": "class",
@@ -10259,7 +10532,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "12c7ea2ad6aba3a1"
+              "sig": "0d75ae84ff18eb99"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -10343,7 +10616,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "de5b395f65e26054"
+              "sig": "a767016aabfb2bbb"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -10508,7 +10781,7 @@
             },
             "BuildInlineCorpusInput": {
               "kind": "interface",
-              "sig": "87aadac70d5d79be"
+              "sig": "9461f3c14c37d337"
             },
             "buildInMemoryCompositeProjection": {
               "kind": "value",
@@ -10528,7 +10801,7 @@
             },
             "CitationValidation": {
               "kind": "interface",
-              "sig": "08059a3a975df1be"
+              "sig": "934058775ef17546"
             },
             "collectBoundedScan": {
               "kind": "value",
@@ -10584,7 +10857,7 @@
             },
             "grepEntries": {
               "kind": "value",
-              "sig": "ffdd3fe3f7fcaaf8"
+              "sig": "5c8230d8459f615d"
             },
             "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
               "kind": "value",
@@ -10652,7 +10925,7 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "7fbd849eba925ce6"
+              "sig": "43fd300df9cc2da7"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
@@ -10704,11 +10977,11 @@
             },
             "RlmCitation": {
               "kind": "type",
-              "sig": "df0257cdec985559"
+              "sig": "87c7eb8edb713164"
             },
             "RlmCitationV1": {
               "kind": "type",
-              "sig": "462ddfd43f40d8b7"
+              "sig": "db54e89e54242b1b"
             },
             "RlmCommitNode": {
               "kind": "type",
@@ -10716,7 +10989,7 @@
             },
             "RlmCompleted": {
               "kind": "type",
-              "sig": "e92201fe8fe2131c"
+              "sig": "1d8f226de5162de0"
             },
             "RlmCompositeAddressLookup": {
               "kind": "type",
@@ -10760,19 +11033,19 @@
             },
             "RlmCorpusEntry": {
               "kind": "type",
-              "sig": "f4739a7f886f15b3"
+              "sig": "125a272cb7609d51"
             },
             "RlmCorpusEntryV1": {
               "kind": "type",
-              "sig": "1671038670ad5c1b"
+              "sig": "d34dff45c796ea2c"
             },
             "RlmCorpusError": {
               "kind": "class",
-              "sig": "6a25041e77160ae0"
+              "sig": "7a90b265ed7ec2b9"
             },
             "RlmCorpusHandle": {
               "kind": "interface",
-              "sig": "bd94ea6fb6ddb2ec"
+              "sig": "b295f09b754b013b"
             },
             "RlmCorpusIdentity": {
               "kind": "type",
@@ -10784,19 +11057,19 @@
             },
             "RlmCorpusInput": {
               "kind": "type",
-              "sig": "e28fc97cebee0106"
+              "sig": "9006194db44e5711"
             },
             "RlmCorpusInputV1": {
               "kind": "type",
-              "sig": "81627698be9fd8da"
+              "sig": "792a78379349ecb7"
             },
             "RlmCorpusManifest": {
               "kind": "type",
-              "sig": "03085fe08d66ce7c"
+              "sig": "66a193f340881eda"
             },
             "RlmCorpusManifestV1": {
               "kind": "type",
-              "sig": "4d4e9abd4212b999"
+              "sig": "6855770b37874727"
             },
             "RlmCorpusOpNode": {
               "kind": "type",
@@ -10812,11 +11085,11 @@
             },
             "RlmCorpusResolved": {
               "kind": "type",
-              "sig": "e200395792b29c46"
+              "sig": "32684878b8b7ab56"
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "1974b98520659112"
+              "sig": "4b9cf9adb8c7089e"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -10832,7 +11105,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "d3e19d96a69ccc4e"
+              "sig": "972b73dbbbe5267d"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -10844,7 +11117,7 @@
             },
             "RlmDeterministicRequest": {
               "kind": "type",
-              "sig": "f8e5999170761b9f"
+              "sig": "3be3d666a582384b"
             },
             "RlmDigest": {
               "kind": "type",
@@ -10868,7 +11141,7 @@
             },
             "RlmEvent": {
               "kind": "type",
-              "sig": "5277f2cd690b412c"
+              "sig": "3ef798d786cef8b5"
             },
             "RlmEventBase": {
               "kind": "value",
@@ -10896,11 +11169,11 @@
             },
             "RlmInlineCorpusInputV2": {
               "kind": "interface",
-              "sig": "dc953200bced48f2"
+              "sig": "ff2ca664699655d3"
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "40bf21f2b33ee396"
+              "sig": "ec8591c43acaa7cd"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -10976,7 +11249,7 @@
             },
             "RlmPartial": {
               "kind": "type",
-              "sig": "73ccea6c86993fb3"
+              "sig": "6b416ab095681136"
             },
             "RlmPartialReason": {
               "kind": "type",
@@ -11036,7 +11309,7 @@
             },
             "RlmRequest": {
               "kind": "type",
-              "sig": "811215bbec3bc096"
+              "sig": "9287c3908758d763"
             },
             "RlmRunRef": {
               "kind": "type",
@@ -11064,7 +11337,7 @@
             },
             "RlmSemanticRequest": {
               "kind": "type",
-              "sig": "d92bd3fbaa57dd74"
+              "sig": "88b0d4f6f79f6182"
             },
             "RlmShape": {
               "kind": "interface",
@@ -11092,7 +11365,7 @@
             },
             "RlmStoredValue": {
               "kind": "interface",
-              "sig": "10fb0210664cd8cc"
+              "sig": "8b3e91d4f3560261"
             },
             "RlmStrategyProfile": {
               "kind": "type",
@@ -11104,11 +11377,11 @@
             },
             "RlmTerminalEvent": {
               "kind": "type",
-              "sig": "a27c1ccf9621e9be"
+              "sig": "41d9387d99790775"
             },
             "RlmTerminalResult": {
               "kind": "type",
-              "sig": "6e9be327986d5eff"
+              "sig": "fbf1dc1784544ab5"
             },
             "RlmTokenUsage": {
               "kind": "type",
@@ -11180,7 +11453,7 @@
             },
             "validateCitations": {
               "kind": "value",
-              "sig": "dd4bfe291bdbf166"
+              "sig": "35cb567d71cfa5b3"
             },
             "validateProgram": {
               "kind": "value",
@@ -12451,11 +12724,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "6bc7feb7500042fa"
+              "sig": "2701e67a01ee329a"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "6bc7feb7500042fa"
+              "sig": "2701e67a01ee329a"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -12893,7 +13166,7 @@
             },
             "khalaModelFallbackFallthroughReasonTags": {
               "kind": "value",
-              "sig": "9125a3ff6ca67aad"
+              "sig": "f5ec52ef054db4f9"
             },
             "KhalaModelFallbackOutcome": {
               "kind": "type",
@@ -12909,7 +13182,7 @@
             },
             "khalaModelFallbackTransientReasonTags": {
               "kind": "value",
-              "sig": "9125a3ff6ca67aad"
+              "sig": "f5ec52ef054db4f9"
             },
             "khalaRuntimeEventFromEffectAiStreamPart": {
               "kind": "function",
@@ -12987,7 +13260,7 @@
             },
             "localAiSdkSandboxProviderModuleUrl": {
               "kind": "value",
-              "sig": "90043ae4ad8f0390"
+              "sig": "9e46debfe4e9953a"
             },
             "LocalAiSdkSandboxProviderOptions": {
               "kind": "type",
@@ -13037,7 +13310,7 @@
             },
             "OpenAgentsSandboxLane": {
               "kind": "type",
-              "sig": "f004d7c7a351ae6f"
+              "sig": "3d1c81f528caa6f6"
             },
             "OpenAgentsSandboxProcessInput": {
               "kind": "type",
@@ -13288,7 +13561,7 @@
             },
             "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ActivationDecision": {
               "kind": "type",
@@ -13300,7 +13573,7 @@
             },
             "ActivationRefusalReason": {
               "kind": "type",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ActivationResult": {
               "kind": "type",
@@ -13316,7 +13589,7 @@
             },
             "BASELINE_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "BaselinePointer": {
               "kind": "type",
@@ -13344,7 +13617,7 @@
             },
             "CANARY_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "CanaryPlan": {
               "kind": "type",
@@ -13352,7 +13625,7 @@
             },
             "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "CandidateArtifact": {
               "kind": "type",
@@ -13380,7 +13653,7 @@
             },
             "COMPILED_PROGRAM_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "CompiledProgram": {
               "kind": "type",
@@ -13388,11 +13661,11 @@
             },
             "DATASET_REVISION_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "DATASET_SPLIT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "datasetId": {
               "kind": "value",
@@ -13420,7 +13693,7 @@
             },
             "DatasetSplitFailure": {
               "kind": "type",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "DatasetSplitName": {
               "kind": "type",
@@ -13456,7 +13729,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "4c9c8ae2a1e0a48b"
+              "sig": "4b3fc0f19b11329f"
             },
             "DseModelError": {
               "kind": "class",
@@ -13488,7 +13761,7 @@
             },
             "EVALUATION_REPORT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "EvaluationReport": {
               "kind": "type",
@@ -13524,7 +13797,7 @@
             },
             "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "IndependentReviewResult": {
               "kind": "type",
@@ -13580,7 +13853,7 @@
             },
             "PREDICT_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "PredictArgs": {
               "kind": "interface",
@@ -13628,7 +13901,7 @@
             },
             "PROMOTION_REQUEST_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "promotionId": {
               "kind": "value",
@@ -13640,7 +13913,7 @@
             },
             "PromotionRefusalReason": {
               "kind": "type",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "PromotionRequest": {
               "kind": "type",
@@ -13648,7 +13921,7 @@
             },
             "PROMPT_IR_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "PromptIr": {
               "kind": "type",
@@ -13664,7 +13937,7 @@
             },
             "RELEASE_CHANNEL_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ReleaseChannel": {
               "kind": "type",
@@ -13672,7 +13945,7 @@
             },
             "RELEASED_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ReleasedArtifactPointer": {
               "kind": "type",
@@ -13716,7 +13989,7 @@
             },
             "RESOURCE_BUDGET_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ResourceBudget": {
               "kind": "type",
@@ -13744,7 +14017,7 @@
             },
             "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "rollbackActivation": {
               "kind": "value",
@@ -13768,7 +14041,7 @@
             },
             "SEARCH_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "SearchAlgorithm": {
               "kind": "type",
@@ -13788,15 +14061,15 @@
             },
             "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "SIGNATURE_REGISTRY": {
               "kind": "value",
-              "sig": "5e5ea3f8e694965d"
+              "sig": "9e8982f250f1848d"
             },
             "SignatureCatalog": {
               "kind": "type",
@@ -13852,7 +14125,7 @@
             },
             "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "UncertaintyMethod": {
               "kind": "type",
@@ -13869,7 +14142,7 @@
           "exports": {
             "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ActivationReceipt": {
               "kind": "type",
@@ -13881,7 +14154,7 @@
             },
             "BASELINE_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "BaselinePointer": {
               "kind": "type",
@@ -13901,7 +14174,7 @@
             },
             "CANARY_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "CanaryPlan": {
               "kind": "type",
@@ -13909,7 +14182,7 @@
             },
             "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "CandidateArtifact": {
               "kind": "type",
@@ -13937,7 +14210,7 @@
             },
             "COMPILED_PROGRAM_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "CompiledProgram": {
               "kind": "type",
@@ -13945,11 +14218,11 @@
             },
             "DATASET_REVISION_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "DATASET_SPLIT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "datasetId": {
               "kind": "value",
@@ -13977,7 +14250,7 @@
             },
             "DatasetSplitFailure": {
               "kind": "type",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "DatasetSplitName": {
               "kind": "type",
@@ -14021,7 +14294,7 @@
             },
             "EVALUATION_REPORT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "EvaluationReport": {
               "kind": "type",
@@ -14057,7 +14330,7 @@
             },
             "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "IndependentReviewResult": {
               "kind": "type",
@@ -14109,7 +14382,7 @@
             },
             "PREDICT_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "PredictReceipt": {
               "kind": "type",
@@ -14133,7 +14406,7 @@
             },
             "PROMOTION_REQUEST_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "promotionId": {
               "kind": "value",
@@ -14145,7 +14418,7 @@
             },
             "PromotionRefusalReason": {
               "kind": "type",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "PromotionRequest": {
               "kind": "type",
@@ -14153,7 +14426,7 @@
             },
             "PROMPT_IR_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "PromptIr": {
               "kind": "type",
@@ -14169,7 +14442,7 @@
             },
             "RELEASE_CHANNEL_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ReleaseChannel": {
               "kind": "type",
@@ -14177,7 +14450,7 @@
             },
             "RELEASED_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ReleasedArtifactPointer": {
               "kind": "type",
@@ -14197,7 +14470,7 @@
             },
             "RESOURCE_BUDGET_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ResourceBudget": {
               "kind": "type",
@@ -14221,7 +14494,7 @@
             },
             "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "RollbackReceipt": {
               "kind": "type",
@@ -14233,7 +14506,7 @@
             },
             "SEARCH_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "SearchAlgorithm": {
               "kind": "type",
@@ -14253,15 +14526,15 @@
             },
             "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "SIGNATURE_REGISTRY": {
               "kind": "value",
-              "sig": "5e5ea3f8e694965d"
+              "sig": "9e8982f250f1848d"
             },
             "SignatureCatalog": {
               "kind": "type",
@@ -14317,7 +14590,7 @@
             },
             "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "UncertaintyMethod": {
               "kind": "type",
@@ -14403,7 +14676,7 @@
             },
             "ActivationRefusalReason": {
               "kind": "type",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "ActivationResult": {
               "kind": "type",
@@ -14431,7 +14704,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "4c9c8ae2a1e0a48b"
+              "sig": "4b3fc0f19b11329f"
             },
             "DseModelError": {
               "kind": "class",
@@ -14544,7 +14817,7 @@
             },
             "HONESTY_MARKER": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "invalidThenValidModelLayer": {
               "kind": "value",
@@ -14552,11 +14825,450 @@
             },
             "PINNED_NOW": {
               "kind": "value",
-              "sig": "4f9a13c9dfbac31c"
+              "sig": "448e6f81579b6dee"
             },
             "testDeps": {
               "kind": "value",
               "sig": "a8f8b946af4a3b6d"
+            }
+          }
+        }
+      }
+    },
+    "@openagentsinc/graph-corpus": {
+      "version": "0.2.0-rc.4",
+      "entrypoints": {
+        ".": {
+          "source": "./src/index.ts",
+          "exports": {
+            "buildGraphCorpus": {
+              "kind": "value",
+              "sig": "dc04ad4beea45317"
+            },
+            "BuildGraphCorpusInput": {
+              "kind": "interface",
+              "sig": "bd27632f51de2479"
+            },
+            "BuiltGraphCorpus": {
+              "kind": "interface",
+              "sig": "cc89345c79f86b9a"
+            },
+            "canonicalGraphPolicy": {
+              "kind": "value",
+              "sig": "0cec1f7a453312da"
+            },
+            "canonicalJson": {
+              "kind": "value",
+              "sig": "3e00f015f787b020"
+            },
+            "canonicalSourceMemberships": {
+              "kind": "value",
+              "sig": "0d87612e8f566023"
+            },
+            "compareCanonicalText": {
+              "kind": "value",
+              "sig": "7e017276ff71c757"
+            },
+            "computeGraphDigest": {
+              "kind": "value",
+              "sig": "b2ae0c65d3585b3f"
+            },
+            "computeGraphManifestDigest": {
+              "kind": "value",
+              "sig": "a00c38ab821542d1"
+            },
+            "derivationBytes": {
+              "kind": "value",
+              "sig": "bb83f652dc54d1c0"
+            },
+            "deriveGraphElementRef": {
+              "kind": "value",
+              "sig": "cacf36ea934e020f"
+            },
+            "GRAPH_CANONICALIZATION_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GRAPH_ELEMENT_ADDRESS_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GRAPH_IN_MEMORY_BYTE_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "GRAPH_IN_MEMORY_ELEMENT_CEILING": {
+              "kind": "value",
+              "sig": "ceab13d527db7331"
+            },
+            "GRAPH_MANIFEST_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GRAPH_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GraphCanonicalEntity": {
+              "kind": "type",
+              "sig": "bbe3d43eab74c464"
+            },
+            "GraphCanonicalKey": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "GraphCorpusError": {
+              "kind": "class",
+              "sig": "9374543c8f5ad84f"
+            },
+            "GraphCorpusPolicy": {
+              "kind": "type",
+              "sig": "120d97d19eea5afb"
+            },
+            "GraphCoverage": {
+              "kind": "type",
+              "sig": "2c81c3bffa2ce093"
+            },
+            "GraphDecodeOutcome": {
+              "kind": "type",
+              "sig": "536ece367f27cad1"
+            },
+            "GraphDerivation": {
+              "kind": "type",
+              "sig": "5b237be1dbd4cc6b"
+            },
+            "graphDescriptorRef": {
+              "kind": "value",
+              "sig": "b4d9be16de94d920"
+            },
+            "GraphDescriptorRef": {
+              "kind": "type",
+              "sig": "bde3778e2be4a316"
+            },
+            "GraphDeterministicDerivation": {
+              "kind": "type",
+              "sig": "86f380c6cffa937b"
+            },
+            "graphDigest": {
+              "kind": "value",
+              "sig": "5cbec0100b683b8c"
+            },
+            "GraphDigest": {
+              "kind": "type",
+              "sig": "173c597c02018836"
+            },
+            "GraphElementKind": {
+              "kind": "type",
+              "sig": "cffbadb63e0566bc"
+            },
+            "graphElementRef": {
+              "kind": "value",
+              "sig": "11e3863be9b914db"
+            },
+            "GraphElementRef": {
+              "kind": "type",
+              "sig": "21fcf88d8158cfa8"
+            },
+            "GraphEmbeddingProjectionDescriptor": {
+              "kind": "type",
+              "sig": "37cb40ad0e884b31"
+            },
+            "graphEntityRef": {
+              "kind": "value",
+              "sig": "fef5b3d40e6d9272"
+            },
+            "GraphEntityRef": {
+              "kind": "type",
+              "sig": "c215295db9b4663f"
+            },
+            "graphIdentity": {
+              "kind": "value",
+              "sig": "8f33d4987a27a7cf"
+            },
+            "GraphIdentity": {
+              "kind": "type",
+              "sig": "f231280bbac8763b"
+            },
+            "GraphIdentityInput": {
+              "kind": "interface",
+              "sig": "f5e7032cfbc163bd"
+            },
+            "GraphIdentityScope": {
+              "kind": "type",
+              "sig": "bbec508a80729007"
+            },
+            "GraphManifest": {
+              "kind": "type",
+              "sig": "812c488eb1e4b2c8"
+            },
+            "GraphMention": {
+              "kind": "type",
+              "sig": "fe9669591975a13b"
+            },
+            "graphMentionRef": {
+              "kind": "value",
+              "sig": "d602f7971572b71a"
+            },
+            "GraphMentionRef": {
+              "kind": "type",
+              "sig": "bf6ad4fd0d39be14"
+            },
+            "GraphMergeEvidence": {
+              "kind": "type",
+              "sig": "07a9dba8843c8c56"
+            },
+            "graphMergeRef": {
+              "kind": "value",
+              "sig": "467a83bdc0644255"
+            },
+            "GraphMergeRef": {
+              "kind": "type",
+              "sig": "6bfd336bf564fae4"
+            },
+            "GraphModelDerivation": {
+              "kind": "type",
+              "sig": "c7fea2179a6293ad"
+            },
+            "GraphReadableElement": {
+              "kind": "type",
+              "sig": "7989a5f4811f0aaf"
+            },
+            "GraphRef": {
+              "kind": "type",
+              "sig": "562d9827ab049cae"
+            },
+            "graphRefValue": {
+              "kind": "value",
+              "sig": "23727a636af2a9be"
+            },
+            "GraphRelation": {
+              "kind": "type",
+              "sig": "2e996e1fa7c595c9"
+            },
+            "graphRelationRef": {
+              "kind": "value",
+              "sig": "fa83eb285fa862a9"
+            },
+            "GraphRelationRef": {
+              "kind": "type",
+              "sig": "945a7ff863f60ac3"
+            },
+            "graphScopeRef": {
+              "kind": "value",
+              "sig": "adddcc00452d395b"
+            },
+            "GraphScopeRef": {
+              "kind": "type",
+              "sig": "e88f78755353cfa3"
+            },
+            "GraphSnapshot": {
+              "kind": "type",
+              "sig": "58f2ecda7924079f"
+            },
+            "GraphSnapshotHandle": {
+              "kind": "interface",
+              "sig": "90921706ea2db29d"
+            },
+            "GraphSourceMembership": {
+              "kind": "type",
+              "sig": "22da7196c96ef943"
+            },
+            "makeCanonicalEntity": {
+              "kind": "value",
+              "sig": "8367cc5248c176ac"
+            },
+            "makeEmbeddingProjectionDescriptor": {
+              "kind": "value",
+              "sig": "622ac8d7a15c9f1d"
+            },
+            "makeGraphMention": {
+              "kind": "value",
+              "sig": "f34362dda2d3f29b"
+            },
+            "makeGraphRelation": {
+              "kind": "value",
+              "sig": "b778fcdd5af0f66a"
+            },
+            "makeInMemoryGraphSnapshotHandle": {
+              "kind": "value",
+              "sig": "20f399c773c68c80"
+            },
+            "makeMergeEvidence": {
+              "kind": "value",
+              "sig": "19dd566e6791c89d"
+            },
+            "sha256Hex": {
+              "kind": "value",
+              "sig": "18e003e8aa90dcad"
+            },
+            "verifyBuiltGraphCorpus": {
+              "kind": "value",
+              "sig": "0fc7a75c5c76621f"
+            }
+          }
+        },
+        "./schemas": {
+          "source": "./src/schemas.ts",
+          "exports": {
+            "GRAPH_CANONICALIZATION_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GRAPH_ELEMENT_ADDRESS_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GRAPH_MANIFEST_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GRAPH_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "013b37a187da986c"
+            },
+            "GraphCanonicalEntity": {
+              "kind": "type",
+              "sig": "bbe3d43eab74c464"
+            },
+            "GraphCanonicalKey": {
+              "kind": "type",
+              "sig": "eab2ed61b0cdf4f2"
+            },
+            "GraphCorpusPolicy": {
+              "kind": "type",
+              "sig": "120d97d19eea5afb"
+            },
+            "GraphCoverage": {
+              "kind": "type",
+              "sig": "2c81c3bffa2ce093"
+            },
+            "GraphDecodeOutcome": {
+              "kind": "type",
+              "sig": "536ece367f27cad1"
+            },
+            "GraphDerivation": {
+              "kind": "type",
+              "sig": "5b237be1dbd4cc6b"
+            },
+            "graphDescriptorRef": {
+              "kind": "value",
+              "sig": "b4d9be16de94d920"
+            },
+            "GraphDescriptorRef": {
+              "kind": "type",
+              "sig": "bde3778e2be4a316"
+            },
+            "GraphDeterministicDerivation": {
+              "kind": "type",
+              "sig": "86f380c6cffa937b"
+            },
+            "graphDigest": {
+              "kind": "value",
+              "sig": "5cbec0100b683b8c"
+            },
+            "GraphDigest": {
+              "kind": "type",
+              "sig": "173c597c02018836"
+            },
+            "GraphElementKind": {
+              "kind": "type",
+              "sig": "cffbadb63e0566bc"
+            },
+            "graphElementRef": {
+              "kind": "value",
+              "sig": "11e3863be9b914db"
+            },
+            "GraphElementRef": {
+              "kind": "type",
+              "sig": "21fcf88d8158cfa8"
+            },
+            "GraphEmbeddingProjectionDescriptor": {
+              "kind": "type",
+              "sig": "37cb40ad0e884b31"
+            },
+            "graphEntityRef": {
+              "kind": "value",
+              "sig": "fef5b3d40e6d9272"
+            },
+            "GraphEntityRef": {
+              "kind": "type",
+              "sig": "c215295db9b4663f"
+            },
+            "GraphIdentity": {
+              "kind": "type",
+              "sig": "f231280bbac8763b"
+            },
+            "GraphIdentityScope": {
+              "kind": "type",
+              "sig": "bbec508a80729007"
+            },
+            "GraphManifest": {
+              "kind": "type",
+              "sig": "812c488eb1e4b2c8"
+            },
+            "GraphMention": {
+              "kind": "type",
+              "sig": "fe9669591975a13b"
+            },
+            "graphMentionRef": {
+              "kind": "value",
+              "sig": "d602f7971572b71a"
+            },
+            "GraphMentionRef": {
+              "kind": "type",
+              "sig": "bf6ad4fd0d39be14"
+            },
+            "GraphMergeEvidence": {
+              "kind": "type",
+              "sig": "07a9dba8843c8c56"
+            },
+            "graphMergeRef": {
+              "kind": "value",
+              "sig": "467a83bdc0644255"
+            },
+            "GraphMergeRef": {
+              "kind": "type",
+              "sig": "6bfd336bf564fae4"
+            },
+            "GraphModelDerivation": {
+              "kind": "type",
+              "sig": "c7fea2179a6293ad"
+            },
+            "GraphRef": {
+              "kind": "type",
+              "sig": "562d9827ab049cae"
+            },
+            "graphRefValue": {
+              "kind": "value",
+              "sig": "23727a636af2a9be"
+            },
+            "GraphRelation": {
+              "kind": "type",
+              "sig": "2e996e1fa7c595c9"
+            },
+            "graphRelationRef": {
+              "kind": "value",
+              "sig": "fa83eb285fa862a9"
+            },
+            "GraphRelationRef": {
+              "kind": "type",
+              "sig": "945a7ff863f60ac3"
+            },
+            "graphScopeRef": {
+              "kind": "value",
+              "sig": "adddcc00452d395b"
+            },
+            "GraphScopeRef": {
+              "kind": "type",
+              "sig": "e88f78755353cfa3"
+            },
+            "GraphSnapshot": {
+              "kind": "type",
+              "sig": "58f2ecda7924079f"
+            },
+            "GraphSourceMembership": {
+              "kind": "type",
+              "sig": "22da7196c96ef943"
             }
           }
         }
@@ -14606,7 +15318,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -14626,7 +15338,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "eaa3c4c3ff90b958"
+              "sig": "bc578c572efaba1e"
             },
             "HistoryCorpusEventReader": {
               "kind": "interface",
@@ -14650,7 +15362,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "14e667e791e48418"
+              "sig": "eb65fb6f06992506"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -14734,7 +15446,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "57e2896219b92d26"
+              "sig": "e61c02de0bf451e9"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -14758,7 +15470,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "2cc93ce83f223cfe"
+              "sig": "15752cc941c37816"
             },
             "NeutralThreadNote": {
               "kind": "interface",
@@ -14782,7 +15494,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -14802,11 +15514,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "b8c89992413f8470"
+              "sig": "e83f83555dbff216"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -14814,11 +15526,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "7e45d9daf9c9adf4"
+              "sig": "12908daaca379f30"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -14878,11 +15590,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "timeSliceRecursiveRecallCorpus": {
               "kind": "value",
@@ -14923,11 +15635,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             }
           }
         },
@@ -14940,7 +15652,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -14960,7 +15672,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "eaa3c4c3ff90b958"
+              "sig": "bc578c572efaba1e"
             },
             "HistoryCorpusExclusions": {
               "kind": "interface",
@@ -14980,7 +15692,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "2cc93ce83f223cfe"
+              "sig": "15752cc941c37816"
             }
           }
         },
@@ -15021,7 +15733,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "57e2896219b92d26"
+              "sig": "e61c02de0bf451e9"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -15107,7 +15819,7 @@
           "exports": {
             "HistoryRecall": {
               "kind": "class",
-              "sig": "14e667e791e48418"
+              "sig": "eb65fb6f06992506"
             },
             "HistoryRecallCorpusProvider": {
               "kind": "interface",
@@ -15160,7 +15872,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -15180,11 +15892,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "b8c89992413f8470"
+              "sig": "e83f83555dbff216"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -15192,11 +15904,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "7e45d9daf9c9adf4"
+              "sig": "12908daaca379f30"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -15329,11 +16041,11 @@
             },
             "HISTORY_EVENT_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "HISTORY_NOTE_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "HistoryCorpusEntry": {
               "kind": "alias",
@@ -15353,7 +16065,7 @@
             },
             "HistoryRecall": {
               "kind": "alias",
-              "sig": "14e667e791e48418"
+              "sig": "eb65fb6f06992506"
             },
             "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
               "kind": "value",
@@ -15421,39 +16133,39 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "694c0a332f93a55e"
+              "sig": "5ac6bc2337b38eda"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "617981218de98fcf"
+              "sig": "285cbfeee75d1629"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "eb9fa0027251eeeb"
+              "sig": "c41f5e2db6a094b3"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -15585,7 +16297,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "82855fd8fb64b6fb"
+              "sig": "94c30b2aabe5663c"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -15601,7 +16313,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "15b5237e6e4120c2"
+              "sig": "c4df02bbfa54b2ae"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -15669,7 +16381,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "8e9d08c9f7238210"
+              "sig": "fa6d623c5bb6a3ac"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -15897,7 +16609,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -15913,7 +16625,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "e4a480cd1f29b7a3"
+              "sig": "d6afc867df162072"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -16119,39 +16831,39 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "8d03614ab9d9c0f5"
+              "sig": "1a06cef7f3cee9a3"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "1410d7d1ab7b54c4"
+              "sig": "ce29d3fc3b13a936"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "b7fb45372eb96efc"
+              "sig": "ecf53c5c2f359d7a"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -16283,7 +16995,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "ec9c21ec4ae2c1f2"
+              "sig": "d723d9be0fd4d6df"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -16299,7 +17011,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "85878eaab5fd2df2"
+              "sig": "f061379c43a0024b"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -16367,7 +17079,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "676bd6d282309df3"
+              "sig": "7463bd8d84ab9bee"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -16595,7 +17307,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -16611,7 +17323,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -16736,11 +17448,11 @@
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "1410d7d1ab7b54c4"
+              "sig": "ce29d3fc3b13a936"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "b7fb45372eb96efc"
+              "sig": "ecf53c5c2f359d7a"
             },
             "RlmCompositeAddressLookup": {
               "kind": "type",
@@ -16768,7 +17480,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "ec9c21ec4ae2c1f2"
+              "sig": "d723d9be0fd4d6df"
             },
             "RlmCorpusSourceShape": {
               "kind": "interface",
@@ -16780,7 +17492,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "676bd6d282309df3"
+              "sig": "7463bd8d84ab9bee"
             },
             "RlmValidatedSourceAddress": {
               "kind": "interface",
@@ -16809,11 +17521,11 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "8d03614ab9d9c0f5"
+              "sig": "1a06cef7f3cee9a3"
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "85878eaab5fd2df2"
+              "sig": "f061379c43a0024b"
             },
             "rlmLayer": {
               "kind": "value",
@@ -16854,7 +17566,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             }
           }
         },
@@ -16937,27 +17649,27 @@
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -17370,7 +18082,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "62187ec259aa7c06"
+              "sig": "519d4be1aa84cd30"
             },
             "RlmToolParams": {
               "kind": "type",

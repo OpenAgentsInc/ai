@@ -118,6 +118,11 @@ SDK-MEM-02 (#31) supplies corpus v2 source planes, deterministic composition,
 exact child citations, and explicit v1 migration. Later graph issues consume
 this contract. They do not change its authority boundary.
 
+SDK-MEM-03 (#32) adds the portable graph schemas, canonical identity,
+ref-only provenance, deterministic rebuild, small snapshot handle, and exact
+RLM locator compatibility. It does not add the #35 RLM projection, extraction,
+persistence, ranking, deletion, archive, or query execution.
+
 Owner direction on 2026-07-21 admits issue decomposition for this ordered
 program. Implementation remains issue-scoped. The source evidence is the
 Apache-2.0 Cognee tree at

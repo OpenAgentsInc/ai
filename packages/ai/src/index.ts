@@ -34,3 +34,4 @@ export * from "@openagentsinc/agent-harness-contract";
 export * from "@openagentsinc/history-corpus";
 export * from "@openagentsinc/ai-model";
 export * as Dse from "@openagentsinc/dse";
+export * as Graph from "@openagentsinc/graph-corpus";

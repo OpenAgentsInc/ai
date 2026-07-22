@@ -20,6 +20,7 @@
     "./ui-stream": "./src/ui-stream.ts",
     "./recall": "./src/recall.ts",
     "./rlm": "./src/rlm.ts",
+    "./graph": "./src/graph.ts",
     "./program": "./src/program.ts",
     "./program/contract": "./src/program-contract.ts",
     "./program/runtime": "./src/program-runtime.ts",
@@ -38,6 +39,7 @@
     "@openagentsinc/agent-runtime-schema": "workspace:*",
     "@openagentsinc/ai-model": "workspace:*",
     "@openagentsinc/dse": "workspace:*",
+    "@openagentsinc/graph-corpus": "workspace:*",
     "@openagentsinc/history-corpus": "workspace:*",
     "@openagentsinc/rlm": "workspace:*",
     "effect": "catalog:"
