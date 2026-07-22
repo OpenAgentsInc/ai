@@ -1,6 +1,6 @@
 {
   "name": "@openagentsinc/dse",
-  "version": "0.2.0-rc.3",
+  "version": "0.2.0-rc.4",
   "private": false,
   "description": "Effect-native typed model programs, immutable compilation artifacts, bounded optimization, and receipted prediction.",
   "license": "Apache-2.0",
