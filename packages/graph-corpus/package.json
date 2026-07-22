@@ -6,7 +6,9 @@
   "license": "Apache-2.0",
   "files": [
     "src/builder.ts",
+    "src/capabilities.ts",
     "src/canonical.ts",
+    "src/deletion.ts",
     "src/handle.ts",
     "src/index.ts",
     "src/schemas.ts",
@@ -16,6 +18,8 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
+    "./capabilities": "./src/capabilities.ts",
+    "./deletion": "./src/deletion.ts",
     "./schemas": "./src/schemas.ts"
   },
   "publishConfig": {

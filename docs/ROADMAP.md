@@ -222,6 +222,15 @@ summaries, and ranking features that become removable. Shared elements retain
 their other source memberships. Execution is host-owned, idempotent, and
 receipted. A successful plan is not evidence that deletion ran.
 
+SDK-MEM-04 (#33) implements this portable contract. The package declares
+adapter support, plans from one exact RLM v2 source locator, preserves shared
+support through explicit rekeys, and accounts for vector, summary, and ranking
+artifacts. Each artifact plane has an explicit coverage claim. Incomplete
+inventories, retained edges with removed endpoints, and rekey collisions stay
+explicit. Complete result validation compares the actual after state with a
+pure projection. The implementation does not execute deletion or grant host
+authority.
+
 Feedback changes a separate ranking snapshot. It never changes graph content,
 identity, provenance, or embedding bytes. A recall result records the exact
 graph digest, ranking-snapshot digest, query, and used element refs. Equal graph

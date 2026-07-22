@@ -4366,11 +4366,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "2701e67a01ee329a"
+              "sig": "3f43dfcb44f7ecad"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "2701e67a01ee329a"
+              "sig": "3f43dfcb44f7ecad"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -5122,7 +5122,7 @@
             },
             "Graph": {
               "kind": "alias",
-              "sig": "322323294838aa8d"
+              "sig": "3642a138e5a2aebd"
             },
             "grepRecursiveRecallCorpus": {
               "kind": "value",
@@ -5170,7 +5170,7 @@
             },
             "HarnessAgentStreamError": {
               "kind": "type",
-              "sig": "5ef226f90516685e"
+              "sig": "aa14d8e59c52bfd0"
             },
             "HarnessAgentStreamResult": {
               "kind": "interface",
@@ -5210,7 +5210,7 @@
             },
             "HarnessCapabilityUnsupported": {
               "kind": "class",
-              "sig": "09d895a1825b4880"
+              "sig": "29d4780df80841ec"
             },
             "HarnessContinuationState": {
               "kind": "interface",
@@ -5446,7 +5446,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "0d75ae84ff18eb99"
+              "sig": "80304e8c32abf1b6"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -5538,7 +5538,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "a767016aabfb2bbb"
+              "sig": "3dbade6dad6b2916"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -5578,7 +5578,7 @@
             },
             "InferenceProviderDescriptor": {
               "kind": "type",
-              "sig": "2b25c72a4eb41f54"
+              "sig": "a0aa85e5aecbd532"
             },
             "initialUiMessage": {
               "kind": "value",
@@ -6950,7 +6950,7 @@
             },
             "TurnSupportedIntent": {
               "kind": "type",
-              "sig": "ed18348c84dc3164"
+              "sig": "c7d8ce8ebc634a9b"
             },
             "TurnTaskClass": {
               "kind": "type",
@@ -7230,7 +7230,27 @@
               "kind": "value",
               "sig": "cacf36ea934e020f"
             },
+            "GRAPH_ADAPTER_CAPABILITIES_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_ARTIFACT_INVENTORY_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
             "GRAPH_CANONICALIZATION_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_DELETE_PLAN_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "b62661a9c125efd7"
+            },
+            "GRAPH_DELETE_RECEIPT_SCHEMA_ID": {
               "kind": "value",
               "sig": "b62661a9c125efd7"
             },
@@ -7254,6 +7274,34 @@
               "kind": "value",
               "sig": "b62661a9c125efd7"
             },
+            "GraphAdapterCapabilities": {
+              "kind": "type",
+              "sig": "cb67722d5a2aba27"
+            },
+            "GraphAdapterCapability": {
+              "kind": "type",
+              "sig": "1c5e6f5be108f4d1"
+            },
+            "GraphAdapterCapabilityError": {
+              "kind": "class",
+              "sig": "d07a6773585ee043"
+            },
+            "GraphArtifactInventory": {
+              "kind": "type",
+              "sig": "772b90376880a1e8"
+            },
+            "GraphArtifactInventoryCoverage": {
+              "kind": "type",
+              "sig": "da72a9bb08cfca75"
+            },
+            "GraphArtifactInventoryGap": {
+              "kind": "type",
+              "sig": "ef6d20b3bdd9b2b6"
+            },
+            "GraphArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "7e97f292388ea320"
+            },
             "GraphCanonicalEntity": {
               "kind": "type",
               "sig": "e3e37f6e4a487d92"
@@ -7261,6 +7309,26 @@
             "GraphCanonicalKey": {
               "kind": "type",
               "sig": "eab2ed61b0cdf4f2"
+            },
+            "GraphCompleteArtifactInventory": {
+              "kind": "type",
+              "sig": "ee0cbc5599dfdf48"
+            },
+            "GraphCompleteArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "a140b0449104b2e5"
+            },
+            "GraphCompleteDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "a5427b76defdf04e"
+            },
+            "GraphCompleteDeletePlan": {
+              "kind": "type",
+              "sig": "77adeb64f117ccea"
+            },
+            "GraphCompleteDeleteReceipt": {
+              "kind": "type",
+              "sig": "2a2a290514bc46eb"
             },
             "GraphCorpusError": {
               "kind": "class",
@@ -7278,9 +7346,53 @@
               "kind": "type",
               "sig": "beb5658af90099e7"
             },
+            "graphDeleteActionRefs": {
+              "kind": "value",
+              "sig": "e08504206a5389a9"
+            },
+            "GraphDeleteActionSet": {
+              "kind": "type",
+              "sig": "bac670d2174e7693"
+            },
+            "GraphDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "a817812480a74886"
+            },
+            "GraphDeleteExecutionValidationContext": {
+              "kind": "interface",
+              "sig": "cdb97253c9500c0f"
+            },
+            "GraphDeletePlan": {
+              "kind": "type",
+              "sig": "cc59d215d2ec0cf9"
+            },
+            "GraphDeletePlanningError": {
+              "kind": "class",
+              "sig": "e3fdbec3258a0213"
+            },
+            "GraphDeleteReceipt": {
+              "kind": "type",
+              "sig": "42aa44b8c2bbaf12"
+            },
+            "GraphDeleteRef": {
+              "kind": "type",
+              "sig": "6a3f2b3b0316251a"
+            },
+            "GraphDeleteUnresolved": {
+              "kind": "type",
+              "sig": "7347109f30ff40e5"
+            },
             "GraphDerivation": {
               "kind": "type",
               "sig": "a17a1c4e38afeeaf"
+            },
+            "GraphDerivedArtifactAction": {
+              "kind": "type",
+              "sig": "9d7d475a33ff0d8c"
+            },
+            "GraphDerivedArtifactKind": {
+              "kind": "type",
+              "sig": "ec58b1c2c8cf51ab"
             },
             "graphDescriptorRef": {
               "kind": "value",
@@ -7326,6 +7438,18 @@
               "kind": "type",
               "sig": "c215295db9b4663f"
             },
+            "GraphEntityRekeyAction": {
+              "kind": "type",
+              "sig": "b9705c88a975ec7d"
+            },
+            "GraphFailedDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "bf4c2a09e7c58af9"
+            },
+            "GraphFailedDeleteReceipt": {
+              "kind": "type",
+              "sig": "f4ac27b00bc5ce67"
+            },
             "graphIdentity": {
               "kind": "value",
               "sig": "8f33d4987a27a7cf"
@@ -7341,6 +7465,26 @@
             "GraphIdentityScope": {
               "kind": "type",
               "sig": "bbec508a80729007"
+            },
+            "GraphIncompleteArtifactInventory": {
+              "kind": "type",
+              "sig": "1eba103af567b09f"
+            },
+            "GraphIncompleteArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "7f6c08907c655f92"
+            },
+            "GraphIncompleteDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "f3db2460b1934685"
+            },
+            "GraphIncompleteDeletePlan": {
+              "kind": "type",
+              "sig": "8dc77cc030ba9a9e"
+            },
+            "GraphIncompleteDeleteReceipt": {
+              "kind": "type",
+              "sig": "9d2afc7376037bcf"
             },
             "GraphManifest": {
               "kind": "type",
@@ -7370,9 +7514,17 @@
               "kind": "type",
               "sig": "6bfd336bf564fae4"
             },
+            "GraphMergeRekeyAction": {
+              "kind": "type",
+              "sig": "cace97f84d63510c"
+            },
             "GraphModelDerivation": {
               "kind": "type",
               "sig": "be500f3efb45d51c"
+            },
+            "GraphRankingArtifact": {
+              "kind": "type",
+              "sig": "d6b28a3e77403890"
             },
             "GraphReadableElement": {
               "kind": "type",
@@ -7398,6 +7550,18 @@
               "kind": "type",
               "sig": "945a7ff863f60ac3"
             },
+            "GraphRelationRekeyAction": {
+              "kind": "type",
+              "sig": "efe5c7d3ef8a0d33"
+            },
+            "GraphRemovableElement": {
+              "kind": "type",
+              "sig": "0e0886c184354e8f"
+            },
+            "GraphRemovableMerge": {
+              "kind": "type",
+              "sig": "9555bbb9322cd59b"
+            },
             "graphScopeRef": {
               "kind": "value",
               "sig": "adddcc00452d395b"
@@ -7418,13 +7582,49 @@
               "kind": "type",
               "sig": "22da7196c96ef943"
             },
+            "GraphSourceMembershipRemoval": {
+              "kind": "type",
+              "sig": "3f398dbd838742b9"
+            },
+            "GraphSummaryArtifact": {
+              "kind": "type",
+              "sig": "a0feeeb53d31661f"
+            },
+            "GraphVectorArtifact": {
+              "kind": "type",
+              "sig": "6dfdf2248fdfbeda"
+            },
             "makeCanonicalEntity": {
               "kind": "value",
               "sig": "8367cc5248c176ac"
             },
+            "makeCompleteGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "6826c6491c02d5f4"
+            },
             "makeEmbeddingProjectionDescriptor": {
               "kind": "value",
               "sig": "622ac8d7a15c9f1d"
+            },
+            "makeFailedGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "de6dfd9c5aee13f3"
+            },
+            "makeGraphAdapterCapabilities": {
+              "kind": "value",
+              "sig": "063f986c5f552912"
+            },
+            "makeGraphArtifactInventory": {
+              "kind": "value",
+              "sig": "b9b9367a62f007f6"
+            },
+            "MakeGraphArtifactInventoryInput": {
+              "kind": "interface",
+              "sig": "bd8582d887eda14e"
+            },
+            "makeGraphDeleteReceipt": {
+              "kind": "value",
+              "sig": "bb33559aa76af8ce"
             },
             "makeGraphMention": {
               "kind": "value",
@@ -7434,6 +7634,10 @@
               "kind": "value",
               "sig": "b778fcdd5af0f66a"
             },
+            "makeIncompleteGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "435ee6ef5697b2b9"
+            },
             "makeInMemoryGraphSnapshotHandle": {
               "kind": "value",
               "sig": "20f399c773c68c80"
@@ -7442,9 +7646,37 @@
               "kind": "value",
               "sig": "19dd566e6791c89d"
             },
+            "planGraphSourceDeletion": {
+              "kind": "value",
+              "sig": "223fd283ea050aad"
+            },
+            "requireExecutableGraphDeletePlan": {
+              "kind": "value",
+              "sig": "ec917154dbac042c"
+            },
+            "requireGraphAdapterCapability": {
+              "kind": "value",
+              "sig": "8175e7fa9aaa6110"
+            },
             "sha256Hex": {
               "kind": "value",
               "sig": "18e003e8aa90dcad"
+            },
+            "validateGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "bb33559aa76af8ce"
+            },
+            "validateGraphDeletePlan": {
+              "kind": "value",
+              "sig": "fca01b608b67feef"
+            },
+            "validateGraphDeletePlanCurrent": {
+              "kind": "value",
+              "sig": "7101f62fc694a390"
+            },
+            "validateGraphDeleteReceipt": {
+              "kind": "value",
+              "sig": "0f3ad27be84c3603"
             },
             "verifyBuiltGraphCorpus": {
               "kind": "value",
@@ -7569,11 +7801,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "2701e67a01ee329a"
+              "sig": "3f43dfcb44f7ecad"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "2701e67a01ee329a"
+              "sig": "3f43dfcb44f7ecad"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -8173,7 +8405,7 @@
             },
             "HarnessAgentStreamError": {
               "kind": "type",
-              "sig": "5ef226f90516685e"
+              "sig": "aa14d8e59c52bfd0"
             },
             "HarnessAgentStreamResult": {
               "kind": "interface",
@@ -8213,7 +8445,7 @@
             },
             "HarnessCapabilityUnsupported": {
               "kind": "class",
-              "sig": "09d895a1825b4880"
+              "sig": "29d4780df80841ec"
             },
             "HarnessContinuationState": {
               "kind": "interface",
@@ -9343,7 +9575,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "d57d4d10e77f0905"
+              "sig": "c32c9f2e277d643d"
             },
             "DseModelError": {
               "kind": "class",
@@ -10318,7 +10550,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "d57d4d10e77f0905"
+              "sig": "c32c9f2e277d643d"
             },
             "DseModelError": {
               "kind": "class",
@@ -10532,7 +10764,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "0d75ae84ff18eb99"
+              "sig": "80304e8c32abf1b6"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -10616,7 +10848,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "a767016aabfb2bbb"
+              "sig": "3dbade6dad6b2916"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -10925,7 +11157,7 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "43fd300df9cc2da7"
+              "sig": "d29d0d8b8b9330d3"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
@@ -11089,7 +11321,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "4b9cf9adb8c7089e"
+              "sig": "a2a289e9c4fcbec4"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -11105,7 +11337,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "972b73dbbbe5267d"
+              "sig": "57dd383ab8a647cd"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -11173,7 +11405,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "ec8591c43acaa7cd"
+              "sig": "dbc305678fa480a9"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -11971,7 +12203,7 @@
             },
             "InferenceProviderDescriptor": {
               "kind": "type",
-              "sig": "2b25c72a4eb41f54"
+              "sig": "a0aa85e5aecbd532"
             },
             "KhalaChatTurnEventKind": {
               "kind": "type",
@@ -12651,7 +12883,7 @@
             },
             "TurnSupportedIntent": {
               "kind": "type",
-              "sig": "ed18348c84dc3164"
+              "sig": "c7d8ce8ebc634a9b"
             },
             "TurnTaskClass": {
               "kind": "type",
@@ -12724,11 +12956,11 @@
             },
             "ChatTransportService": {
               "kind": "class",
-              "sig": "2701e67a01ee329a"
+              "sig": "3f43dfcb44f7ecad"
             },
             "ChatTransportTag": {
               "kind": "value",
-              "sig": "2701e67a01ee329a"
+              "sig": "3f43dfcb44f7ecad"
             },
             "ChatTransportTurnProducer": {
               "kind": "type",
@@ -13166,7 +13398,7 @@
             },
             "khalaModelFallbackFallthroughReasonTags": {
               "kind": "value",
-              "sig": "f5ec52ef054db4f9"
+              "sig": "691e13c67695a4e7"
             },
             "KhalaModelFallbackOutcome": {
               "kind": "type",
@@ -13182,7 +13414,7 @@
             },
             "khalaModelFallbackTransientReasonTags": {
               "kind": "value",
-              "sig": "f5ec52ef054db4f9"
+              "sig": "691e13c67695a4e7"
             },
             "khalaRuntimeEventFromEffectAiStreamPart": {
               "kind": "function",
@@ -13260,7 +13492,7 @@
             },
             "localAiSdkSandboxProviderModuleUrl": {
               "kind": "value",
-              "sig": "9e46debfe4e9953a"
+              "sig": "932e2cc11e469d3f"
             },
             "LocalAiSdkSandboxProviderOptions": {
               "kind": "type",
@@ -13310,7 +13542,7 @@
             },
             "OpenAgentsSandboxLane": {
               "kind": "type",
-              "sig": "3d1c81f528caa6f6"
+              "sig": "85198318e9039cac"
             },
             "OpenAgentsSandboxProcessInput": {
               "kind": "type",
@@ -13561,7 +13793,7 @@
             },
             "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ActivationDecision": {
               "kind": "type",
@@ -13573,7 +13805,7 @@
             },
             "ActivationRefusalReason": {
               "kind": "type",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ActivationResult": {
               "kind": "type",
@@ -13589,7 +13821,7 @@
             },
             "BASELINE_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "BaselinePointer": {
               "kind": "type",
@@ -13617,7 +13849,7 @@
             },
             "CANARY_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "CanaryPlan": {
               "kind": "type",
@@ -13625,7 +13857,7 @@
             },
             "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "CandidateArtifact": {
               "kind": "type",
@@ -13653,7 +13885,7 @@
             },
             "COMPILED_PROGRAM_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "CompiledProgram": {
               "kind": "type",
@@ -13661,11 +13893,11 @@
             },
             "DATASET_REVISION_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "DATASET_SPLIT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "datasetId": {
               "kind": "value",
@@ -13693,7 +13925,7 @@
             },
             "DatasetSplitFailure": {
               "kind": "type",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "DatasetSplitName": {
               "kind": "type",
@@ -13729,7 +13961,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "4b3fc0f19b11329f"
+              "sig": "86af9ee15d097df8"
             },
             "DseModelError": {
               "kind": "class",
@@ -13761,7 +13993,7 @@
             },
             "EVALUATION_REPORT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "EvaluationReport": {
               "kind": "type",
@@ -13797,7 +14029,7 @@
             },
             "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "IndependentReviewResult": {
               "kind": "type",
@@ -13853,7 +14085,7 @@
             },
             "PREDICT_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "PredictArgs": {
               "kind": "interface",
@@ -13901,7 +14133,7 @@
             },
             "PROMOTION_REQUEST_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "promotionId": {
               "kind": "value",
@@ -13913,7 +14145,7 @@
             },
             "PromotionRefusalReason": {
               "kind": "type",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "PromotionRequest": {
               "kind": "type",
@@ -13921,7 +14153,7 @@
             },
             "PROMPT_IR_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "PromptIr": {
               "kind": "type",
@@ -13937,7 +14169,7 @@
             },
             "RELEASE_CHANNEL_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ReleaseChannel": {
               "kind": "type",
@@ -13945,7 +14177,7 @@
             },
             "RELEASED_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ReleasedArtifactPointer": {
               "kind": "type",
@@ -13989,7 +14221,7 @@
             },
             "RESOURCE_BUDGET_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ResourceBudget": {
               "kind": "type",
@@ -14017,7 +14249,7 @@
             },
             "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "rollbackActivation": {
               "kind": "value",
@@ -14041,7 +14273,7 @@
             },
             "SEARCH_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "SearchAlgorithm": {
               "kind": "type",
@@ -14061,15 +14293,15 @@
             },
             "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "SIGNATURE_REGISTRY": {
               "kind": "value",
-              "sig": "9e8982f250f1848d"
+              "sig": "974315bc9cbfa984"
             },
             "SignatureCatalog": {
               "kind": "type",
@@ -14125,7 +14357,7 @@
             },
             "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "UncertaintyMethod": {
               "kind": "type",
@@ -14142,7 +14374,7 @@
           "exports": {
             "ACTIVATION_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ActivationReceipt": {
               "kind": "type",
@@ -14154,7 +14386,7 @@
             },
             "BASELINE_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "BaselinePointer": {
               "kind": "type",
@@ -14174,7 +14406,7 @@
             },
             "CANARY_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "CanaryPlan": {
               "kind": "type",
@@ -14182,7 +14414,7 @@
             },
             "CANDIDATE_ARTIFACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "CandidateArtifact": {
               "kind": "type",
@@ -14210,7 +14442,7 @@
             },
             "COMPILED_PROGRAM_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "CompiledProgram": {
               "kind": "type",
@@ -14218,11 +14450,11 @@
             },
             "DATASET_REVISION_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "DATASET_SPLIT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "datasetId": {
               "kind": "value",
@@ -14250,7 +14482,7 @@
             },
             "DatasetSplitFailure": {
               "kind": "type",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "DatasetSplitName": {
               "kind": "type",
@@ -14294,7 +14526,7 @@
             },
             "EVALUATION_REPORT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "EvaluationReport": {
               "kind": "type",
@@ -14330,7 +14562,7 @@
             },
             "INDEPENDENT_REVIEW_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "IndependentReviewResult": {
               "kind": "type",
@@ -14382,7 +14614,7 @@
             },
             "PREDICT_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "PredictReceipt": {
               "kind": "type",
@@ -14406,7 +14638,7 @@
             },
             "PROMOTION_REQUEST_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "promotionId": {
               "kind": "value",
@@ -14418,7 +14650,7 @@
             },
             "PromotionRefusalReason": {
               "kind": "type",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "PromotionRequest": {
               "kind": "type",
@@ -14426,7 +14658,7 @@
             },
             "PROMPT_IR_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "PromptIr": {
               "kind": "type",
@@ -14442,7 +14674,7 @@
             },
             "RELEASE_CHANNEL_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ReleaseChannel": {
               "kind": "type",
@@ -14450,7 +14682,7 @@
             },
             "RELEASED_POINTER_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ReleasedArtifactPointer": {
               "kind": "type",
@@ -14470,7 +14702,7 @@
             },
             "RESOURCE_BUDGET_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ResourceBudget": {
               "kind": "type",
@@ -14494,7 +14726,7 @@
             },
             "ROLLBACK_RECEIPT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "RollbackReceipt": {
               "kind": "type",
@@ -14506,7 +14738,7 @@
             },
             "SEARCH_PLAN_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "SearchAlgorithm": {
               "kind": "type",
@@ -14526,15 +14758,15 @@
             },
             "SIGNATURE_CATALOG_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "SIGNATURE_CONTRACT_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "SIGNATURE_REGISTRY": {
               "kind": "value",
-              "sig": "9e8982f250f1848d"
+              "sig": "974315bc9cbfa984"
             },
             "SignatureCatalog": {
               "kind": "type",
@@ -14590,7 +14822,7 @@
             },
             "UNCERTAINTY_RECORD_SCHEMA_LITERAL": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "UncertaintyMethod": {
               "kind": "type",
@@ -14676,7 +14908,7 @@
             },
             "ActivationRefusalReason": {
               "kind": "type",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "ActivationResult": {
               "kind": "type",
@@ -14704,7 +14936,7 @@
             },
             "DseModel": {
               "kind": "class",
-              "sig": "4b3fc0f19b11329f"
+              "sig": "86af9ee15d097df8"
             },
             "DseModelError": {
               "kind": "class",
@@ -14817,7 +15049,7 @@
             },
             "HONESTY_MARKER": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "invalidThenValidModelLayer": {
               "kind": "value",
@@ -14825,7 +15057,7 @@
             },
             "PINNED_NOW": {
               "kind": "value",
-              "sig": "448e6f81579b6dee"
+              "sig": "f286b808573c2209"
             },
             "testDeps": {
               "kind": "value",
@@ -14885,13 +15117,33 @@
               "kind": "value",
               "sig": "cacf36ea934e020f"
             },
+            "GRAPH_ADAPTER_CAPABILITIES_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_ARTIFACT_INVENTORY_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
             "GRAPH_CANONICALIZATION_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_DELETE_PLAN_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_DELETE_RECEIPT_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
             },
             "GRAPH_ELEMENT_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
             },
             "GRAPH_IN_MEMORY_BYTE_CEILING": {
               "kind": "value",
@@ -14903,11 +15155,39 @@
             },
             "GRAPH_MANIFEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
             },
             "GRAPH_SCHEMA_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
+            },
+            "GraphAdapterCapabilities": {
+              "kind": "type",
+              "sig": "cb67722d5a2aba27"
+            },
+            "GraphAdapterCapability": {
+              "kind": "type",
+              "sig": "1c5e6f5be108f4d1"
+            },
+            "GraphAdapterCapabilityError": {
+              "kind": "class",
+              "sig": "5f90b75bd07669f9"
+            },
+            "GraphArtifactInventory": {
+              "kind": "type",
+              "sig": "772b90376880a1e8"
+            },
+            "GraphArtifactInventoryCoverage": {
+              "kind": "type",
+              "sig": "da72a9bb08cfca75"
+            },
+            "GraphArtifactInventoryGap": {
+              "kind": "type",
+              "sig": "b297b54f1306ce07"
+            },
+            "GraphArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "7e97f292388ea320"
             },
             "GraphCanonicalEntity": {
               "kind": "type",
@@ -14916,6 +15196,26 @@
             "GraphCanonicalKey": {
               "kind": "type",
               "sig": "eab2ed61b0cdf4f2"
+            },
+            "GraphCompleteArtifactInventory": {
+              "kind": "type",
+              "sig": "ee0cbc5599dfdf48"
+            },
+            "GraphCompleteArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "a140b0449104b2e5"
+            },
+            "GraphCompleteDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "1f0a8f190ade7f32"
+            },
+            "GraphCompleteDeletePlan": {
+              "kind": "type",
+              "sig": "cd178543af0e06a7"
+            },
+            "GraphCompleteDeleteReceipt": {
+              "kind": "type",
+              "sig": "08f76a5d16d87386"
             },
             "GraphCorpusError": {
               "kind": "class",
@@ -14933,9 +15233,53 @@
               "kind": "type",
               "sig": "536ece367f27cad1"
             },
+            "graphDeleteActionRefs": {
+              "kind": "value",
+              "sig": "adf84e08d436aceb"
+            },
+            "GraphDeleteActionSet": {
+              "kind": "type",
+              "sig": "bac670d2174e7693"
+            },
+            "GraphDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "d022dcacf6b233e1"
+            },
+            "GraphDeleteExecutionValidationContext": {
+              "kind": "interface",
+              "sig": "cdb97253c9500c0f"
+            },
+            "GraphDeletePlan": {
+              "kind": "type",
+              "sig": "36bc3d5e907d9700"
+            },
+            "GraphDeletePlanningError": {
+              "kind": "class",
+              "sig": "fc4dd3ca01a7dddd"
+            },
+            "GraphDeleteReceipt": {
+              "kind": "type",
+              "sig": "64fe751e56a29642"
+            },
+            "GraphDeleteRef": {
+              "kind": "type",
+              "sig": "6a3f2b3b0316251a"
+            },
+            "GraphDeleteUnresolved": {
+              "kind": "type",
+              "sig": "491cd1f52a76823d"
+            },
             "GraphDerivation": {
               "kind": "type",
               "sig": "1c4fe7f611ca3b42"
+            },
+            "GraphDerivedArtifactAction": {
+              "kind": "type",
+              "sig": "9d7d475a33ff0d8c"
+            },
+            "GraphDerivedArtifactKind": {
+              "kind": "type",
+              "sig": "f8f143894dae5591"
             },
             "graphDescriptorRef": {
               "kind": "value",
@@ -14981,6 +15325,18 @@
               "kind": "type",
               "sig": "c215295db9b4663f"
             },
+            "GraphEntityRekeyAction": {
+              "kind": "type",
+              "sig": "b9705c88a975ec7d"
+            },
+            "GraphFailedDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "51fa95147f5bb195"
+            },
+            "GraphFailedDeleteReceipt": {
+              "kind": "type",
+              "sig": "ac9e1504fa27b437"
+            },
             "graphIdentity": {
               "kind": "value",
               "sig": "8f33d4987a27a7cf"
@@ -14996,6 +15352,26 @@
             "GraphIdentityScope": {
               "kind": "type",
               "sig": "bbec508a80729007"
+            },
+            "GraphIncompleteArtifactInventory": {
+              "kind": "type",
+              "sig": "1eba103af567b09f"
+            },
+            "GraphIncompleteArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "7f6c08907c655f92"
+            },
+            "GraphIncompleteDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "4c130709c3e51de6"
+            },
+            "GraphIncompleteDeletePlan": {
+              "kind": "type",
+              "sig": "8dc77cc030ba9a9e"
+            },
+            "GraphIncompleteDeleteReceipt": {
+              "kind": "type",
+              "sig": "f4bfdb53cc202c4a"
             },
             "GraphManifest": {
               "kind": "type",
@@ -15025,9 +15401,17 @@
               "kind": "type",
               "sig": "6bfd336bf564fae4"
             },
+            "GraphMergeRekeyAction": {
+              "kind": "type",
+              "sig": "cace97f84d63510c"
+            },
             "GraphModelDerivation": {
               "kind": "type",
               "sig": "c7fea2179a6293ad"
+            },
+            "GraphRankingArtifact": {
+              "kind": "type",
+              "sig": "d6b28a3e77403890"
             },
             "GraphReadableElement": {
               "kind": "type",
@@ -15053,6 +15437,18 @@
               "kind": "type",
               "sig": "945a7ff863f60ac3"
             },
+            "GraphRelationRekeyAction": {
+              "kind": "type",
+              "sig": "efe5c7d3ef8a0d33"
+            },
+            "GraphRemovableElement": {
+              "kind": "type",
+              "sig": "0e0886c184354e8f"
+            },
+            "GraphRemovableMerge": {
+              "kind": "type",
+              "sig": "9555bbb9322cd59b"
+            },
             "graphScopeRef": {
               "kind": "value",
               "sig": "adddcc00452d395b"
@@ -15073,13 +15469,49 @@
               "kind": "type",
               "sig": "22da7196c96ef943"
             },
+            "GraphSourceMembershipRemoval": {
+              "kind": "type",
+              "sig": "3f398dbd838742b9"
+            },
+            "GraphSummaryArtifact": {
+              "kind": "type",
+              "sig": "a0feeeb53d31661f"
+            },
+            "GraphVectorArtifact": {
+              "kind": "type",
+              "sig": "6dfdf2248fdfbeda"
+            },
             "makeCanonicalEntity": {
               "kind": "value",
               "sig": "8367cc5248c176ac"
             },
+            "makeCompleteGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "8f85fa63f622e47e"
+            },
             "makeEmbeddingProjectionDescriptor": {
               "kind": "value",
               "sig": "622ac8d7a15c9f1d"
+            },
+            "makeFailedGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "547db43a78fd2e88"
+            },
+            "makeGraphAdapterCapabilities": {
+              "kind": "value",
+              "sig": "063f986c5f552912"
+            },
+            "makeGraphArtifactInventory": {
+              "kind": "value",
+              "sig": "b9b9367a62f007f6"
+            },
+            "MakeGraphArtifactInventoryInput": {
+              "kind": "interface",
+              "sig": "bd8582d887eda14e"
+            },
+            "makeGraphDeleteReceipt": {
+              "kind": "value",
+              "sig": "3f682062e2dd4953"
             },
             "makeGraphMention": {
               "kind": "value",
@@ -15089,6 +15521,10 @@
               "kind": "value",
               "sig": "b778fcdd5af0f66a"
             },
+            "makeIncompleteGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "02e3b3cc1c684c4e"
+            },
             "makeInMemoryGraphSnapshotHandle": {
               "kind": "value",
               "sig": "20f399c773c68c80"
@@ -15097,13 +15533,283 @@
               "kind": "value",
               "sig": "19dd566e6791c89d"
             },
+            "planGraphSourceDeletion": {
+              "kind": "value",
+              "sig": "223fd283ea050aad"
+            },
+            "requireExecutableGraphDeletePlan": {
+              "kind": "value",
+              "sig": "dcadf2dfff099a7f"
+            },
+            "requireGraphAdapterCapability": {
+              "kind": "value",
+              "sig": "8175e7fa9aaa6110"
+            },
             "sha256Hex": {
               "kind": "value",
               "sig": "18e003e8aa90dcad"
             },
+            "validateGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "3f682062e2dd4953"
+            },
+            "validateGraphDeletePlan": {
+              "kind": "value",
+              "sig": "c4d9c8fdf0dfd9ed"
+            },
+            "validateGraphDeletePlanCurrent": {
+              "kind": "value",
+              "sig": "d6f52bb063380c40"
+            },
+            "validateGraphDeleteReceipt": {
+              "kind": "value",
+              "sig": "53265e084fd113e8"
+            },
             "verifyBuiltGraphCorpus": {
               "kind": "value",
               "sig": "0fc7a75c5c76621f"
+            }
+          }
+        },
+        "./capabilities": {
+          "source": "./src/capabilities.ts",
+          "exports": {
+            "GRAPH_ADAPTER_CAPABILITIES_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GraphAdapterCapabilities": {
+              "kind": "type",
+              "sig": "cb67722d5a2aba27"
+            },
+            "GraphAdapterCapability": {
+              "kind": "type",
+              "sig": "1c5e6f5be108f4d1"
+            },
+            "GraphAdapterCapabilityError": {
+              "kind": "class",
+              "sig": "5f90b75bd07669f9"
+            },
+            "makeGraphAdapterCapabilities": {
+              "kind": "value",
+              "sig": "063f986c5f552912"
+            },
+            "requireGraphAdapterCapability": {
+              "kind": "value",
+              "sig": "8175e7fa9aaa6110"
+            }
+          }
+        },
+        "./deletion": {
+          "source": "./src/deletion.ts",
+          "exports": {
+            "GRAPH_ARTIFACT_INVENTORY_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_DELETE_PLAN_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GRAPH_DELETE_RECEIPT_SCHEMA_ID": {
+              "kind": "value",
+              "sig": "897c9826ad82794e"
+            },
+            "GraphArtifactInventory": {
+              "kind": "type",
+              "sig": "772b90376880a1e8"
+            },
+            "GraphArtifactInventoryCoverage": {
+              "kind": "type",
+              "sig": "da72a9bb08cfca75"
+            },
+            "GraphArtifactInventoryGap": {
+              "kind": "type",
+              "sig": "b297b54f1306ce07"
+            },
+            "GraphArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "7e97f292388ea320"
+            },
+            "GraphCompleteArtifactInventory": {
+              "kind": "type",
+              "sig": "ee0cbc5599dfdf48"
+            },
+            "GraphCompleteArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "a140b0449104b2e5"
+            },
+            "GraphCompleteDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "1f0a8f190ade7f32"
+            },
+            "GraphCompleteDeletePlan": {
+              "kind": "type",
+              "sig": "cd178543af0e06a7"
+            },
+            "GraphCompleteDeleteReceipt": {
+              "kind": "type",
+              "sig": "08f76a5d16d87386"
+            },
+            "graphDeleteActionRefs": {
+              "kind": "value",
+              "sig": "adf84e08d436aceb"
+            },
+            "GraphDeleteActionSet": {
+              "kind": "type",
+              "sig": "bac670d2174e7693"
+            },
+            "GraphDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "d022dcacf6b233e1"
+            },
+            "GraphDeleteExecutionValidationContext": {
+              "kind": "interface",
+              "sig": "cdb97253c9500c0f"
+            },
+            "GraphDeletePlan": {
+              "kind": "type",
+              "sig": "36bc3d5e907d9700"
+            },
+            "GraphDeletePlanningError": {
+              "kind": "class",
+              "sig": "fc4dd3ca01a7dddd"
+            },
+            "GraphDeleteReceipt": {
+              "kind": "type",
+              "sig": "64fe751e56a29642"
+            },
+            "GraphDeleteRef": {
+              "kind": "type",
+              "sig": "6a3f2b3b0316251a"
+            },
+            "GraphDeleteUnresolved": {
+              "kind": "type",
+              "sig": "491cd1f52a76823d"
+            },
+            "GraphDerivedArtifactAction": {
+              "kind": "type",
+              "sig": "9d7d475a33ff0d8c"
+            },
+            "GraphDerivedArtifactKind": {
+              "kind": "type",
+              "sig": "f8f143894dae5591"
+            },
+            "GraphEntityRekeyAction": {
+              "kind": "type",
+              "sig": "b9705c88a975ec7d"
+            },
+            "GraphFailedDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "51fa95147f5bb195"
+            },
+            "GraphFailedDeleteReceipt": {
+              "kind": "type",
+              "sig": "ac9e1504fa27b437"
+            },
+            "GraphIncompleteArtifactInventory": {
+              "kind": "type",
+              "sig": "1eba103af567b09f"
+            },
+            "GraphIncompleteArtifactPlaneCoverage": {
+              "kind": "type",
+              "sig": "7f6c08907c655f92"
+            },
+            "GraphIncompleteDeleteExecutionResult": {
+              "kind": "type",
+              "sig": "4c130709c3e51de6"
+            },
+            "GraphIncompleteDeletePlan": {
+              "kind": "type",
+              "sig": "8dc77cc030ba9a9e"
+            },
+            "GraphIncompleteDeleteReceipt": {
+              "kind": "type",
+              "sig": "f4bfdb53cc202c4a"
+            },
+            "GraphMergeRekeyAction": {
+              "kind": "type",
+              "sig": "cace97f84d63510c"
+            },
+            "GraphRankingArtifact": {
+              "kind": "type",
+              "sig": "d6b28a3e77403890"
+            },
+            "GraphRelationRekeyAction": {
+              "kind": "type",
+              "sig": "efe5c7d3ef8a0d33"
+            },
+            "GraphRemovableElement": {
+              "kind": "type",
+              "sig": "0e0886c184354e8f"
+            },
+            "GraphRemovableMerge": {
+              "kind": "type",
+              "sig": "9555bbb9322cd59b"
+            },
+            "GraphSourceMembershipRemoval": {
+              "kind": "type",
+              "sig": "3f398dbd838742b9"
+            },
+            "GraphSummaryArtifact": {
+              "kind": "type",
+              "sig": "a0feeeb53d31661f"
+            },
+            "GraphVectorArtifact": {
+              "kind": "type",
+              "sig": "6dfdf2248fdfbeda"
+            },
+            "makeCompleteGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "8f85fa63f622e47e"
+            },
+            "makeFailedGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "547db43a78fd2e88"
+            },
+            "makeGraphArtifactInventory": {
+              "kind": "value",
+              "sig": "b9b9367a62f007f6"
+            },
+            "MakeGraphArtifactInventoryInput": {
+              "kind": "interface",
+              "sig": "bd8582d887eda14e"
+            },
+            "makeGraphDeleteReceipt": {
+              "kind": "value",
+              "sig": "3f682062e2dd4953"
+            },
+            "makeIncompleteGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "02e3b3cc1c684c4e"
+            },
+            "planGraphSourceDeletion": {
+              "kind": "value",
+              "sig": "223fd283ea050aad"
+            },
+            "requireExecutableGraphDeletePlan": {
+              "kind": "value",
+              "sig": "dcadf2dfff099a7f"
+            },
+            "validateGraphDeleteExecutionResult": {
+              "kind": "value",
+              "sig": "3f682062e2dd4953"
+            },
+            "validateGraphDeletePlan": {
+              "kind": "value",
+              "sig": "c4d9c8fdf0dfd9ed"
+            },
+            "validateGraphDeletePlanCurrent": {
+              "kind": "value",
+              "sig": "d6f52bb063380c40"
+            },
+            "validateGraphDeleteReceipt": {
+              "kind": "value",
+              "sig": "53265e084fd113e8"
             }
           }
         },
@@ -15112,19 +15818,19 @@
           "exports": {
             "GRAPH_CANONICALIZATION_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
             },
             "GRAPH_ELEMENT_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
             },
             "GRAPH_MANIFEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
             },
             "GRAPH_SCHEMA_ID": {
               "kind": "value",
-              "sig": "013b37a187da986c"
+              "sig": "897c9826ad82794e"
             },
             "GraphCanonicalEntity": {
               "kind": "type",
@@ -15318,7 +16024,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -15338,7 +16044,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "bc578c572efaba1e"
+              "sig": "abfcce01521c0a49"
             },
             "HistoryCorpusEventReader": {
               "kind": "interface",
@@ -15362,7 +16068,7 @@
             },
             "HistoryRecall": {
               "kind": "class",
-              "sig": "eb65fb6f06992506"
+              "sig": "aadcf4a98486e470"
             },
             "HistoryRecallCapName": {
               "kind": "type",
@@ -15446,7 +16152,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "e61c02de0bf451e9"
+              "sig": "a68f7080f3e8654a"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -15470,7 +16176,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "15752cc941c37816"
+              "sig": "47fdf12ae945acc5"
             },
             "NeutralThreadNote": {
               "kind": "interface",
@@ -15494,7 +16200,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -15514,11 +16220,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "e83f83555dbff216"
+              "sig": "587adff121c7b731"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -15526,11 +16232,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "12908daaca379f30"
+              "sig": "ff4f21d01609fb74"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -15590,11 +16296,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "timeSliceRecursiveRecallCorpus": {
               "kind": "value",
@@ -15635,11 +16341,11 @@
             },
             "threadNoteRedactionClass": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "threadNoteVisibility": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             }
           }
         },
@@ -15652,7 +16358,7 @@
             },
             "historyCorpusCoverageNote": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "HistoryCorpusEntry": {
               "kind": "interface",
@@ -15672,7 +16378,7 @@
             },
             "historyCorpusEventKindVocabulary": {
               "kind": "value",
-              "sig": "bc578c572efaba1e"
+              "sig": "abfcce01521c0a49"
             },
             "HistoryCorpusExclusions": {
               "kind": "interface",
@@ -15692,7 +16398,7 @@
             },
             "neutralLogCoreKinds": {
               "kind": "value",
-              "sig": "15752cc941c37816"
+              "sig": "47fdf12ae945acc5"
             }
           }
         },
@@ -15733,7 +16439,7 @@
             },
             "HistoryRecallToolkit": {
               "kind": "value",
-              "sig": "e61c02de0bf451e9"
+              "sig": "a68f7080f3e8654a"
             },
             "historyRecallToolkitHandlers": {
               "kind": "value",
@@ -15819,7 +16525,7 @@
           "exports": {
             "HistoryRecall": {
               "kind": "class",
-              "sig": "eb65fb6f06992506"
+              "sig": "aadcf4a98486e470"
             },
             "HistoryRecallCorpusProvider": {
               "kind": "interface",
@@ -15872,7 +16578,7 @@
             },
             "RECURSIVE_RECALL_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RecursiveRecallCaps": {
               "kind": "interface",
@@ -15892,11 +16598,11 @@
             },
             "RecursiveRecallFailureClass": {
               "kind": "type",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "recursiveRecallFailureClasses": {
               "kind": "value",
-              "sig": "e83f83555dbff216"
+              "sig": "587adff121c7b731"
             },
             "RecursiveRecallOp": {
               "kind": "type",
@@ -15904,11 +16610,11 @@
             },
             "RecursiveRecallPartialReason": {
               "kind": "type",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "recursiveRecallPartialReasons": {
               "kind": "value",
-              "sig": "12908daaca379f30"
+              "sig": "ff4f21d01609fb74"
             },
             "RecursiveRecallResult": {
               "kind": "type",
@@ -16041,11 +16747,11 @@
             },
             "HISTORY_EVENT_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "HISTORY_NOTE_ADDRESS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "HistoryCorpusEntry": {
               "kind": "alias",
@@ -16065,7 +16771,7 @@
             },
             "HistoryRecall": {
               "kind": "alias",
-              "sig": "eb65fb6f06992506"
+              "sig": "aadcf4a98486e470"
             },
             "IN_MEMORY_COMPOSITE_PROJECTION_ENTRY_CEILING": {
               "kind": "value",
@@ -16133,39 +16839,39 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "5ac6bc2337b38eda"
+              "sig": "83d27ba55054bd05"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "285cbfeee75d1629"
+              "sig": "4b6fbc15fadc1bed"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "c41f5e2db6a094b3"
+              "sig": "11df529000fba1c4"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -16297,7 +17003,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "94c30b2aabe5663c"
+              "sig": "3c390f63a8144248"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -16313,7 +17019,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "c4df02bbfa54b2ae"
+              "sig": "96169c06d3057cd6"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -16381,7 +17087,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "fa6d623c5bb6a3ac"
+              "sig": "556f0008cfee37d3"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -16609,7 +17315,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -16625,7 +17331,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "d6afc867df162072"
+              "sig": "cb4cc8ca53487320"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -16831,39 +17537,39 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "1a06cef7f3cee9a3"
+              "sig": "bbbaf28a2c8d63b9"
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "ce29d3fc3b13a936"
+              "sig": "d7a621be86b8f8de"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "ecf53c5c2f359d7a"
+              "sig": "9e62f98a9264ff6b"
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -16995,7 +17701,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "d723d9be0fd4d6df"
+              "sig": "a396abe6904a3e07"
             },
             "RlmCorpusSourceRef": {
               "kind": "type",
@@ -17011,7 +17717,7 @@
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "f061379c43a0024b"
+              "sig": "c1045bfd19fbcf18"
             },
             "RlmDeterministicLimits": {
               "kind": "type",
@@ -17079,7 +17785,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "7463bd8d84ab9bee"
+              "sig": "5315f5ea1284f042"
             },
             "RlmIterationStarted": {
               "kind": "type",
@@ -17307,7 +18013,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RlmToolParams": {
               "kind": "type",
@@ -17323,7 +18029,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RlmValuePublished": {
               "kind": "type",
@@ -17448,11 +18154,11 @@
             },
             "RLM_ALL_REDACTION_CLASSES": {
               "kind": "value",
-              "sig": "ce29d3fc3b13a936"
+              "sig": "d7a621be86b8f8de"
             },
             "RLM_ALL_VISIBILITIES": {
               "kind": "value",
-              "sig": "ecf53c5c2f359d7a"
+              "sig": "9e62f98a9264ff6b"
             },
             "RlmCompositeAddressLookup": {
               "kind": "type",
@@ -17480,7 +18186,7 @@
             },
             "RlmCorpusSource": {
               "kind": "class",
-              "sig": "d723d9be0fd4d6df"
+              "sig": "a396abe6904a3e07"
             },
             "RlmCorpusSourceShape": {
               "kind": "interface",
@@ -17492,7 +18198,7 @@
             },
             "rlmInlineCorpusSourceLayer": {
               "kind": "value",
-              "sig": "7463bd8d84ab9bee"
+              "sig": "5315f5ea1284f042"
             },
             "RlmValidatedSourceAddress": {
               "kind": "interface",
@@ -17521,11 +18227,11 @@
             },
             "Rlm": {
               "kind": "class",
-              "sig": "1a06cef7f3cee9a3"
+              "sig": "bbbaf28a2c8d63b9"
             },
             "rlmDeterministicLayer": {
               "kind": "value",
-              "sig": "f061379c43a0024b"
+              "sig": "c1045bfd19fbcf18"
             },
             "rlmLayer": {
               "kind": "value",
@@ -17566,7 +18272,7 @@
             },
             "RlmValueKind": {
               "kind": "type",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             }
           }
         },
@@ -17649,27 +18355,27 @@
             },
             "RLM_COMPOSITION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_CORPUS_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_CORPUS_SCHEMA_ID_V1": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_PROGRAM_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_REQUEST_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RLM_SOURCE_PLANE_EXTENSION_SCHEMA_ID": {
               "kind": "value",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RlmArtifactDescriptor": {
               "kind": "type",
@@ -18082,7 +18788,7 @@
             },
             "RlmToolOperationClass": {
               "kind": "type",
-              "sig": "519d4be1aa84cd30"
+              "sig": "46dd0e52088e9cfd"
             },
             "RlmToolParams": {
               "kind": "type",
