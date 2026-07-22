@@ -213,7 +213,11 @@ export interface GraphExtractionRunResult {
 const makeReceipt = (
   args: Omit<GraphExtractionRunReceipt, "schemaId" | "receiptRef" | "receiptDigest">,
 ): GraphExtractionRunReceipt => {
-  const content = { schemaId: GRAPH_EXTRACTION_RECEIPT_SCHEMA_ID, ...args };
+  const content = {
+    schemaId: GRAPH_EXTRACTION_RECEIPT_SCHEMA_ID,
+    ...args,
+    freshnessEvidenceRefs: uniqueSorted(args.freshnessEvidenceRefs),
+  };
   const receiptDigest = canonicalDigest(content);
   return decodeReceipt({
     ...content,
@@ -460,17 +464,6 @@ export const runGraphExtraction = Effect.fn("Dse.runGraphExtraction")(function* 
           }),
           Effect.result,
         );
-      const afterCallAssertion = yield* args.deps
-        .assertCorpusUnchanged(args.corpus)
-        .pipe(Effect.result);
-      if (Result.isFailure(afterCallAssertion)) {
-        reasons.push("invalid_corpus");
-        batches.length = 0;
-        processedEntries = 0;
-        stop = true;
-        break;
-      }
-      freshnessEvidenceRefs.push(afterCallAssertion.success);
       if (Result.isFailure(completion)) {
         const timedOut = completion.failure.reason === "time_cap";
         reasons.push(timedOut ? "time_cap" : "model_failed");
@@ -489,6 +482,17 @@ export const runGraphExtraction = Effect.fn("Dse.runGraphExtraction")(function* 
           }),
         );
         usageUnavailable = true;
+        const afterCallAssertion = yield* args.deps
+          .assertCorpusUnchanged(args.corpus)
+          .pipe(Effect.result);
+        if (Result.isFailure(afterCallAssertion)) {
+          reasons.push("invalid_corpus");
+          batches.length = 0;
+          processedEntries = 0;
+          stop = true;
+          break;
+        }
+        freshnessEvidenceRefs.push(afterCallAssertion.success);
         stop = true;
         break;
       }
@@ -550,6 +554,17 @@ export const runGraphExtraction = Effect.fn("Dse.runGraphExtraction")(function* 
         ...(success === undefined ? { failureRef: "decode.rejected" } : {}),
       });
       attempts.push(record);
+      const afterCallAssertion = yield* args.deps
+        .assertCorpusUnchanged(args.corpus)
+        .pipe(Effect.result);
+      if (Result.isFailure(afterCallAssertion)) {
+        reasons.push("invalid_corpus");
+        batches.length = 0;
+        processedEntries = 0;
+        stop = true;
+        break;
+      }
+      freshnessEvidenceRefs.push(afterCallAssertion.success);
       if (args.deps.monotonicMs() - started > args.limits.maxWallClockMs) {
         reasons.push("time_cap");
         stop = true;
@@ -704,16 +719,6 @@ export const runDeterministicGraphExtraction = Effect.fn("Dse.runDeterministicGr
         }),
         Effect.result,
       );
-      const afterCallAssertion = yield* args.deps
-        .assertCorpusUnchanged(args.corpus)
-        .pipe(Effect.result);
-      if (Result.isFailure(afterCallAssertion)) {
-        reasons.push("invalid_corpus");
-        batches.length = 0;
-        processedEntries = 0;
-        break;
-      }
-      freshnessEvidenceRefs.push(afterCallAssertion.success);
       if (Result.isFailure(extracted)) {
         const value = {
           batchRef: batch.batchRef,
@@ -729,6 +734,16 @@ export const runDeterministicGraphExtraction = Effect.fn("Dse.runDeterministicGr
           ...value,
           attemptRef: safeRef("graph-extraction-parser-attempt", value),
         });
+        const afterCallAssertion = yield* args.deps
+          .assertCorpusUnchanged(args.corpus)
+          .pipe(Effect.result);
+        if (Result.isFailure(afterCallAssertion)) {
+          reasons.push("invalid_corpus");
+          batches.length = 0;
+          processedEntries = 0;
+          break;
+        }
+        freshnessEvidenceRefs.push(afterCallAssertion.success);
         reasons.push(extracted.failure.reason === "time_cap" ? "time_cap" : "parser_failed");
         break;
       }
@@ -754,6 +769,16 @@ export const runDeterministicGraphExtraction = Effect.fn("Dse.runDeterministicGr
           ...value,
           attemptRef: safeRef("graph-extraction-parser-attempt", value),
         });
+        const afterCallAssertion = yield* args.deps
+          .assertCorpusUnchanged(args.corpus)
+          .pipe(Effect.result);
+        if (Result.isFailure(afterCallAssertion)) {
+          reasons.push("invalid_corpus");
+          batches.length = 0;
+          processedEntries = 0;
+          break;
+        }
+        freshnessEvidenceRefs.push(afterCallAssertion.success);
         if (outputCharacters > args.limits.maxOutputCharacters)
           reasons.push("output_character_cap");
         if (
@@ -795,6 +820,16 @@ export const runDeterministicGraphExtraction = Effect.fn("Dse.runDeterministicGr
           ...value,
           attemptRef: safeRef("graph-extraction-parser-attempt", value),
         });
+        const afterCallAssertion = yield* args.deps
+          .assertCorpusUnchanged(args.corpus)
+          .pipe(Effect.result);
+        if (Result.isFailure(afterCallAssertion)) {
+          reasons.push("invalid_corpus");
+          batches.length = 0;
+          processedEntries = 0;
+          break;
+        }
+        freshnessEvidenceRefs.push(afterCallAssertion.success);
         if (outputCharacterCap) reasons.push("output_character_cap");
         if (outputTokenCap) reasons.push("output_token_cap");
         break;
@@ -806,7 +841,7 @@ export const runDeterministicGraphExtraction = Effect.fn("Dse.runDeterministicGr
         parserRef: args.extractor.parserRef,
         parserVersion: args.extractor.parserVersion,
         inputDigest: canonicalDigest(promptInput(batch)),
-        outputDigest: canonicalDigest(candidateBytes),
+        outputDigest: canonicalDigest(decoded.success),
         outcome: "decoded" as const,
         outputCharacters: candidateBytes.length,
         outputTokens: candidateTokens,
@@ -815,6 +850,16 @@ export const runDeterministicGraphExtraction = Effect.fn("Dse.runDeterministicGr
         ...parserValue,
         attemptRef: safeRef("graph-extraction-parser-attempt", parserValue),
       });
+      const afterCallAssertion = yield* args.deps
+        .assertCorpusUnchanged(args.corpus)
+        .pipe(Effect.result);
+      if (Result.isFailure(afterCallAssertion)) {
+        reasons.push("invalid_corpus");
+        batches.length = 0;
+        processedEntries = 0;
+        break;
+      }
+      freshnessEvidenceRefs.push(afterCallAssertion.success);
       batches.push({
         batch,
         candidates: decoded.success,
@@ -989,6 +1034,47 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
         (isSuccess ? item.failureRef === undefined : item.failureRef !== undefined)
       );
     });
+    const modelAttemptsByBatch = new Map<string, GraphExtractionAttemptReceipt[]>();
+    for (const attempt of decoded.attempts) {
+      const group = modelAttemptsByBatch.get(attempt.batchRef) ?? [];
+      group.push(attempt);
+      modelAttemptsByBatch.set(attempt.batchRef, group);
+    }
+    const attemptBatchIndexes = decoded.attempts.map((item) =>
+      planned.batches.findIndex((batch) => batch.batchRef === item.batchRef),
+    );
+    const modelAttemptHistoryValid =
+      (context.program !== undefined || decoded.attempts.length === 0) &&
+      [...modelAttemptsByBatch.values()].every((group) => {
+        if (
+          context.program === undefined ||
+          group.length > context.program.decodePolicy.maxRepairs + 1
+        )
+          return false;
+        const successIndexes = group.flatMap((item, index) =>
+          item.decodeOutcome === "decoded" || item.decodeOutcome === "repaired" ? [index] : [],
+        );
+        if (successIndexes.length > 1) return false;
+        if (successIndexes.length === 1)
+          return (
+            successIndexes[0] === group.length - 1 &&
+            group.slice(0, -1).every((item) => item.decodeOutcome === "rejected")
+          );
+        const terminal = group.at(-1)!;
+        const capTermination =
+          decoded.reasons.some((reason) => reason.endsWith("_cap")) ||
+          terminal.usage._tag === "Unavailable";
+        return (
+          group.slice(0, -1).every((item) => item.decodeOutcome === "rejected") &&
+          (terminal.decodeOutcome === "model_failed" ||
+            (terminal.decodeOutcome === "rejected" &&
+              (group.length === context.program.decodePolicy.maxRepairs + 1 || capTermination)))
+        );
+      }) &&
+      attemptBatchIndexes.every(
+        (index, position) =>
+          index >= 0 && (position === 0 || index >= attemptBatchIndexes[position - 1]!),
+      );
     const parserAttemptsByBatch = new Map(
       decoded.parserAttempts.map((item) => [item.batchRef, item]),
     );
@@ -1003,14 +1089,33 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
         item.inputDigest === canonicalDigest(promptInput(batch)) &&
         item.attemptRef === safeRef("graph-extraction-parser-attempt", attemptContent) &&
         (item.outcome === "decoded"
-          ? successful?.derivation._tag === "Deterministic" &&
-            successful.derivation.parserRef === item.parserRef &&
-            successful.derivation.parserVersion === item.parserVersion &&
-            item.outputDigest === canonicalDigest(successful.candidates) &&
-            item.failureRef === undefined
+          ? successful === undefined
+            ? decoded.reasons.includes("invalid_corpus") && item.failureRef === undefined
+            : successful.derivation._tag === "Deterministic" &&
+              successful.derivation.parserRef === item.parserRef &&
+              successful.derivation.parserVersion === item.parserVersion &&
+              item.outputDigest === canonicalDigest(successful.candidates) &&
+              item.outputCharacters === canonicalStringify(successful.candidates).length &&
+              item.outputTokens ===
+                context.countTokens(canonicalStringify(successful.candidates)) &&
+              item.failureRef === undefined
           : successful === undefined && item.failureRef !== undefined)
       );
     });
+    const deterministicBatches = context.result.batches.filter(
+      (item) => item.derivation._tag === "Deterministic",
+    );
+    const decodedParserAttempts = decoded.parserAttempts.filter(
+      (item) => item.outcome === "decoded",
+    );
+    const deterministicParserCoverageValid =
+      decoded.modelCalls === 0
+        ? deterministicBatches.every(
+            (item) => parserAttemptsByBatch.get(item.batch.batchRef)?.outcome === "decoded",
+          ) &&
+          (decoded.status !== "Complete" ||
+            decodedParserAttempts.length === deterministicBatches.length)
+        : decoded.parserAttempts.length === 0 && deterministicBatches.length === 0;
     const successfulBatchRefs = context.result.batches.map((item) => item.batch.batchRef);
     const plannedBatchRefs = planned.batches.map((item) => item.batchRef);
     const successfulIndexes = successfulBatchRefs.map((ref) => plannedBatchRefs.indexOf(ref));
@@ -1059,7 +1164,9 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
         decoded.compiledProgramDigest !== compiledProgramDigest(context.program)) ||
       !batchesValid ||
       !attemptsValid ||
+      !modelAttemptHistoryValid ||
       !parserAttemptsValid ||
+      !deterministicParserCoverageValid ||
       !capAlgebraValid ||
       parserAttemptsByBatch.size !== decoded.parserAttempts.length ||
       decoded.admittedEntries !== planned.admittedEntries ||

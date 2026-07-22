@@ -161,6 +161,7 @@ describe("DSE graph extraction receipts", () => {
       usageTruth: "exact",
       outputTokens: 8,
       processedEntries: 2,
+      freshnessEvidenceRefs: ["freshness.fixture"],
     });
     expect(result.receipt.compiledProgramDigest).toBe(compiledProgramDigest(program));
     await expect(
@@ -217,6 +218,18 @@ describe("DSE graph extraction receipts", () => {
       "rejected",
       "repaired",
     ]);
+    await expect(
+      Effect.runPromise(
+        validateGraphExtractionRunReceipt(result.receipt, {
+          corpus,
+          program,
+          limits,
+          countTokens: deps().countTokens,
+          assertCorpusUnchanged: deps().assertCorpusUnchanged,
+          result,
+        }),
+      ),
+    ).resolves.toBeUndefined();
   });
 
   test("keeps unavailable usage absent instead of fabricating zero", async () => {
@@ -395,6 +408,37 @@ describe("DSE graph extraction receipts", () => {
       parserRef: "parser.fixture",
       parserVersion: "1.0.0",
     });
+    await expect(
+      Effect.runPromise(
+        validateGraphExtractionRunReceipt(first.receipt, {
+          corpus,
+          limits,
+          countTokens: deps().countTokens,
+          assertCorpusUnchanged: deps().assertCorpusUnchanged,
+          result: first,
+        }),
+      ),
+    ).resolves.toBeUndefined();
+    const built = await Effect.runPromise(
+      applyGraphExtractionCandidates({
+        run: first,
+        execution: {
+          corpus,
+          limits,
+          countTokens: deps().countTokens,
+          assertCorpusUnchanged: deps().assertCorpusUnchanged,
+        },
+        graphRef: "graph.deterministic-fixture",
+        scopeRef: "tenant.fixture",
+        policy: { includeVisibilities: ["private"], includeRedactionClasses: ["none"] },
+      }),
+    );
+    expect(built.snapshot).toMatchObject({
+      mentions: { length: 2 },
+      entities: { length: 1 },
+      relations: { length: 1 },
+      merges: { length: 1 },
+    });
   });
 
   test("does not apply partial output", async () => {
@@ -474,6 +518,24 @@ describe("DSE graph extraction receipts", () => {
     expect(changed.status).toBe("Refused");
     expect(changed.batches).toEqual([]);
     expect(changed.receipt.reasons).toContain("invalid_corpus");
+    expect(changed.receipt.attempts).toHaveLength(1);
+    expect(changed.receipt.attempts[0]).toMatchObject({
+      decodeOutcome: "decoded",
+      usage: { _tag: "Exact", inputTokens: 12, outputTokens: 8 },
+    });
+    expect(changed.receipt.outputCharacters).toBeGreaterThan(0);
+    await expect(
+      Effect.runPromise(
+        validateGraphExtractionRunReceipt(changed.receipt, {
+          corpus,
+          program,
+          limits,
+          countTokens: deps().countTokens,
+          assertCorpusUnchanged: deps().assertCorpusUnchanged,
+          result: changed,
+        }),
+      ),
+    ).resolves.toBeUndefined();
 
     const neverObserved: string[] = [];
     const refused = await run({
@@ -572,5 +634,47 @@ describe("DSE graph extraction receipts", () => {
     );
     expect(staleResult.status).toBe("Refused");
     expect(parserCalls).toBe(0);
+
+    let freshnessChecks = 0;
+    const changedAfterParse = await Effect.runPromise(
+      runDeterministicGraphExtraction({
+        corpus,
+        extractor,
+        limits,
+        deps: {
+          ...deps(),
+          assertCorpusUnchanged: () => {
+            freshnessChecks += 1;
+            return freshnessChecks < 3
+              ? Effect.succeed("freshness.fixture")
+              : Effect.fail(
+                  new GraphExtractionError({
+                    reason: "invalid_corpus",
+                    detailSafe: "The fixture changed after parsing.",
+                  }),
+                );
+          },
+        },
+      }),
+    );
+    expect(changedAfterParse.status).toBe("Refused");
+    expect(changedAfterParse.batches).toEqual([]);
+    expect(changedAfterParse.receipt.parserAttempts).toHaveLength(1);
+    expect(changedAfterParse.receipt.parserAttempts[0]).toMatchObject({
+      outcome: "decoded",
+      outputCharacters: expect.any(Number),
+      outputTokens: expect.any(Number),
+    });
+    await expect(
+      Effect.runPromise(
+        validateGraphExtractionRunReceipt(changedAfterParse.receipt, {
+          corpus,
+          limits,
+          countTokens: deps().countTokens,
+          assertCorpusUnchanged: deps().assertCorpusUnchanged,
+          result: changedAfterParse,
+        }),
+      ),
+    ).resolves.toBeUndefined();
   });
 });

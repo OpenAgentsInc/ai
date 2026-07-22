@@ -24,6 +24,8 @@ const boundedRef = S.String.check(
 const boundedText = (maximum: number) => S.String.check(S.isMaxLength(maximum));
 const count = S.Number.check(S.isInt(), S.isGreaterThanOrEqualTo(0));
 const positiveCount = S.Number.check(S.isInt(), S.isGreaterThanOrEqualTo(1));
+const boundedPositiveCount = (maximum: number) =>
+  S.Number.check(S.isInt(), S.isGreaterThanOrEqualTo(1), S.isLessThanOrEqualTo(maximum));
 const confidence = S.Number.check(
   S.isFinite(),
   S.isGreaterThanOrEqualTo(0),
@@ -151,12 +153,12 @@ export const graphExtractionSignature = makeSignature({
 
 /** Run and batch caps. Every value is explicit and receipt-bound. */
 export const GraphExtractionLimits = S.Struct({
-  maxEntries: positiveCount,
+  maxEntries: boundedPositiveCount(128),
   maxCharacters: positiveCount,
   maxInputTokens: positiveCount,
   maxOutputTokens: positiveCount,
   maxOutputCharacters: positiveCount,
-  maxModelCalls: positiveCount,
+  maxModelCalls: boundedPositiveCount(256),
   maxWallClockMs: positiveCount,
   maxConcurrency: S.Literal(1),
   maxEntriesPerBatch: positiveCount,
@@ -229,7 +231,7 @@ export const GraphExtractionRunReceipt = S.Struct({
   corpusRef: RlmCorpusRef,
   contentDigest: RlmCorpusDigest,
   manifestDigest: RlmManifestDigest,
-  freshnessEvidenceRefs: S.Array(boundedRef).check(S.isMaxLength(1024)),
+  freshnessEvidenceRefs: S.Array(boundedRef).check(S.isMaxLength(512)),
   sourceLocators: S.Array(RlmSourceLocator),
   signatureRef: boundedRef,
   compiledProgramDigest: Sha256Hex,
