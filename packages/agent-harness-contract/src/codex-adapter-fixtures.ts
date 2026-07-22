@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Stream } from "effect";
 import type { CodexAppServerTransport, CodexEvent, CodexExecSpawner } from "./codex-adapter.ts";
 import { CodexTransportError } from "./codex-adapter.ts";
 
@@ -147,11 +147,46 @@ export interface ScriptedCodexAppServerTransport {
  * configured `runTurnFailure` makes every `runTurn` fail with that typed
  * transport error instead.
  */
+/**
+ * A strictly single-element-chunk {@link Stream} over `script`, so a lazy
+ * pull-based consumer observes each event ARRIVE and be projected before the
+ * next event is produced (openagents#9167). `onProduce` records production
+ * order for the incremental-emission proof. `Stream.fromIterable(script)` would
+ * emit the whole script as one chunk and defeat that observation, so each
+ * element is concatenated as its own one-element stream.
+ */
+const perElementCodexStream = (
+  script: ReadonlyArray<CodexEvent>,
+  onProduce?: (event: CodexEvent) => void,
+): Stream.Stream<CodexEvent, CodexTransportError> =>
+  script.reduce(
+    (acc, event) =>
+      acc.pipe(
+        Stream.concat(
+          Stream.fromIterable([event]).pipe(
+            Stream.tap((produced) => Effect.sync(() => onProduce?.(produced))),
+          ),
+        ),
+      ),
+    Stream.empty as Stream.Stream<CodexEvent, CodexTransportError>,
+  );
+
 export const makeScriptedCodexAppServerTransport = (options?: {
   readonly threadId?: string;
   readonly turnScripts?: ReadonlyArray<ReadonlyArray<CodexEvent>>;
   readonly runTurnFailure?: CodexTransportError;
   readonly withSteer?: boolean;
+  /**
+   * When true, the transport also exposes the live streaming seam
+   * {@link CodexAppServerTransport.runTurnStreaming} (openagents#9167),
+   * emitting the same scripted events one at a time as a pull-based stream.
+   * `runTurn` (batch) stays available for back-compat coverage.
+   */
+  readonly streaming?: boolean;
+  /** Records each event AS the streaming transport produces it (incremental proof). */
+  readonly onProduce?: (event: CodexEvent) => void;
+  /** Fails the streaming turn stream with this typed error instead of completing. */
+  readonly streamingFailure?: CodexTransportError;
 }): ScriptedCodexAppServerTransport => {
   const threadId = options?.threadId ?? "thread_app_1";
   const turnScripts = options?.turnScripts ?? [codexAppServerTurnScript];
@@ -176,6 +211,19 @@ export const makeScriptedCodexAppServerTransport = (options?: {
             const index = Math.min(runTurnCalls.length - 1, turnScripts.length - 1);
             return turnScripts[index] ?? [];
           }),
+    ...(options?.streaming === true
+      ? {
+          runTurnStreaming: (params: { readonly threadId: string; readonly prompt: string }) => {
+            runTurnCalls.push(params);
+            const index = Math.min(runTurnCalls.length - 1, turnScripts.length - 1);
+            const script = turnScripts[index] ?? [];
+            const base = perElementCodexStream(script, options?.onProduce);
+            return options?.streamingFailure !== undefined
+              ? base.pipe(Stream.concat(Stream.fail(options.streamingFailure)))
+              : base;
+          },
+        }
+      : {}),
     respondToApproval: (params) =>
       Effect.sync(() => {
         approvalResponses.push(params);

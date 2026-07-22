@@ -1,6 +1,6 @@
 {
   "name": "@openagentsinc/ai",
-  "version": "0.2.1-rc.2",
+  "version": "0.2.1-rc.3",
   "private": false,
   "description": "OpenAgents AI SDK umbrella package. Curated re-exports of the SDK layer entry points.",
   "license": "Apache-2.0",

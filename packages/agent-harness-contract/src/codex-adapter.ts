@@ -302,6 +302,32 @@ export interface CodexAppServerTransport {
     readonly threadId: string;
     readonly prompt: string;
   }) => Effect.Effect<ReadonlyArray<CodexEvent>, CodexTransportError>;
+  /**
+   * LIVE-STREAMING variant of {@link runTurn} (openagents#9167). Returns a
+   * {@link Stream} that emits each {@link CodexEvent} the instant the
+   * app-server produces it and completes when the turn settles, instead of
+   * buffering the whole turn and resolving once. When a transport provides
+   * this, the adapter projects every event onto the neutral
+   * {@link HarnessStreamEvent} stream AS IT ARRIVES — the exact live drive the
+   * claude adapter gets from `Stream.fromAsyncIterable` — so text/reasoning
+   * deltas and tool rows reach the renderer live rather than only after the
+   * turn ends. A live implementation typically backs this with a
+   * `Queue`/`Stream.fromQueue` fed by the JSON-RPC notification handler.
+   *
+   * Back-compat: OPTIONAL. When a transport omits it, the adapter uses the
+   * batch {@link runTurn} above unchanged.
+   *
+   * The FULLY-CONSUMED ordered event set is identical to what {@link runTurn}
+   * would have produced for the same wire, so the settled transcript stays
+   * cursor-exact. Suspend/continue over a live turn is honestly DEGRADED
+   * (`lossy: true`): a turn produced live has no already-computed tail to
+   * replay from a mid-turn cursor, so the adapter never claims a lossless
+   * remainder for the streaming path.
+   */
+  readonly runTurnStreaming?: (params: {
+    readonly threadId: string;
+    readonly prompt: string;
+  }) => Stream.Stream<CodexEvent, CodexTransportError>;
   /** Answer a pending `execCommandApproval` / `applyPatchApproval` request. */
   readonly respondToApproval: (params: {
     readonly requestId: string;
@@ -971,6 +997,12 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
       const source: KhalaRuntimeSource = options.source;
       const sessionId = options.sessionId;
 
+      // openagents#9167: app-server turns drive LIVE when the transport exposes
+      // a streaming seam. Live turns project each event as it arrives and are
+      // honestly lossy on suspend (no already-computed tail to replay).
+      const appServerStreaming =
+        config.mode === "app-server" && config.transport.runTurnStreaming !== undefined;
+
       // Owner-local mode: an omitted or default-home codexHome means the
       // currently-authenticated default Codex home (CODEX_HOME left unset).
       const effectiveCodexHome = normalizeCodexHome(config.codexHome);
@@ -1162,6 +1194,93 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
           interrupt: () => interrupt(turnId),
         });
 
+      /**
+       * openagents#9167 live app-server control: consume the transport's
+       * {@link CodexAppServerTransport.runTurnStreaming} lazily, projecting each
+       * {@link CodexEvent} onto the neutral stream the instant it arrives (like
+       * the claude adapter's live drive), while keeping the session cursors and
+       * the Codex-native thread id in sync as events flow. The fully-consumed
+       * ordered set is identical to the batch path; a mid-turn suspend is
+       * honestly lossy (no already-computed tail to replay).
+       */
+      const liveAppServerControl = (params: {
+        readonly turnId: string;
+        readonly threadId: string;
+        readonly prompt: string;
+        readonly ctx: CodexProjectionContext;
+        readonly advanceCounter: () => number;
+        readonly runTurnStreaming: NonNullable<CodexAppServerTransport["runTurnStreaming"]>;
+      }): HarnessPromptControl => {
+        const { turnId, threadId, prompt, ctx, advanceCounter, runTurnStreaming } = params;
+        const finishBox: { value: KhalaRuntimeFinishReason | undefined } = { value: undefined };
+
+        const events: Stream.Stream<HarnessStreamEvent, HarnessTurnError> = runTurnStreaming({
+          threadId,
+          prompt,
+        }).pipe(
+          Stream.mapError(transportToTurnError(turnId)),
+          // A native thread id can arrive on the live wire; keep resume state
+          // current even though `thread.started` projects to no neutral event.
+          Stream.tap((codexEvent) =>
+            codexEvent.type === "thread.started"
+              ? Ref.set(threadRef, codexEvent.threadId)
+              : Effect.void,
+          ),
+          Stream.flatMap((codexEvent) =>
+            Stream.fromIterable(codexEventToKhalaEvents(codexEvent, ctx)),
+          ),
+          Stream.tap((event) =>
+            Effect.gen(function* () {
+              yield* Ref.set(cursorRef, event.sequence);
+              yield* Ref.set(sequenceRef, advanceCounter());
+              if (ctx.threadBox.value !== undefined) {
+                yield* Ref.set(threadRef, ctx.threadBox.value);
+              }
+              // Live turns carry no already-computed tail: the honest suspend
+              // remainder is empty (see `suspendTurn`, `lossy: true`).
+              yield* Ref.set(
+                activeRef,
+                Option.some({
+                  turnId,
+                  remaining: [] as ReadonlyArray<HarnessStreamEvent>,
+                }),
+              );
+              if (event.kind === "turn.finished") {
+                finishBox.value = event.finishReason;
+              }
+            }),
+          ),
+        );
+
+        const done: Effect.Effect<HarnessTurnResult, HarnessTurnError> = Effect.gen(function* () {
+          const cursor = yield* Ref.get(cursorRef);
+          return {
+            turnId,
+            finishReason: finishBox.value ?? "interrupted",
+            lastCursor: cursor,
+          } satisfies HarnessTurnResult;
+        });
+
+        return {
+          turnId,
+          events,
+          done,
+          submitToolResult: () =>
+            Effect.fail(
+              new HarnessTurnError({
+                harnessId,
+                sessionId,
+                turnId,
+                failureClass: "no_active_tool_call",
+                detail: "codex runs its built-in tools natively; no host-tool result is awaited",
+              }),
+            ),
+          submitToolApproval: submitToolApproval(turnId),
+          submitUserMessage: submitUserMessage(turnId),
+          interrupt: () => interrupt(turnId),
+        };
+      };
+
       const promptTurn = (opts: HarnessPromptTurnOptions) =>
         Effect.gen(function* () {
           const turnId = opts.turnId;
@@ -1188,6 +1307,21 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
                   failureClass: "thread_not_started",
                 }),
               );
+            }
+            // openagents#9167 live path: project each CodexEvent onto the
+            // neutral stream AS IT ARRIVES so text/tool rows reach the renderer
+            // live, mirroring the claude adapter's `Stream.fromAsyncIterable`
+            // drive. The batch `runTurn` path below is unchanged for
+            // transports that do not expose the streaming seam.
+            if (config.transport.runTurnStreaming !== undefined) {
+              return liveAppServerControl({
+                turnId,
+                threadId,
+                prompt,
+                ctx,
+                advanceCounter: () => counter,
+                runTurnStreaming: config.transport.runTurnStreaming,
+              });
             }
             raw = yield* config.transport
               .runTurn({ threadId, prompt })
@@ -1283,13 +1417,17 @@ export const makeCodexHarnessAdapter = (config: CodexAdapterConfig): AgentHarnes
           const turnId = turn?.turnId ?? pendingContinuation?.turnId ?? "unknown";
           const threadId = yield* Ref.get(threadRef);
           if (config.mode === "app-server") {
-            const remaining = turn?.remaining ?? [];
+            // Batch app-server buffers the whole settled turn, so its remainder
+            // is a lossless replay. The live streaming path (openagents#9167)
+            // has no already-computed tail — its remainder is empty and the
+            // continuation is honestly lossy, matching the exec mode's stance.
+            const remaining = appServerStreaming ? [] : (turn?.remaining ?? []);
             return {
               harnessId,
               sessionId,
               turnId,
               cursor,
-              lossy: false,
+              lossy: appServerStreaming,
               data: {
                 turnId,
                 ...(threadId === undefined ? {} : { threadId }),

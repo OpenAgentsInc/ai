@@ -13,6 +13,7 @@ import {
   codexToolCallId,
   CodexTransportError,
   makeCodexHarnessAdapter,
+  type CodexEvent,
   type CodexProjectionContext,
 } from "./codex-adapter.ts";
 import {
@@ -714,5 +715,146 @@ describe("codex failure classification (ported keyword rules)", () => {
     ["stream disconnected", "execution_failed"],
   ] as const)("classifies %j as %s", (detail, expected) => {
     expect(classifyCodexFailureClass(detail)).toBe(expected);
+  });
+});
+
+describe("codex app-server live streaming seam (openagents#9167)", () => {
+  const makeStreamingAdapter = (options?: {
+    readonly onProduce?: (event: CodexEvent) => void;
+    readonly streamingFailure?: CodexTransportError;
+  }) => {
+    const scripted = makeScriptedCodexAppServerTransport({
+      streaming: true,
+      ...(options?.onProduce === undefined ? {} : { onProduce: options.onProduce }),
+      ...(options?.streamingFailure === undefined
+        ? {}
+        : { streamingFailure: options.streamingFailure }),
+    });
+    const adapter = makeCodexHarnessAdapter({
+      mode: "app-server",
+      codexBinaryPath: BINARY,
+      codexHome: ISOLATED_HOME,
+      workingDirectory: "/tmp/workspace",
+      model: "gpt-5.6-sol",
+      transport: scripted.transport,
+    });
+    return { adapter, scripted };
+  };
+
+  test("the live turn settles to the SAME ordered set as the batch path (cursor-exact)", async () => {
+    // Batch reference: the same script projected through the batch transport.
+    const batch = await Effect.runPromise(
+      Effect.gen(function* () {
+        const { adapter } = makeAppServerAdapter();
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        return yield* collect(control.events);
+      }),
+    );
+
+    const live = await Effect.runPromise(
+      Effect.gen(function* () {
+        const { adapter, scripted } = makeStreamingAdapter();
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        const events = yield* collect(control.events);
+        const done = yield* control.done;
+        return { events, done, runTurnCalls: scripted.runTurnCalls };
+      }),
+    );
+
+    // Identical ordered kinds and contiguous sequences: the settled transcript
+    // is byte-for-byte what the batch adapter produced for the same wire.
+    expect(kinds(live.events)).toEqual(kinds(batch));
+    expect(sequences(live.events)).toEqual(sequences(batch));
+    expect(live.events.at(-1)).toEqual(batch.at(-1));
+    expect(live.done.finishReason).toBe("stop");
+    expect(live.done.lastCursor).toBe(9);
+    expect(live.runTurnCalls).toEqual([{ threadId: "thread_app_1", prompt: "hi" }]);
+  });
+
+  test("events arrive INCREMENTALLY — projection begins before production finishes", async () => {
+    const log: Array<string> = [];
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const { adapter } = makeStreamingAdapter({
+          onProduce: (event) => log.push(`produce:${event.type}`),
+        });
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        yield* Stream.runForEach(control.events, (event) =>
+          Effect.sync(() => log.push(`receive:${event.kind}`)),
+        );
+      }),
+    );
+
+    const firstReceive = log.findIndex((entry) => entry.startsWith("receive:"));
+    const lastProduce = log.map((entry) => entry.startsWith("produce:")).lastIndexOf(true);
+    // Live: a neutral event was received BEFORE the last wire event was
+    // produced. A batch transport would emit every `produce:` first, so
+    // firstReceive would fall AFTER lastProduce — this assertion fails for it.
+    expect(firstReceive).toBeGreaterThanOrEqual(0);
+    expect(firstReceive).toBeLessThan(lastProduce);
+    // And the very first turn.started projection lands before the turn's
+    // completion event is ever produced on the wire.
+    const firstTurnStarted = log.indexOf("receive:turn.started");
+    const produceCompleted = log.indexOf("produce:turn.completed");
+    expect(firstTurnStarted).toBeGreaterThanOrEqual(0);
+    expect(produceCompleted).toBeGreaterThan(firstTurnStarted);
+  });
+
+  test("suspend over a live turn is honestly lossy (no already-computed tail)", async () => {
+    const outcome = await Effect.runPromise(
+      Effect.gen(function* () {
+        const { adapter } = makeStreamingAdapter();
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        const phase1 = yield* collect(control.events.pipe(Stream.take(3)));
+        const continuation = yield* session.suspendTurn();
+        return { phase1, continuation };
+      }),
+    );
+    expect(sequences(outcome.phase1)).toEqual([0, 1, 2]);
+    expect(outcome.continuation.cursor).toBe(2);
+    // Streaming turns cannot losslessly replay an un-produced tail.
+    expect(outcome.continuation.lossy).toBe(true);
+    expect((outcome.continuation.data as { remaining: ReadonlyArray<unknown> }).remaining).toEqual(
+      [],
+    );
+  });
+
+  test("a live transport failure surfaces as a typed HarnessTurnError", async () => {
+    const failure = new CodexTransportError({
+      failureClass: "account_rate_limited",
+      detail: "429 too many requests",
+    });
+    const exit = await Effect.runPromiseExit(
+      Effect.gen(function* () {
+        const { adapter } = makeStreamingAdapter({ streamingFailure: failure });
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        return yield* collect(control.events);
+      }),
+    );
+    expect(exit._tag).toBe("Failure");
+    if (exit._tag === "Failure") {
+      const error = exit.cause;
+      // The failure class threads through onto the turn error unchanged.
+      expect(JSON.stringify(error)).toContain("account_rate_limited");
+    }
+  });
+
+  test("approvals still route natively through the live transport", async () => {
+    const { adapter, scripted } = makeStreamingAdapter();
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        // Drain enough to register the scripted approval request.
+        yield* collect(control.events.pipe(Stream.take(5)));
+        yield* control.submitToolApproval(codexToolCallId("call_1"), "allow-once");
+      }),
+    );
+    expect(scripted.approvalResponses).toEqual([{ requestId: "rpc_41", decision: "approved" }]);
   });
 });
