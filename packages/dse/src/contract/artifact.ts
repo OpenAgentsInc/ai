@@ -166,6 +166,10 @@ export const candidateArtifactDigest = (artifact: CandidateArtifact): string => 
   return sha256Hex(canonicalStringify(covered));
 };
 
+/** Content-address only the compiled program bytes, without candidate metadata. */
+export const compiledProgramDigest = (program: CompiledProgram): Sha256Hex =>
+  sha256Hex(canonicalStringify(encodeProgram(program)));
+
 /** The frozen released-artifact reference for a candidate digest (slash-free). */
 export const releasedArtifactRefFor = (
   signatureId: typeof SignatureId.Type,

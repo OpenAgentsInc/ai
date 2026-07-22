@@ -3,6 +3,7 @@ import { Schema as S } from "effect";
 import { signatureId, type SignatureId } from "./refs.js";
 import { PROMPT_IR_SCHEMA_LITERAL, type SignatureContract } from "./signature.js";
 import { makeSignature, type DseSignature } from "./signature.js";
+import { graphExtractionSignature } from "./graph-extraction.js";
 
 /**
  * The first Apple FM signatures.
@@ -234,4 +235,5 @@ export const SIGNATURE_REGISTRY: ReadonlyArray<SignatureRegistryEntry> = [
   { signature: honestChatReplySignature, status: "admitted" },
   { signature: turnRouteSignature, status: "admitted" },
   { signature: triageRouteSignature, status: "draft" },
+  { signature: graphExtractionSignature, status: "draft" },
 ];

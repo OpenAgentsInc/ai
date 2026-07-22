@@ -11,3 +11,4 @@ export * from "./predict.js";
 export * from "./resolver.js";
 export * from "./activation.js";
 export * from "./events.js";
+export * from "./graph-extraction.js";

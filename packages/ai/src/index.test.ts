@@ -46,6 +46,9 @@ describe("@openagentsinc/ai umbrella root", () => {
     expect(typeof Root.Dse.bindProgram).toBe("function");
     expect(typeof Root.Dse.predict).toBe("function");
     expect(typeof Root.Dse.predictReceiptToRuntimeEvents).toBe("function");
+    expect(typeof Root.Dse.runGraphExtraction).toBe("function");
+    expect(typeof Root.Dse.runDeterministicGraphExtraction).toBe("function");
+    expect(typeof Root.Dse.applyGraphExtractionCandidates).toBe("function");
     expect(typeof Root.Graph.buildGraphCorpus).toBe("function");
   });
 
@@ -107,6 +110,8 @@ describe("@openagentsinc/ai layer subpaths", () => {
     expect(ProgramContract.makeSignature).toBe(Root.Dse.makeSignature);
     expect(ProgramRuntime.predict).toBe(Root.Dse.predict);
     expect(typeof ProgramRuntime.predictReceiptToRuntimeEvents).toBe("function");
+    expect(ProgramRuntime.runGraphExtraction).toBe(Root.Dse.runGraphExtraction);
+    expect(ProgramContract.graphExtractionSignature).toBe(Root.Dse.graphExtractionSignature);
     expect(typeof ProgramOptimizer.compileSignature).toBe("function");
     expect(typeof ProgramTest.honestDataset).toBe("function");
     expect("compileSignature" in Program).toBe(false);

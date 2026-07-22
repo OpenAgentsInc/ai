@@ -27,6 +27,8 @@
   },
   "dependencies": {
     "@openagentsinc/agent-runtime-schema": "workspace:*",
+    "@openagentsinc/graph-corpus": "workspace:*",
+    "@openagentsinc/rlm": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

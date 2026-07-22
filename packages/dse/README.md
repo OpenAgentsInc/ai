@@ -41,6 +41,19 @@ only after an explicit promotion.
 - Predict. `predict` renders the compiled program, calls the model, decodes the
   result with the output schema, runs one bounded repair on a first decode
   failure, and writes an append-only predict receipt.
+- Graph extraction. `graphExtractionSignature` accepts bounded, authorized
+  corpus entries. `runGraphExtraction` sends one canonical message envelope.
+  The envelope keeps trusted program blocks separate from untrusted corpus
+  text. The runtime checks immutable-corpus evidence before and after each
+  external call. It enforces entry, character, token, call, and time limits.
+  Version 1 runs batches in serial and requires `maxConcurrency` to be `1`.
+  Model output contains batch-local candidate keys only. Only a validated
+  `Complete` result can enter `applyGraphExtractionCandidates`. That function
+  checks corpus evidence again, joins exact source locators, and builds a graph
+  in a separate pure step. `Partial` output remains an advisory artifact.
+- Deterministic extraction. `runDeterministicGraphExtraction` uses the same
+  candidate contract with a parser reference, a parser version, and zero model
+  calls. It does not invent a model receipt.
 - Events. `predictReceiptToRuntimeEvents` projects predict lifecycle and usage
   onto the existing `KhalaRuntimeEvent` union. Unknown usage stays unknown and
   never becomes zero.
@@ -77,6 +90,9 @@ only after an explicit promotion.
   holdout is too small for a meaningful interval.
 - Signatures. The admitted Apple FM signatures are `AppleFm/HonestChatReply.v1`
   (the honest answer) and `AppleFm/TurnRoute.v1` (the route recommendation).
+  `GraphCorpus/EntityRelationExtraction.v1` is the draft portable graph
+  extraction signature. A consuming host must supply an admitted compiled
+  program, model identity, tokenizer, clock, and spend authority.
 
 ## Generated signature catalog
 

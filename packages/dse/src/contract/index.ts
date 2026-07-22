@@ -19,3 +19,4 @@ export * from "./artifact.js";
 export * from "./promotion.js";
 export * from "./activation.js";
 export * from "./catalog.js";
+export * from "./graph-extraction.js";

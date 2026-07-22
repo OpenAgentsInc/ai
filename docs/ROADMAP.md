@@ -152,6 +152,19 @@ second truth store.
   a DSE signature and exact compiled artifact. Its output is decoded graph
   candidate data with a predict receipt. Deterministic parsers use the same
   output contract without a model call.
+
+SDK-MEM-05 (#34) implements this boundary. Model output contains batch-local
+candidate keys, confidence, and advisory graph facts only. The runtime joins
+exact RLM source locators, scope, compiled-program identity, derivation, and
+usage receipt refs after decode. It reports `Complete`, `Partial`, `Refused`,
+or `Failed` and enforces explicit entry, character, token, output, model-call,
+and time limits. Version 1 runs batches in serial and fixes the concurrency
+limit at `1`. The model receives one receipt-bound canonical envelope that
+separates trusted program blocks from untrusted corpus text. The runtime checks
+immutable-corpus evidence at each external-call boundary. Only a validated
+`Complete` result can enter the separate pure graph build. It adds no database,
+retrieval, ranking, deletion, background, spend, or profile-memory authority.
+
 - **Consuming applications own authority and persistence.** Consent, owner
   scope, promotion, durable adapters, deletion execution, spend admission,
   profile memory, and public projection stay outside the SDK. The OpenAgents

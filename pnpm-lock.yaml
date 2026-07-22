@@ -213,6 +213,12 @@ importers:
       '@openagentsinc/agent-runtime-schema':
         specifier: workspace:*
         version: link:../agent-runtime-schema
+      '@openagentsinc/graph-corpus':
+        specifier: workspace:*
+        version: link:../graph-corpus
+      '@openagentsinc/rlm':
+        specifier: workspace:*
+        version: link:../rlm
       effect:
         specifier: 4.0.0-beta.94
         version: 4.0.0-beta.94

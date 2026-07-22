@@ -11,7 +11,6 @@ import {
   deriveGraphElementRef,
   graphIdentity,
   sha256Hex,
-  type GraphIdentityInput,
 } from "./canonical.ts";
 import {
   GRAPH_CANONICALIZATION_ID,
@@ -25,7 +24,6 @@ import {
   GraphRelation,
   GraphSnapshot,
   graphDescriptorRef,
-  graphDigest,
   graphEntityRef,
   graphMergeRef,
   graphMentionRef,

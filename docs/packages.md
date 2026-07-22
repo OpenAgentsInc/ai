@@ -122,9 +122,16 @@ candidate search and produces proposals; it cannot activate them.
 
 - Key exports: `DseSignature`, `Program`, `bindProgram`, `CandidateArtifact`,
   `predict`, `predictReceiptToRuntimeEvents`, `compileSignature`, dataset and
-  evaluation schemas, and promotion and activation receipts.
+  evaluation schemas, promotion and activation receipts,
+  `graphExtractionSignature`, `runGraphExtraction`,
+  `runDeterministicGraphExtraction`, and `applyGraphExtractionCandidates`.
 - Use the root or `/runtime` for prediction. Import `/optimizer` only in an
-  offline compile application. Use `/test` for deterministic fixtures.
+  offline compile application. Graph extraction accepts only already-filtered
+  corpus entries and returns advisory candidates plus exact-or-unavailable
+  usage receipts. Version 1 is serial. Only a validated `Complete` result can
+  join trusted source locators and enter graph construction. It does not select
+  credentials, persist data, or apply a database operation. Use `/test` for
+  deterministic fixtures.
 - Umbrella paths: `@openagentsinc/ai/program`, `/program/contract`,
   `/program/runtime`, `/program/optimizer`, and `/program/test`.
 - npm: [@openagentsinc/dse](https://www.npmjs.com/package/@openagentsinc/dse)
