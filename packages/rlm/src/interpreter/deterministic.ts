@@ -37,7 +37,23 @@ export const collectBoundedScan = (
     Effect.mapError(mapRlmCorpusError),
   );
 
-const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/**
+ * Compile a grep pattern into a real regular expression, or return `null` when
+ * the pattern is not a valid regex. Both the Tier D deterministic operator and
+ * the Tier S `CorpusOp` `Grep` node use this single helper, so the two tiers
+ * share exactly one match semantics: full JavaScript regular expressions, not
+ * literal-plus-glob. A caller that receives `null` must surface a typed
+ * `operation_contract_violation` instead of silently matching nothing (which
+ * previously made a valid regex pattern in a Tier S program yield zero hits and
+ * an `invalid_citations` terminal).
+ */
+export const compileRlmGrepRegex = (pattern: string, caseSensitive: boolean): RegExp | null => {
+  try {
+    return new RegExp(pattern, caseSensitive ? "" : "i");
+  } catch {
+    return null;
+  }
+};
 
 export const runDeterministicOperation = (
   handle: RlmCorpusHandle,
@@ -68,10 +84,8 @@ export const runDeterministicOperation = (
         if (handle.manifest.coverage.entryCount > limits.maxEntriesScanned) {
           capsHit.push("maxEntriesScanned");
         }
-        let re: RegExp;
-        try {
-          re = new RegExp(operation.pattern, operation.caseSensitive === false ? "i" : "");
-        } catch {
+        const re = compileRlmGrepRegex(operation.pattern, operation.caseSensitive !== false);
+        if (re === null) {
           return yield* new RlmError({
             reason: "operation_contract_violation",
             retryable: false,
@@ -161,14 +175,24 @@ export const runDeterministicOperation = (
     };
   });
 
-/** Pure string match helper for operator registry (no Effect). */
+/**
+ * Pure string match helper for operator registry (no Effect). Uses the SAME
+ * full-regex semantics as the Tier D deterministic `Grep` operator through the
+ * shared {@link compileRlmGrepRegex} helper, so a program author's regex
+ * pattern behaves identically in a Tier S `CorpusOp` `Grep` node and a Tier D
+ * request. An invalid pattern returns zero hits here; the caller is expected to
+ * validate the pattern with {@link compileRlmGrepRegex} first and fail typed
+ * with `operation_contract_violation` rather than treat an invalid regex as an
+ * empty result.
+ */
 export const grepEntries = (
   entries: ReadonlyArray<RlmCorpusEntry>,
   pattern: string,
   caseSensitive: boolean,
   limits: { maxScan: number; maxHits: number },
 ): { hits: ReadonlyArray<RlmCorpusEntry>; scanned: number } => {
-  const re = new RegExp(escapeRegExp(pattern).replace(/\\\*/g, ".*"), caseSensitive ? "" : "i");
+  const re = compileRlmGrepRegex(pattern, caseSensitive);
+  if (re === null) return { hits: [], scanned: 0 };
   const hits: Array<RlmCorpusEntry> = [];
   let scanned = 0;
   for (const e of entries) {

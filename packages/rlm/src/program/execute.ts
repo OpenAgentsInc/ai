@@ -7,6 +7,7 @@ import type { RlmCorpusHandle } from "../corpus/handle.ts";
 import type { RlmEnvironment } from "../environment/values.ts";
 import {
   collectBoundedScan,
+  compileRlmGrepRegex,
   grepEntries,
   mapRlmCorpusError,
 } from "../interpreter/deterministic.ts";
@@ -107,11 +108,24 @@ export const executeProgram = (
         case "CorpusOp": {
           if (node.operator === "Grep") {
             const pattern = String(node.params["pattern"] ?? "");
+            // Tier S `CorpusOp` Grep matches Tier D semantics exactly: a full
+            // regular expression, case-sensitive unless the node opts out with
+            // `caseSensitive: false`. An invalid regex is a typed operation
+            // contract violation, never a silent zero-hit result that would
+            // later surface as `invalid_citations`.
+            const caseSensitive = node.params["caseSensitive"] !== false;
+            if (compileRlmGrepRegex(pattern, caseSensitive) === null) {
+              return yield* new RlmError({
+                reason: "operation_contract_violation",
+                retryable: false,
+                detailSafe: "invalid regex pattern in CorpusOp Grep",
+              });
+            }
             const entries = yield* collectBoundedScan(
               deps.handle,
               deps.budget.maxEntriesScannedPerOperation,
             );
-            const { hits } = grepEntries(entries, pattern, true, {
+            const { hits } = grepEntries(entries, pattern, caseSensitive, {
               maxScan: deps.budget.maxEntriesScannedPerOperation,
               maxHits: deps.budget.maxSpansPerOperation,
             });
