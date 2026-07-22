@@ -156,7 +156,7 @@
             },
             "ClaudeCodeAdapterConfig": {
               "kind": "interface",
-              "sig": "0e00e0b4e11c1e23"
+              "sig": "7c85dbd5b8368201"
             },
             "ClaudeCodeAssistantMessage": {
               "kind": "interface",
@@ -4407,7 +4407,7 @@
             },
             "ClaudeCodeAdapterConfig": {
               "kind": "interface",
-              "sig": "0e00e0b4e11c1e23"
+              "sig": "7c85dbd5b8368201"
             },
             "ClaudeCodeAssistantMessage": {
               "kind": "interface",
@@ -8381,7 +8381,7 @@
             },
             "ClaudeCodeAdapterConfig": {
               "kind": "interface",
-              "sig": "0e00e0b4e11c1e23"
+              "sig": "7c85dbd5b8368201"
             },
             "ClaudeCodeAssistantMessage": {
               "kind": "interface",

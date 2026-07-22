@@ -37,7 +37,7 @@ Extractor schema v2 measures each entry point in an independent TypeScript
 program. It also replaces checkout-local compiler paths with logical paths.
 Thus, a new entry point or a different worktree cannot change an unrelated
 signature hash. The `0.2.1-rc.2` snapshot is the intentional v1-to-v2 hash
-migration. The published `0.2.0-rc.6` snapshot remains unchanged.
+migration. The published v1 snapshots through `0.2.0-rc.7` remain unchanged.
 
 ## Commands
 

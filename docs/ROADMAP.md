@@ -10,7 +10,7 @@ monorepo.
 ## Where the SDK is today
 
 Extracted 2026-07-21 from the openagents monorepo. Apache-2.0. Published rc
-trains through `0.2.0-rc.6`. The monorepo consumes the train from npm and
+trains through `0.2.0-rc.7`. The monorepo consumes the train from npm and
 deleted its in-tree copies. Layers L0–L6 are live: the
 `effect/unstable/ai` model bridge (`ai-model`), the `KhalaRuntimeEvent`
 vocabulary (`agent-runtime-schema`), the durable seq-cursor event log, the
