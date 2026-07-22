@@ -218,6 +218,7 @@ export const GraphExtractionReason = S.Literals([
   "invalid_corpus",
   "candidate_rejected",
   "model_failed",
+  "model_identity_drift",
   "parser_failed",
   "decode_failed",
 ]);

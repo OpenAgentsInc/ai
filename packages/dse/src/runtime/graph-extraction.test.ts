@@ -25,6 +25,7 @@ import {
   type GraphExtractionModel,
   type GraphExtractionRuntimeDeps,
 } from "./graph-extraction.js";
+import { canonicalDigest } from "../internal/canonical.js";
 
 const source = (entryKey: string): RlmSourceLocator => ({
   sourcePlane: "repository",
@@ -230,6 +231,86 @@ describe("DSE graph extraction receipts", () => {
         }),
       ),
     ).resolves.toBeUndefined();
+  });
+
+  test("stops on model identity drift and retains both attempts", async () => {
+    const onePerBatch = S.decodeUnknownSync(GraphExtractionLimits)({
+      ...limits,
+      maxEntriesPerBatch: 1,
+    });
+    const identities = ["fixture.model.a", "fixture.model.b"];
+    let call = 0;
+    const empty = JSON.stringify({ mentions: [], entities: [], relations: [], merges: [] });
+    const result = await run({
+      limits: onePerBatch,
+      model: {
+        complete: () =>
+          Effect.succeed({
+            text: empty,
+            modelIdentity: identities[call++]!,
+            usage: { _tag: "Exact", inputTokens: 12, outputTokens: 8 },
+          }),
+      },
+    });
+    expect(result.status).not.toBe("Complete");
+    expect(result.receipt.reasons).toContain("model_identity_drift");
+    expect(result.receipt.modelIdentity).toBe("fixture.model.a");
+    expect(result.receipt.attempts.map((item) => item.modelIdentity)).toEqual(identities);
+    await expect(
+      Effect.runPromise(
+        validateGraphExtractionRunReceipt(result.receipt, {
+          corpus,
+          program,
+          limits: onePerBatch,
+          countTokens: deps().countTokens,
+          assertCorpusUnchanged: deps().assertCorpusUnchanged,
+          result,
+        }),
+      ),
+    ).resolves.toBeUndefined();
+  });
+
+  test("does not use a planning entry cap to excuse truncated repair history", async () => {
+    const capped = S.decodeUnknownSync(GraphExtractionLimits)({ ...limits, maxEntries: 1 });
+    const empty = JSON.stringify({ mentions: [], entities: [], relations: [], merges: [] });
+    const result = await run({ limits: capped, model: queueModel(["bad", empty]) });
+    const first = result.receipt.attempts[0]!;
+    const {
+      receiptRef: _receiptRef,
+      receiptDigest: _receiptDigest,
+      ...originalContent
+    } = result.receipt;
+    const forgedContent = {
+      ...originalContent,
+      status: "Refused" as const,
+      processedEntries: 0,
+      excludedEntries: corpus.entries.length,
+      plannedInputTokens: first.plannedInputTokens,
+      observedInputTokens: first.usage._tag === "Exact" ? first.usage.inputTokens : 0,
+      outputCharacters: first.outputCharacters,
+      candidateOutputTokens: first.candidateOutputTokens,
+      outputTokens: first.usage._tag === "Exact" ? first.usage.outputTokens : 0,
+      modelCalls: 1,
+      attempts: [first],
+    };
+    const receiptDigest = canonicalDigest(forgedContent);
+    const forgedReceipt = {
+      ...forgedContent,
+      receiptDigest,
+      receiptRef: `graph-extraction-receipt.${receiptDigest}`,
+    } as typeof result.receipt;
+    const forged = { status: "Refused" as const, batches: [], receipt: forgedReceipt };
+    const error = await Effect.runPromise(
+      validateGraphExtractionRunReceipt(forgedReceipt, {
+        corpus,
+        program,
+        limits: capped,
+        countTokens: deps().countTokens,
+        assertCorpusUnchanged: deps().assertCorpusUnchanged,
+        result: forged,
+      }).pipe(Effect.flip),
+    );
+    expect(error).toMatchObject({ reason: "invalid_corpus" });
   });
 
   test("keeps unavailable usage absent instead of fabricating zero", async () => {

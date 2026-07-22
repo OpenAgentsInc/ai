@@ -4990,7 +4990,7 @@
             },
             "Dse": {
               "kind": "alias",
-              "sig": "e08eec9eafa421a2"
+              "sig": "9ca59f6b09cc1e29"
             },
             "EditorAnchor": {
               "kind": "type",
@@ -9659,7 +9659,7 @@
             },
             "GraphExtractionBatchPlan": {
               "kind": "interface",
-              "sig": "1d37e0387fdadeef"
+              "sig": "1e1219d422fe3c74"
             },
             "GraphExtractionCandidates": {
               "kind": "type",
@@ -9707,7 +9707,7 @@
             },
             "GraphExtractionReason": {
               "kind": "type",
-              "sig": "79c3eb78e53e063f"
+              "sig": "2ddb0067b8c37463"
             },
             "GraphExtractionReceiptValidationContext": {
               "kind": "interface",
@@ -9715,11 +9715,11 @@
             },
             "GraphExtractionRunReceipt": {
               "kind": "type",
-              "sig": "95c3fd3f9ccf360c"
+              "sig": "658b77e99fef2b0a"
             },
             "GraphExtractionRunResult": {
               "kind": "interface",
-              "sig": "443aaa12cca613e0"
+              "sig": "038d3928f1ac375f"
             },
             "GraphExtractionRunStatus": {
               "kind": "type",
@@ -10356,11 +10356,11 @@
             },
             "GraphExtractionReason": {
               "kind": "type",
-              "sig": "79c3eb78e53e063f"
+              "sig": "2ddb0067b8c37463"
             },
             "GraphExtractionRunReceipt": {
               "kind": "type",
-              "sig": "95c3fd3f9ccf360c"
+              "sig": "658b77e99fef2b0a"
             },
             "GraphExtractionRunStatus": {
               "kind": "type",
@@ -10806,7 +10806,7 @@
             },
             "GraphExtractionBatchPlan": {
               "kind": "interface",
-              "sig": "1d37e0387fdadeef"
+              "sig": "1e1219d422fe3c74"
             },
             "GraphExtractionError": {
               "kind": "class",
@@ -10834,7 +10834,7 @@
             },
             "GraphExtractionRunResult": {
               "kind": "interface",
-              "sig": "443aaa12cca613e0"
+              "sig": "038d3928f1ac375f"
             },
             "GraphExtractionRuntimeDeps": {
               "kind": "interface",
@@ -14349,7 +14349,7 @@
             },
             "GraphExtractionBatchPlan": {
               "kind": "interface",
-              "sig": "1d37e0387fdadeef"
+              "sig": "1e1219d422fe3c74"
             },
             "GraphExtractionCandidates": {
               "kind": "type",
@@ -14397,7 +14397,7 @@
             },
             "GraphExtractionReason": {
               "kind": "type",
-              "sig": "79c3eb78e53e063f"
+              "sig": "2ddb0067b8c37463"
             },
             "GraphExtractionReceiptValidationContext": {
               "kind": "interface",
@@ -14405,11 +14405,11 @@
             },
             "GraphExtractionRunReceipt": {
               "kind": "type",
-              "sig": "a1aa6089da81a56b"
+              "sig": "da4f7a0e1bf6898e"
             },
             "GraphExtractionRunResult": {
               "kind": "interface",
-              "sig": "5551b5448a2d3a38"
+              "sig": "4cc018dac358f886"
             },
             "GraphExtractionRunStatus": {
               "kind": "type",
@@ -15046,11 +15046,11 @@
             },
             "GraphExtractionReason": {
               "kind": "type",
-              "sig": "79c3eb78e53e063f"
+              "sig": "2ddb0067b8c37463"
             },
             "GraphExtractionRunReceipt": {
               "kind": "type",
-              "sig": "a1aa6089da81a56b"
+              "sig": "da4f7a0e1bf6898e"
             },
             "GraphExtractionRunStatus": {
               "kind": "type",
@@ -15496,7 +15496,7 @@
             },
             "GraphExtractionBatchPlan": {
               "kind": "interface",
-              "sig": "1d37e0387fdadeef"
+              "sig": "1e1219d422fe3c74"
             },
             "GraphExtractionError": {
               "kind": "class",
@@ -15524,7 +15524,7 @@
             },
             "GraphExtractionRunResult": {
               "kind": "interface",
-              "sig": "5551b5448a2d3a38"
+              "sig": "4cc018dac358f886"
             },
             "GraphExtractionRuntimeDeps": {
               "kind": "interface",

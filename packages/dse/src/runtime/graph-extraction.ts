@@ -298,6 +298,7 @@ const statusFor = (args: {
   return args.reasons.some(
     (reason) =>
       reason === "model_failed" ||
+      reason === "model_identity_drift" ||
       reason === "parser_failed" ||
       reason === "decode_failed" ||
       reason === "candidate_rejected",
@@ -497,7 +498,9 @@ export const runGraphExtraction = Effect.fn("Dse.runGraphExtraction")(function* 
         break;
       }
       const completed = completion.success;
-      modelIdentity = completed.modelIdentity;
+      const modelIdentityDrift =
+        modelIdentity !== undefined && modelIdentity !== completed.modelIdentity;
+      if (modelIdentity === undefined) modelIdentity = completed.modelIdentity;
       const text = completed.text;
       const chars = text.length;
       const countedOutputTokens = args.deps.countTokens(text);
@@ -565,12 +568,18 @@ export const runGraphExtraction = Effect.fn("Dse.runGraphExtraction")(function* 
         break;
       }
       freshnessEvidenceRefs.push(afterCallAssertion.success);
+      if (modelIdentityDrift) {
+        reasons.push("model_identity_drift");
+        stop = true;
+        break;
+      }
       if (args.deps.monotonicMs() - started > args.limits.maxWallClockMs) {
         reasons.push("time_cap");
         stop = true;
         break;
       }
       if (completed.usage._tag === "Unavailable") {
+        if (success === undefined) reasons.push("output_token_cap");
         stop = true;
       }
       if (overChars || overTokens) {
@@ -1019,7 +1028,6 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
         item.promptDigest === canonicalDigest(rendered) &&
         item.plannedInputTokens === context.countTokens(rendered) &&
         item.attemptRef === safeRef("graph-extraction-attempt", attemptContent) &&
-        item.modelIdentity === (decoded.modelIdentity ?? "model.unavailable") &&
         (isSuccess
           ? item.candidateDigest !== undefined &&
             ((item.decodeOutcome === "decoded" && item.attempt === 0) ||
@@ -1043,6 +1051,16 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
     const attemptBatchIndexes = decoded.attempts.map((item) =>
       planned.batches.findIndex((batch) => batch.batchRef === item.batchRef),
     );
+    const attemptModelIdentities = [...new Set(decoded.attempts.map((item) => item.modelIdentity))];
+    const modelIdentityAlgebraValid = decoded.reasons.includes("model_identity_drift")
+      ? attemptModelIdentities.length > 1 &&
+        decoded.modelIdentity === decoded.attempts[0]?.modelIdentity
+      : attemptModelIdentities.length <= 1 &&
+        (decoded.attempts.length === 0 ||
+          decoded.modelIdentity === attemptModelIdentities[0] ||
+          (decoded.modelIdentity === undefined &&
+            attemptModelIdentities[0] === "model.unavailable" &&
+            decoded.attempts.every((item) => item.decodeOutcome === "model_failed")));
     const modelAttemptHistoryValid =
       (context.program !== undefined || decoded.attempts.length === 0) &&
       [...modelAttemptsByBatch.values()].every((group) => {
@@ -1061,14 +1079,46 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
             group.slice(0, -1).every((item) => item.decodeOutcome === "rejected")
           );
         const terminal = group.at(-1)!;
-        const capTermination =
-          decoded.reasons.some((reason) => reason.endsWith("_cap")) ||
-          terminal.usage._tag === "Unavailable";
+        const isExactTerminalAttempt = terminal.attemptRef === decoded.attempts.at(-1)?.attemptRef;
+        const batch = plannedByRef.get(terminal.batchRef);
+        const nextAttempt = terminal.attempt + 1;
+        const nextEnvelope =
+          batch === undefined || context.program === undefined
+            ? undefined
+            : canonicalStringify({
+                trusted: {
+                  system: context.program.promptIr.system,
+                  instruction: context.program.promptIr.instruction,
+                  toolPolicy: context.program.promptIr.toolPolicy,
+                  outputFormat: context.program.promptIr.outputFormat,
+                  fewShotExampleIds: context.program.promptIr.fewShotExampleIds,
+                },
+                untrustedContext: canonicalStringify(promptInput(batch)),
+                repairInstruction: nextAttempt > 0 ? REPAIR_SUFFIX : "",
+              });
+        const nextInputTokens = nextEnvelope === undefined ? 0 : context.countTokens(nextEnvelope);
+        const executionCapTermination =
+          isExactTerminalAttempt &&
+          ((decoded.reasons.includes("model_call_cap") &&
+            decoded.modelCalls >= decoded.limits.maxModelCalls) ||
+            (decoded.reasons.includes("input_token_cap") &&
+              (decoded.plannedInputTokens + nextInputTokens > decoded.limits.maxInputTokens ||
+                nextInputTokens > decoded.limits.maxInputTokensPerBatch ||
+                (decoded.observedInputTokens ?? 0) > decoded.limits.maxInputTokens)) ||
+            (decoded.reasons.includes("output_token_cap") &&
+              ((decoded.candidateOutputTokens ?? 0) > decoded.limits.maxOutputTokens ||
+                (decoded.outputTokens ?? 0) > decoded.limits.maxOutputTokens ||
+                terminal.usage._tag === "Unavailable")) ||
+            (decoded.reasons.includes("output_character_cap") &&
+              decoded.outputCharacters > decoded.limits.maxOutputCharacters) ||
+            (decoded.reasons.includes("time_cap") &&
+              decoded.elapsedMs >= decoded.limits.maxWallClockMs));
         return (
           group.slice(0, -1).every((item) => item.decodeOutcome === "rejected") &&
           (terminal.decodeOutcome === "model_failed" ||
             (terminal.decodeOutcome === "rejected" &&
-              (group.length === context.program.decodePolicy.maxRepairs + 1 || capTermination)))
+              (group.length === context.program.decodePolicy.maxRepairs + 1 ||
+                executionCapTermination)))
         );
       }) &&
       attemptBatchIndexes.every(
@@ -1164,6 +1214,7 @@ export const validateGraphExtractionRunReceipt = Effect.fn("Dse.validateGraphExt
         decoded.compiledProgramDigest !== compiledProgramDigest(context.program)) ||
       !batchesValid ||
       !attemptsValid ||
+      !modelIdentityAlgebraValid ||
       !modelAttemptHistoryValid ||
       !parserAttemptsValid ||
       !deterministicParserCoverageValid ||
