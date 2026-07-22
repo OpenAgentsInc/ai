@@ -36,6 +36,7 @@ cursor.
 | `@openagentsinc/agent-harness-contract`    | L2–L5 core                    |
 | `@openagentsinc/ai-model`                  | L0 model-call bridge          |
 | `@openagentsinc/history-corpus`            | L6 recall                     |
+| `@openagentsinc/rlm`                       | L6 recursive engine           |
 | `@openagentsinc/ai-sdk-sandbox-local`      | L3 interop                    |
 | `@openagentsinc/ai-sdk-sandbox-openagents` | L3 interop                    |
 
@@ -57,6 +58,19 @@ contract and emits `KhalaRuntimeEvent` upward:
 The generic [ACP adapter](packages/agent-harness-contract/src/acp-adapter.ts)
 serves any Agent Client Protocol peer; Grok CLI (`grok_acp`) uses it directly
 and the Cursor adapter (`cursor_acp`) builds on it.
+
+## RLM
+
+The SDK ships first-class Recursive Language Model support: recall instead of
+compaction. `@openagentsinc/rlm` (public entry point `@openagentsinc/ai/rlm`)
+answers bounded, cited questions over a durable, redaction-aware corpus
+without putting the corpus into a model context window — a zero-model-call
+deterministic tier plus an Effect-native engine for declarative model/RLM
+recursion, under global budgets with exact-usage honesty and citation
+validation, exposed as one typed service and an Effect `Tool` adapter for
+harness consumption. An RLM result is evidence, not authority: a completed
+answer is a cited candidate, never an authorization. Spec, architecture, and
+conformance gates: [`docs/rlm/`](docs/rlm/README.md).
 
 ## Train policy
 
