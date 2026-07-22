@@ -116,6 +116,9 @@ and exact source locators in one deterministic snapshot.
 - Direct contract paths: `@openagentsinc/graph-corpus/capabilities` and
   `@openagentsinc/graph-corpus/deletion`, and
   `@openagentsinc/graph-corpus/ranking`.
+- Portable archive path: `@openagentsinc/graph-corpus/archive`. It exports and
+  imports canonical, bounded, inert graph corpus archive v1 data. It is not on
+  the root or AI umbrella surface in this release candidate.
 
 ## @openagentsinc/dse
 

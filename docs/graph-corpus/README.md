@@ -81,3 +81,19 @@ separate snapshot. It does not change graph truth or remove a result.
 Content hashes prove integrity. They do not grant authority or prove who
 approved an operation. The package gives no owner consent, promotion,
 persistence, delete execution, archive, database, or product-query authority.
+
+## Archive v1
+
+Issue #37 adds a canonical UTF-8 JSON archive at the direct `./archive`
+subpath. Mandatory graph, node, edge, source-membership, merge-evidence,
+provenance, and descriptor sections have independent digests. Optional vector,
+summary, ranking, and content-extension sections stay outside base graph
+identity. Portable vector and summary payloads have separate payload digests
+and strict size, encoding, owner, descriptor, and policy checks.
+
+Import checks byte and item limits, canonical bytes, the format version, all
+digests, exact ordering, provenance refs, and current graph bindings. It then
+rebuilds the graph through `buildGraphCorpus`. Imported data is inert and
+deeply frozen. A content extension also requires a separately supplied trusted
+host authority context. Import never infers consent, activation, persistence,
+or compatibility with COGX or another format.

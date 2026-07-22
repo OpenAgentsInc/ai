@@ -175,6 +175,30 @@ Use `rankingArtifactsFromSnapshot` with the current graph and exact RLM
 projection context to add validated ranking artifacts to a delete-planning
 inventory.
 
-The embedding descriptor identifies fields and dimensions only. This package
-does not store vectors. Natural-language graph queries, Cypher, model calls,
+The embedding descriptor identifies fields and dimensions only. The live graph
+snapshot does not store vectors. The optional archive section can carry bounded
+portable vector payloads. Natural-language graph queries, Cypher, model calls,
 storage, delete execution, and product wiring are outside this package.
+
+## Portable archive
+
+The `@openagentsinc/graph-corpus/archive` subpath supplies the OpenAgents graph
+corpus archive v1. The encoder produces canonical UTF-8 JSON. The manifest
+binds exact archive content, manifest, archive-ref, graph, provenance,
+descriptor, node, edge, source-membership, and merge-evidence digests. A
+declared `snapshot_export` capability is required to export an archive.
+
+Optional vector and summary records contain content-addressed bounded payloads.
+Optional ranking state remains separate from graph truth. Omitted artifact
+planes never become complete coverage. A content extension requires an exact
+graph binding, source membership, classification, policy subset, content
+digest, and host authority evidence. Import rejects the extension unless the
+caller supplies the matching trusted authority context.
+
+The importer checks the byte limit before JSON parsing. It rejects invalid
+UTF-8, noncanonical bytes, unsupported versions, legacy data that requires a
+migration, changed section digests, stale graph bindings, and invalid optional
+payloads. It rebuilds the graph with `buildGraphCorpus` and returns only deeply
+frozen data. It does not return a service or callback. Import does not grant
+consent, activate an adapter, call a model, read credentials, write storage, or
+prove compatibility with another memory format.

@@ -6,6 +6,8 @@
   "license": "Apache-2.0",
   "files": [
     "src/builder.ts",
+    "src/archive.ts",
+    "src/artifact-inventory-integrity.ts",
     "src/capabilities.ts",
     "src/canonical.ts",
     "src/deletion.ts",
@@ -21,6 +23,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./capabilities": "./src/capabilities.ts",
+    "./archive": "./src/archive.ts",
     "./deletion": "./src/deletion.ts",
     "./rlm": "./src/rlm.ts",
     "./ranking": "./src/ranking.ts",

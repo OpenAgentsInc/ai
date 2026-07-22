@@ -9,6 +9,7 @@ import {
   sha256Hex,
 } from "./canonical.ts";
 import { buildGraphCorpus, verifyBuiltGraphCorpus, type BuiltGraphCorpus } from "./builder.ts";
+import { checkGraphArtifactInventoryIntegrity } from "./artifact-inventory-integrity.ts";
 import {
   GRAPH_CANONICALIZATION_ID,
   GraphDigest,
@@ -439,7 +440,7 @@ export const makeGraphArtifactInventory = (
   });
 };
 
-const validateInventory = (
+const validateGraphArtifactInventoryIntegrity = (
   built: BuiltGraphCorpus,
   inventory: GraphArtifactInventory,
 ): Effect.Effect<void, GraphDeletePlanningError> =>
@@ -453,88 +454,8 @@ const validateInventory = (
         detailSafe: "The artifact inventory does not match its schema.",
       });
     }
-    const { inventoryDigest, ...withoutDigest } = decoded;
-    if (
-      digest(inventoryContent(withoutDigest as Omit<GraphArtifactInventory, "inventoryDigest">)) !==
-      inventoryDigest
-    ) {
-      return yield* new GraphDeletePlanningError({
-        reason: "inventory_changed",
-        detailSafe: "The artifact inventory digest does not match its content.",
-      });
-    }
-    if (
-      decoded.graphRef !== built.snapshot.graphRef ||
-      decoded.scopeRef !== built.snapshot.scopeRef ||
-      decoded.graphDigest !== built.snapshot.graphDigest ||
-      decoded.manifestDigest !== built.manifest.manifestDigest
-    ) {
-      return yield* new GraphDeletePlanningError({
-        reason: "inventory_changed",
-        detailSafe: "The artifact inventory is bound to a different graph.",
-      });
-    }
-    const incompletePlanes = Object.entries(decoded.coverage).filter(
-      ([, coverage]) => coverage._tag === "Incomplete",
-    );
-    if (
-      (decoded._tag === "Complete" && incompletePlanes.length > 0) ||
-      (decoded._tag === "Incomplete" && incompletePlanes.length === 0) ||
-      incompletePlanes.some(
-        ([plane, coverage]) =>
-          coverage._tag === "Incomplete" &&
-          (coverage.gaps.length === 0 ||
-            coverage.gaps.some((gap) =>
-              plane === "vectors"
-                ? gap.artifactKind !== "vector"
-                : plane === "summaries"
-                  ? gap.artifactKind !== "summary"
-                  : gap.artifactKind !== "ranking_ref",
-            )),
-      )
-    ) {
-      return yield* new GraphDeletePlanningError({
-        reason: "invalid_inventory",
-        detailSafe: "Artifact-plane coverage is incomplete or inconsistent.",
-      });
-    }
-    const arraysAreCanonical =
-      canonicalJson(decoded.vectors) ===
-        canonicalJson(byRef(decoded.vectors, (item) => item.artifactRef)) &&
-      canonicalJson(decoded.summaries) ===
-        canonicalJson(byRef(decoded.summaries, (item) => item.artifactRef)) &&
-      canonicalJson(decoded.rankingRefs) ===
-        canonicalJson(byRef(decoded.rankingRefs, (item) => item.artifactRef)) &&
-      Object.values(decoded.coverage).every(
-        (coverage) =>
-          coverage._tag === "Complete" ||
-          canonicalJson(coverage.gaps) ===
-            canonicalJson(byRef(coverage.gaps, (item) => canonicalJson(item))),
-      );
-    if (!arraysAreCanonical) {
-      return yield* new GraphDeletePlanningError({
-        reason: "invalid_inventory",
-        detailSafe: "The artifact inventory is not in canonical order.",
-      });
-    }
-    const allArtifacts = [...decoded.vectors, ...decoded.summaries, ...decoded.rankingRefs];
-    if (new Set(allArtifacts.map((item) => item.artifactRef)).size !== allArtifacts.length) {
-      return yield* new GraphDeletePlanningError({
-        reason: "invalid_inventory",
-        detailSafe: "The artifact inventory contains a duplicate artifact ref.",
-      });
-    }
-    const elementRefs = new Set([
-      ...built.snapshot.mentions.map((item) => item.elementRef),
-      ...built.snapshot.entities.map((item) => item.elementRef),
-      ...built.snapshot.relations.map((item) => item.elementRef),
-    ]);
-    if (allArtifacts.some((item) => !elementRefs.has(item.ownerElementRef))) {
-      return yield* new GraphDeletePlanningError({
-        reason: "invalid_inventory",
-        detailSafe: "A declared artifact owner is not in the graph snapshot.",
-      });
-    }
+    const failure = checkGraphArtifactInventoryIntegrity(built, decoded);
+    if (failure !== undefined) return yield* new GraphDeletePlanningError(failure);
   });
 
 const membershipRemoval = (
@@ -621,7 +542,7 @@ export const planGraphSourceDeletion = Effect.fn("GraphCorpus.planSourceDeletion
         }),
     ),
   );
-  yield* validateInventory(built, inventory);
+  yield* validateGraphArtifactInventoryIntegrity(built, inventory);
 
   const sourceMembershipRemovals: Array<GraphSourceMembershipRemoval> = [];
   const removableElements: Array<GraphRemovableElement> = [];
@@ -1120,7 +1041,7 @@ const validateCompleteAfter = Effect.fn("GraphCorpus.validateCompleteDeleteAfter
         }),
     ),
   );
-  yield* validateInventory(context.after, context.afterInventory);
+  yield* validateGraphArtifactInventoryIntegrity(context.after, context.afterInventory);
   const expectedAfter = yield* projectGraphAfter(plan, context.before);
   const expectedInventory = projectInventoryAfter(plan, context.beforeInventory, expectedAfter);
   if (

@@ -1039,7 +1039,7 @@ export const makeGraphRankingSnapshot = Effect.fn("GraphCorpus.makeGraphRankingS
   },
 );
 
-const snapshotSelfValid = (
+export const validateGraphRankingSnapshotIntegrity = (
   snapshot: GraphRankingSnapshot,
 ): Effect.Effect<void, GraphRankingError> =>
   Effect.gen(function* () {
@@ -1107,7 +1107,7 @@ export const validateGraphRankingSnapshot = Effect.fn("GraphCorpus.validateGraph
   ) {
     const authentic = yield* validateAuthenticResult(context);
     const result = yield* validateCompleteResult(authentic);
-    yield* snapshotSelfValid(snapshot);
+    yield* validateGraphRankingSnapshotIntegrity(snapshot);
     if (!sameIdentity(snapshot, identityFrom(context.built, result)))
       return yield* fail(
         "stale_graph",

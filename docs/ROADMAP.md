@@ -276,9 +276,21 @@ delete planner without making ranking state part of graph truth.
 
 #### Portability
 
-After the graph and deletion contracts stabilize, the SDK adds a versioned,
-content-addressed graph-corpus archive. Export preserves schema versions,
-digests, provenance refs, coverage, exclusions, and optional ranking state.
+SDK-MEM-08 (#37) adds the OpenAgents graph corpus archive v1. It uses canonical
+UTF-8 JSON and independently digested graph, node, edge, source-membership,
+merge-evidence, provenance, and descriptor sections. The manifest binds exact
+content, section, manifest, archive-ref, coverage, exclusion, ordering, and
+provenance-ref values. Optional portable vector and summary payloads and #36
+ranking state do not change base graph identity.
+
+The importer applies byte and aggregate item limits before expensive work. It
+rejects noncanonical bytes, changed digests, stale bindings, unsupported
+versions, and unversioned data that requires a migration. It rebuilds the
+graph through `buildGraphCorpus` and returns deeply frozen inert data only. A
+content extension requires an exact source, graph, policy, classification,
+content-digest, and separately supplied host-authority binding. Import does not
+activate a service, call a model, access credentials, write storage, grant
+consent, or claim COGX compatibility.
 Private source content is absent unless a host separately authorizes it.
 Import validates bytes and produces an inert corpus snapshot. It does not
 grant consent, promote memory, activate an index, or claim compatibility with
