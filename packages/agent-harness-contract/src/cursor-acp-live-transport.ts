@@ -37,6 +37,15 @@ const asRecord = (value: unknown): JsonRecord | null =>
 
 const asString = (value: unknown): string => (typeof value === "string" ? value : "");
 
+/** Bound wire identifiers onto the Khala safe-ref charset. */
+const toSafeRef = (value: string, fallback: string): string => {
+  const cleaned = value
+    .replace(/[^A-Za-z0-9._:-]+/g, "-")
+    .replace(/^[^A-Za-z0-9]+/, "")
+    .slice(0, 200);
+  return cleaned === "" ? fallback : cleaned;
+};
+
 const turnError = (failureClass: string, detail: string): HarnessTurnError =>
   new HarnessTurnError({
     harnessId: "cursor",
@@ -108,14 +117,17 @@ export const makeLiveCursorAcpTransport = (
               break;
             }
             case "tool_call": {
-              const toolCallId = asString(update.toolCallId) || `toolcall.cursor.${updates.length}`;
-              const toolName = asString(update.title) || asString(update.kind) || "tool";
+              const toolCallId = toSafeRef(
+                asString(update.toolCallId),
+                `toolcall.cursor.${updates.length}`,
+              );
+              const toolName = toSafeRef(asString(update.title) || asString(update.kind), "tool");
               startedCalls.set(toolCallId, toolName);
               updates.push({ type: "acp_tool_call", toolCallId, toolName });
               break;
             }
             case "tool_call_update": {
-              const toolCallId = asString(update.toolCallId);
+              const toolCallId = toSafeRef(asString(update.toolCallId), "");
               const status = asString(update.status);
               if (toolCallId !== "" && (status === "completed" || status === "failed")) {
                 updates.push({

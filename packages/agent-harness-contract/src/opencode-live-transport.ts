@@ -77,7 +77,7 @@ export const opencodeMessageToEvents = (message: JsonRecord): OpencodeEvent[] =>
         });
         break;
       case "tool": {
-        const callID = asString(part.callID) || asString(part.id) || "call";
+        const callID = toSafeRefOc(asString(part.callID) || asString(part.id), "call");
         const state = asRecord(part.state) ?? {};
         events.push({
           type: "session.next.tool.called",
@@ -123,6 +123,14 @@ export const opencodeMessageToEvents = (message: JsonRecord): OpencodeEvent[] =>
     }
   }
   return events;
+};
+
+const toSafeRefOc = (value: string, fallback: string): string => {
+  const cleaned = value
+    .replace(/[^A-Za-z0-9._:-]+/g, "-")
+    .replace(/^[^A-Za-z0-9]+/, "")
+    .slice(0, 200);
+  return cleaned === "" ? fallback : cleaned;
 };
 
 const transportError = (failureClass: string, detail: string): OpencodeTransportError =>

@@ -36,6 +36,15 @@ const asRecord = (value: unknown): JsonRecord | null =>
 
 const asString = (value: unknown): string => (typeof value === "string" ? value : "");
 
+/** Bound wire identifiers onto the Khala safe-ref charset. */
+const toSafeRef = (value: string, fallback: string): string => {
+  const cleaned = value
+    .replace(/[^A-Za-z0-9._:-]+/g, "-")
+    .replace(/^[^A-Za-z0-9]+/, "")
+    .slice(0, 200);
+  return cleaned === "" ? fallback : cleaned;
+};
+
 const turnError = (failureClass: string, detail: string): HarnessTurnError =>
   new HarnessTurnError({
     harnessId: "goose",
@@ -77,6 +86,22 @@ export const makeLiveGooseAcpTransport = (
           return;
         }
         if (message === null) return;
+        if (message.method === "session/request_permission" && message.id !== undefined) {
+          const params = asRecord(message.params) ?? {};
+          const options = Array.isArray(params.options) ? params.options : [];
+          const ids = options
+            .map((option) => asString(asRecord(option)?.optionId))
+            .filter((id) => id !== "");
+          const chosen =
+            ids.find((id) => id.includes("allow") && id.includes("once")) ??
+            ids.find((id) => id.includes("allow")) ??
+            ids[0] ??
+            "allow-once";
+          child.stdin!.write(
+            `${JSON.stringify({ jsonrpc: "2.0", id: message.id, result: { outcome: { outcome: "selected", optionId: chosen } } })}\n`,
+          );
+          return;
+        }
         if (message.method === "session/update") {
           const params = asRecord(message.params) ?? {};
           const update = asRecord(params.update) ?? {};
@@ -94,14 +119,17 @@ export const makeLiveGooseAcpTransport = (
               break;
             }
             case "tool_call": {
-              const toolCallId = asString(update.toolCallId) || `toolcall.goose.${updates.length}`;
-              const toolName = asString(update.title) || asString(update.kind) || "tool";
+              const toolCallId = toSafeRef(
+                asString(update.toolCallId),
+                `toolcall.goose.${updates.length}`,
+              );
+              const toolName = toSafeRef(asString(update.title) || asString(update.kind), "tool");
               startedCalls.set(toolCallId, toolName);
               updates.push({ type: "acp_tool_call", toolCallId, toolName });
               break;
             }
             case "tool_call_update": {
-              const toolCallId = asString(update.toolCallId);
+              const toolCallId = toSafeRef(asString(update.toolCallId), "");
               const status = asString(update.status);
               if (toolCallId !== "" && (status === "completed" || status === "failed")) {
                 updates.push({
@@ -159,7 +187,10 @@ export const makeLiveGooseAcpTransport = (
         "initialize",
         {
           protocolVersion: 1,
-          clientCapabilities: { fs: { readTextFile: true, writeTextFile: true }, terminal: true },
+          clientCapabilities: {
+            fs: { readTextFile: false, writeTextFile: false },
+            terminal: false,
+          },
         },
         startTimeoutMs,
       );
