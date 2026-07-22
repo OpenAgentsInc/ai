@@ -49,6 +49,8 @@ contract and emits `KhalaRuntimeEvent` upward:
 | Claude Code    | `makeClaudeCodeHarnessAdapter` | [`claude-code-adapter.ts`](packages/agent-harness-contract/src/claude-code-adapter.ts) |
 | Codex          | `makeCodexHarnessAdapter`      | [`codex-adapter.ts`](packages/agent-harness-contract/src/codex-adapter.ts)             |
 | OpenCode       | `makeOpencodeAdapter`          | [`opencode-adapter.ts`](packages/agent-harness-contract/src/opencode-adapter.ts)       |
+| Pi             | `makePiHarnessAdapter`         | [`pi-adapter.ts`](packages/agent-harness-contract/src/pi-adapter.ts)                   |
+| Goose          | `makeGooseHarnessAdapter`      | [`goose-adapter.ts`](packages/agent-harness-contract/src/goose-adapter.ts)             |
 | Cursor (ACP)   | `makeCursorHarnessAdapter`     | [`cursor-adapter.ts`](packages/agent-harness-contract/src/cursor-adapter.ts)           |
 | Grok CLI (ACP) | `makeAcpHarnessAdapter`        | [`acp-adapter.ts`](packages/agent-harness-contract/src/acp-adapter.ts)                 |
 
