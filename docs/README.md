@@ -77,6 +77,8 @@ git config core.hooksPath .githooks   # enable pre-push gate
 
 - First-class Recursive Language Model specification:
   [`rlm/README.md`](rlm/README.md)
+- DSE (Declarative Self-Improving Effect) compile-side introduction:
+  [`dse/README.md`](dse/README.md)
 - Monorepo consumer: https://github.com/OpenAgentsInc/openagents
 - Monorepo pointer doc (after swap): `docs/ai-sdk/README.md` in openagents
 - npm scope: `@openagentsinc/*`
