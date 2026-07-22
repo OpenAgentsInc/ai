@@ -109,6 +109,11 @@ export interface ClaudeCodeQueryOptions {
   readonly includePartialMessages?: boolean;
   readonly allowedTools?: ReadonlyArray<string>;
   readonly disallowedTools?: ReadonlyArray<string>;
+  readonly maxTurns?: number;
+  readonly pathToClaudeCodeExecutable?: string;
+  readonly mcpServers?: unknown;
+  readonly plugins?: ReadonlyArray<unknown>;
+  readonly skills?: ReadonlyArray<string>;
 }
 
 export interface ClaudeCodeQueryParams {
@@ -844,6 +849,14 @@ export interface ClaudeCodeAdapterConfig {
   readonly env?: Readonly<Record<string, string>>;
   /** Durable interaction seam for AskUserQuestion/approval routing. */
   readonly interaction?: ClaudeCodeInteractionSeam;
+  /**
+   * Host-owned query-option overrides, merged LAST onto the adapter's
+   * assembled options (openagents#9167 slice 2). The host owns whatever it
+   * overrides — including `canUseTool` and `permissionMode`: overriding the
+   * approval path bypasses the adapter's RuntimeInteraction routing, so the
+   * host must provide its own durable approval handling in exchange.
+   */
+  readonly queryOverrides?: Readonly<Record<string, unknown>>;
 }
 
 interface ActiveClaudeTurn {
@@ -1011,6 +1024,7 @@ export const makeClaudeCodeHarnessAdapter = (config: ClaudeCodeAdapterConfig): A
             ...(allowedTools === undefined ? {} : { allowedTools }),
             ...(disallowedTools === undefined ? {} : { disallowedTools }),
             ...(claudeSession.id === undefined ? {} : { resume: claudeSession.id }),
+            ...(config.queryOverrides ?? {}),
           },
         });
 

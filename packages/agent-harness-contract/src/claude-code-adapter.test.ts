@@ -649,3 +649,39 @@ describe("claude-code adapter — identity, isolation, and turn semantics", () =
     expect(error.capability).toBe("compact");
   });
 });
+
+describe("claude code adapter — host query overrides (#9167 slice 2)", () => {
+  test("queryOverrides merge last and win over adapter-assembled options", async () => {
+    const { calls, query } = makeScriptedQuery([REPRESENTATIVE_SCRIPT]);
+    const hostCanUseTool = async () => ({ behavior: "allow" as const, updatedInput: {} });
+    const adapter = makeClaudeCodeHarnessAdapter({
+      query,
+      configDir: "/tmp/claude-homes/s1",
+      model: "claude-haiku-4-5-20251001",
+      queryOverrides: {
+        maxTurns: 25,
+        pathToClaudeCodeExecutable: "/bundle/claude",
+        mcpServers: { delegate: { command: "node" } },
+        skills: ["review"],
+        canUseTool: hostCanUseTool,
+        permissionMode: "default",
+      },
+    });
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const session = yield* adapter.start({ sessionId: "s1", source: SOURCE });
+        const control = yield* session.promptTurn({ turnId: "t1", prompt: "hi" });
+        yield* collect(control.events);
+        yield* control.done;
+      }),
+    );
+    const options = calls[0]?.options as Record<string, unknown>;
+    expect(options.maxTurns).toBe(25);
+    expect(options.pathToClaudeCodeExecutable).toBe("/bundle/claude");
+    expect(options.skills).toEqual(["review"]);
+    expect(options.canUseTool).toBe(hostCanUseTool);
+    // Adapter-assembled fields the host did not override stay intact.
+    expect(options.model).toBe("claude-haiku-4-5-20251001");
+    expect(options.includePartialMessages).toBe(true);
+  });
+});
