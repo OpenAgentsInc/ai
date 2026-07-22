@@ -40,3 +40,5 @@ export * from "./chat-transport.ts";
 export * from "./chat-transport-event-log.ts";
 export * from "./chat-transport-sse.ts";
 export * from "./chat-transport-ipc.ts";
+export * from "./meta-agent-harness.ts";
+export * from "./acp-server.ts";
