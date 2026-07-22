@@ -358,6 +358,19 @@ export const acpPermissionToRuntimeInteractionPayload = (
 // ---------------------------------------------------------------------------
 
 /** Configuration for {@link makeAcpHarnessAdapter}. */
+/**
+ * Live ACP peer seam (buffered): one settled prompt turn's ordered projection
+ * events. A live implementation owns the JSON-RPC wire (initialize,
+ * authenticate, session/new, session/prompt + session/update notifications)
+ * and maps it onto {@link AcpAdapterEvent}. Scripted configs synthesize one.
+ */
+export interface AcpTransport {
+  readonly promptTurn: (params: {
+    readonly prompt: string;
+  }) => Effect.Effect<ReadonlyArray<AcpAdapterEvent>, HarnessTurnError>;
+  readonly shutdown: () => Effect.Effect<void>;
+}
+
 export interface AcpHarnessAdapterConfig {
   /** Stable kebab-case slug for the peer (`grok`, `cursor`). */
   readonly harnessId: string;
@@ -372,6 +385,8 @@ export interface AcpHarnessAdapterConfig {
   readonly adapterKind?: AgentRuntimeAdapterKind;
   /** Scripted ACP projection sequence replayed for each prompt turn (no live peer). */
   readonly script?: ReadonlyArray<AcpAdapterEvent>;
+  /** Live peer transport; when present it overrides {@link script}. */
+  readonly transport?: AcpTransport;
   /** Built-in tools the peer exposes natively, for normalization/filtering. */
   readonly builtinTools?: ReadonlyArray<HarnessBuiltinTool>;
   readonly supportsBuiltinToolApprovals?: boolean;
@@ -531,7 +546,11 @@ export const makeAcpHarnessAdapter = (config: AcpHarnessAdapterConfig): AgentHar
             source,
             nextSequence: () => counter++,
           };
-          const events = script.flatMap((event) => acpEventToKhalaEvents(event, ctx));
+          const rawEvents =
+            config.transport === undefined
+              ? script
+              : yield* config.transport.promptTurn({ prompt: opts.prompt });
+          const events = rawEvents.flatMap((event) => acpEventToKhalaEvents(event, ctx));
           yield* Ref.set(sequenceRef, counter);
           yield* Ref.set(activeRef, Option.some({ turnId, remaining: events }));
           return makeControl({

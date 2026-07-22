@@ -28,6 +28,8 @@ import { makeClaudeCodeHarnessAdapter } from "./claude-code-adapter.ts";
 import { makeCodexHarnessAdapter } from "./codex-adapter.ts";
 import { makeLiveCodexExecSpawner } from "./codex-exec-live-spawner.ts";
 import { runHarnessConversation } from "./harness-conversation-driver.ts";
+import { makeAcpHarnessAdapter } from "./acp-adapter.ts";
+import { makeLiveGrokAcpTransport } from "./grok-acp-live-transport.ts";
 import { makeOpencodeAdapter } from "./opencode-adapter.ts";
 import { makeLiveOpencodeTransport } from "./opencode-live-transport.ts";
 
@@ -49,6 +51,12 @@ const codexBinary = [
   "/Applications/ChatGPT.app/Contents/Resources/codex",
   "/opt/homebrew/bin/codex",
   "/usr/local/bin/codex",
+].find((path) => existsSync(path));
+
+const grokBinary = [
+  join(homedir(), ".grok", "bin", "grok"),
+  "/opt/homebrew/bin/grok",
+  "/usr/local/bin/grok",
 ].find((path) => existsSync(path));
 
 const opencodeBinary = [
@@ -161,6 +169,40 @@ describe.skipIf(!live)("multi-turn LIVE conversations per harness", () => {
       }),
     );
     console.log(`transcript: ${writeTranscript("opencode", result.transcriptLines)}`);
+    report(result);
+    expect(result.turns).toHaveLength(3);
+    expect(result.turns[1].answer).toContain("42");
+    expect(result.turns[2].answer).toContain("51");
+  });
+
+  test("grok (ACP): three turns with continuity and correction", { timeout: 900_000 }, async () => {
+    expect(grokBinary).toBeDefined();
+    const workdir = mkdtempSync(join(tmpdir(), "oa-convo-grok-"));
+    const source: KhalaRuntimeSource = { lane: "agent_client_protocol", adapterKind: "grok_cli" };
+    const result = await Effect.runPromise(
+      Effect.gen(function* () {
+        const transport = yield* makeLiveGrokAcpTransport({
+          binaryPath: grokBinary as string,
+          cwd: workdir,
+        });
+        const adapter = makeAcpHarnessAdapter({
+          harnessId: "grok",
+          harnessKind: "grok_cli",
+          transport,
+        });
+        const conversation = yield* runHarnessConversation({
+          adapter,
+          lane: "grok-local",
+          model: "grok-default",
+          source,
+          sessionId: `convo-grok-${process.pid}`,
+          userTurns: USER_TURNS,
+        });
+        yield* transport.shutdown();
+        return conversation;
+      }),
+    );
+    console.log(`transcript: ${writeTranscript("grok", result.transcriptLines)}`);
     report(result);
     expect(result.turns).toHaveLength(3);
     expect(result.turns[1].answer).toContain("42");
