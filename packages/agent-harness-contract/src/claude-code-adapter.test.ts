@@ -242,6 +242,10 @@ describe("claude-code projection — SDK messages map to a contiguous KhalaRunti
     expect(claudeCodeUsage(undefined, "usage.t")).toBeUndefined();
     expect(claudeCodeUsage({ input_tokens: 0, output_tokens: 0 }, "usage.t")).toBeUndefined();
   });
+
+  test("usage: null (a real wire shape) is treated like absent, never a crash (openagents#9167)", () => {
+    expect(claudeCodeUsage(null, "usage.t")).toBeUndefined();
+  });
 });
 
 describe("claude-code permission — canUseTool routes through RuntimeInteraction", () => {

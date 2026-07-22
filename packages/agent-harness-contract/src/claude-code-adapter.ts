@@ -225,7 +225,8 @@ export interface ClaudeCodeResultMessage {
   readonly is_error?: boolean;
   readonly session_id?: string;
   readonly result?: string;
-  readonly usage?: ClaudeCodeResultUsage;
+  /** `usage: null` is a real wire shape (desktop fixture-pinned); treat like absent. */
+  readonly usage?: ClaudeCodeResultUsage | null;
 }
 
 export type ClaudeCodeMessage =
@@ -297,10 +298,12 @@ const finiteToken = (value: unknown): number =>
  * usage never fabricates a token record.
  */
 export const claudeCodeUsage = (
-  usage: ClaudeCodeResultUsage | undefined,
+  usage: ClaudeCodeResultUsage | null | undefined,
   usageRef: string,
 ): KhalaRuntimeUsage | undefined => {
-  if (usage === undefined) return undefined;
+  // `usage: null` is a real SDK wire shape (openagents#9167 desktop fixture);
+  // it means the same as absent and must never crash the projection.
+  if (usage === undefined || usage === null) return undefined;
   const inputTokens = finiteToken(usage.input_tokens);
   const outputTokens = finiteToken(usage.output_tokens);
   const cacheReadInputTokens = finiteToken(usage.cache_read_input_tokens);
