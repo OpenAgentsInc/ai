@@ -6,7 +6,9 @@ import {
   GraphAdapterCapability,
   GraphAdapterCapabilityError,
   GraphArtifactInventory,
+  GraphDeletePreExecutionRefusal,
   GraphDeleteExecutionResult,
+  GraphDeleteReceipt,
   GraphDeletePlanningError,
   GraphDeleteRef,
   GraphDerivation,
@@ -20,9 +22,8 @@ import {
   makeGraphAdapterCapabilities,
   makeGraphArtifactInventory,
   makeCompleteGraphDeleteExecutionResult,
-  makeFailedGraphDeleteExecutionResult,
+  makeGraphDeletePreExecutionRefusal,
   makeGraphDeleteReceipt,
-  makeIncompleteGraphDeleteExecutionResult,
   makeGraphMention,
   makeGraphRelation,
   makeMergeEvidence,
@@ -31,6 +32,7 @@ import {
   requireGraphAdapterCapability,
   sha256Hex,
   validateGraphDeleteExecutionResult,
+  validateGraphDeletePreExecutionRefusal,
   validateGraphDeletePlan,
   validateGraphDeletePlanCurrent,
   validateGraphDeleteReceipt,
@@ -279,12 +281,8 @@ const simulateCompleteAfter = async (
     const byArtifact = new Map(actions.map((item) => [item.artifactRef, item]));
     return values.flatMap((value) => {
       const action = byArtifact.get(value.artifactRef);
-      if (action?._tag === "Remove") return [];
-      return [
-        action?._tag === "RekeyOwner"
-          ? ({ ...value, ownerElementRef: action.newOwnerElementRef } as A)
-          : value,
-      ];
+      if (action !== undefined) return [];
+      return [value];
     });
   };
   const afterInventory = makeGraphArtifactInventory({
@@ -338,11 +336,20 @@ describe("source-outward graph delete planning", () => {
     expect(plan.actions.relationRekeys).toHaveLength(1);
     expect(plan.actions.removableMerges).toHaveLength(1);
     expect(plan.actions.vectorActions.map((item) => item._tag).sort()).toEqual([
-      "RekeyOwner",
+      "RebuildRequired",
       "Remove",
     ]);
-    expect(plan.actions.summaryActions.map((item) => item._tag)).toEqual(["RekeyOwner"]);
-    expect(plan.actions.rankingRefActions.map((item) => item._tag)).toEqual(["RekeyOwner"]);
+    expect(plan.actions.summaryActions.map((item) => item._tag)).toEqual(["RebuildRequired"]);
+    expect(plan.actions.rankingRefActions.map((item) => item._tag)).toEqual(["RebuildRequired"]);
+    for (const action of [
+      ...plan.actions.vectorActions,
+      ...plan.actions.summaryActions,
+      ...plan.actions.rankingRefActions,
+    ]) {
+      if (action._tag === "RebuildRequired") {
+        expect("newArtifactDigest" in action).toBe(false);
+      }
+    }
     expect(plan.actions.sourceMembershipRemovals.map((item) => item.source)).toEqual(
       plan.actions.sourceMembershipRemovals.map(() => sourceA),
     );
@@ -689,6 +696,18 @@ describe("delete execution results and receipts", () => {
     await expect(
       Effect.runPromise(validateGraphDeleteReceipt(plan, result, receipt, context)),
     ).resolves.toBeUndefined();
+    const affectedArtifactRefs = new Set(
+      [
+        ...plan.actions.vectorActions,
+        ...plan.actions.summaryActions,
+        ...plan.actions.rankingRefActions,
+      ].map((action) => action.artifactRef),
+    );
+    expect(
+      [...afterInventory.vectors, ...afterInventory.summaries, ...afterInventory.rankingRefs].some(
+        (artifact) => affectedArtifactRefs.has(artifact.artifactRef),
+      ),
+    ).toBe(false);
 
     const substituted = {
       ...receipt,
@@ -732,7 +751,7 @@ describe("delete execution results and receipts", () => {
       built: after,
       vectors: [
         {
-          ...afterInventory.vectors[0]!,
+          ...beforeInventory.vectors[0]!,
           ownerElementRef: removedOwner,
         },
       ],
@@ -774,50 +793,74 @@ describe("delete execution results and receipts", () => {
     expect(error.reason).toBe("digest_substitution");
   });
 
-  test("keeps complete, incomplete, and failed result and receipt variants disjoint", async () => {
+  test("keeps incomplete plans on a receipt-free pre-execution refusal path", async () => {
     const before = await fixture();
-    const beforeInventory = artifactInventory(before) as GraphCompleteArtifactInventory;
-    const plan = (await Effect.runPromise(
-      planGraphSourceDeletion(before, sourceA, beforeInventory),
-    )) as GraphCompleteDeletePlan;
-    const incomplete = await Effect.runPromise(
-      makeIncompleteGraphDeleteExecutionResult(
-        plan,
-        { before, beforeInventory, after: before, afterInventory: beforeInventory },
-        [],
-        graphDeleteActionRefs(plan),
-      ),
-    );
-    expect(incomplete._tag).toBe("Incomplete");
-    const incompleteContext = {
-      before,
-      beforeInventory,
-      after: before,
-      afterInventory: beforeInventory,
-    };
-    await expect(
-      Effect.runPromise(validateGraphDeleteExecutionResult(plan, incomplete, incompleteContext)),
-    ).resolves.toBeUndefined();
-    const failed = await Effect.runPromise(
-      makeFailedGraphDeleteExecutionResult(
+    const completeInventory = artifactInventory(before) as GraphCompleteArtifactInventory;
+    const beforeInventory = makeGraphArtifactInventory({
+      built: before,
+      vectors: completeInventory.vectors,
+      summaries: completeInventory.summaries,
+      rankingRefs: completeInventory.rankingRefs,
+      coverage: {
+        ...completeInventory.coverage,
+        vectors: {
+          _tag: "Incomplete",
+          gaps: [
+            {
+              artifactKind: "vector",
+              reason: "inventory_partial",
+              evidenceRef: S.decodeUnknownSync(GraphDeleteRef)("inventory.gap.vectors"),
+            },
+          ],
+        },
+      },
+    });
+    const plan = await Effect.runPromise(planGraphSourceDeletion(before, sourceA, beforeInventory));
+    expect(plan._tag).toBe("Incomplete");
+    const refusal = await Effect.runPromise(
+      makeGraphDeletePreExecutionRefusal(
         plan,
         before,
         beforeInventory,
-        S.decodeUnknownSync(GraphDeleteRef)("host.execution.failed"),
+        S.decodeUnknownSync(GraphDeleteRef)("host.inventory.incomplete"),
       ),
     );
-    expect(failed._tag).toBe("Failed");
-    expect(
-      S.is(GraphDeleteExecutionResult)({
-        ...failed,
-        _tag: "Complete",
-        graphDigestAfter: before.snapshot.graphDigest,
-      }),
-    ).toBe(false);
-    const failedReceipt = await Effect.runPromise(
-      makeGraphDeleteReceipt(plan, failed, { before, beforeInventory }),
+    expect(refusal._tag).toBe("FailedBeforeExecution");
+    expect(S.is(GraphDeletePreExecutionRefusal)(refusal)).toBe(true);
+    expect(S.is(GraphDeleteExecutionResult)(refusal)).toBe(false);
+    expect(S.is(GraphDeleteReceipt)(refusal)).toBe(false);
+    expect("completedActionRefs" in refusal).toBe(false);
+    expect("graphDigestAfter" in refusal).toBe(false);
+    await expect(
+      Effect.runPromise(
+        validateGraphDeletePreExecutionRefusal(plan, refusal, before, beforeInventory),
+      ),
+    ).resolves.toBeUndefined();
+    const completePlan = (await Effect.runPromise(
+      planGraphSourceDeletion(before, sourceA, completeInventory),
+    )) as GraphCompleteDeletePlan;
+    const { after, afterInventory } = await simulateCompleteAfter(
+      before,
+      completePlan,
+      completeInventory,
     );
-    expect(failedReceipt._tag).toBe("Failed");
+    const completeResult = await Effect.runPromise(
+      makeCompleteGraphDeleteExecutionResult(completePlan, {
+        before,
+        beforeInventory: completeInventory,
+        after,
+        afterInventory,
+      }),
+    );
+    const error = await Effect.runPromise(
+      validateGraphDeleteExecutionResult(plan, completeResult, {
+        before,
+        beforeInventory,
+        after,
+        afterInventory,
+      }).pipe(Effect.flip),
+    );
+    expect(error.reason).toBe("incomplete_plan");
   });
 
   test("rejects substituted plan and inventory digests", async () => {

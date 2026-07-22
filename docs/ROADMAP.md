@@ -228,8 +228,10 @@ support through explicit rekeys, and accounts for vector, summary, and ranking
 artifacts. Each artifact plane has an explicit coverage claim. Incomplete
 inventories, retained edges with removed endpoints, and rekey collisions stay
 explicit. Complete result validation compares the actual after state with a
-pure projection. The implementation does not execute deletion or grant host
-authority.
+pure projection. A retained owner rekey removes each obsolete artifact and
+requires a later rebuild. Only a complete plan can produce a result and
+receipt. An incomplete plan can produce only a pre-execution refusal. The
+implementation does not execute deletion or grant host authority.
 
 Feedback changes a separate ranking snapshot. It never changes graph content,
 identity, provenance, or embedding bytes. A recall result records the exact

@@ -79,7 +79,10 @@ authority and it does not prove that deletion occurred.
 The host can record work with `GraphDeleteExecutionResult` and
 `GraphDeleteReceipt`. A complete result requires the actual after graph and
 artifact inventory. The validator rebuilds the expected after state and checks
-all action refs and digests. This package does not execute the plan.
+all action refs and digests. Only a complete plan can produce a result or
+receipt. An incomplete plan can produce a separate
+`GraphDeletePreExecutionRefusal`. The refusal has no completed actions and no
+after-state digest. This package does not execute the plan.
 
 ## Adapter capabilities
 

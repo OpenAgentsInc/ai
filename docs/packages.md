@@ -105,7 +105,8 @@ and exact source locators in one deterministic snapshot.
 - Key exports: `buildGraphCorpus`, `makeGraphMention`,
   `makeCanonicalEntity`, `makeGraphRelation`,
   `makeInMemoryGraphSnapshotHandle`, `makeGraphAdapterCapabilities`,
-  `planGraphSourceDeletion`, and `makeGraphDeleteReceipt`.
+  `planGraphSourceDeletion`, `makeGraphDeletePreExecutionRefusal`, and
+  `makeGraphDeleteReceipt`.
 - Use it to build a ref-only derived graph. It does not call a model, select a
   database, execute a query or delete plan, or grant memory authority.
 - Umbrella path: `@openagentsinc/ai/graph` and the `Graph` namespace.

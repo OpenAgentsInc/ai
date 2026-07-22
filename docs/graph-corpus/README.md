@@ -37,7 +37,10 @@ retained-element rekeys, merge changes, vectors, summaries, and ranking refs.
 The planner keeps the remaining source support on a shared element. Because
 source memberships are part of graph identity, the plan gives the old and new
 refs for each retained entity or relation that changes. It also gives an owner
-rekey action for each attached derived artifact.
+rekey action for each attached derived artifact. A rekey makes each old
+artifact obsolete. The action is `RebuildRequired`, and the after inventory
+does not contain the old artifact digest. A later host rebuild can add a new
+artifact with a new digest.
 
 An incomplete inventory produces an incomplete plan. A supported relation that
 would lose an endpoint also produces an incomplete plan. A rekey collision also
@@ -45,10 +48,12 @@ stays incomplete. The SDK recomputes a plan from the current graph and exact
 inventory before execution admission. The host owns authority, execution,
 persistence, and the after-state.
 
-Execution-result and receipt schemas have separate complete, incomplete, and
-failed variants. A complete result requires the actual after graph and artifact
-inventory. Validation rebuilds the expected after state and refuses orphan
-artifacts. A plan or receipt is not proof of owner authorization.
+Only a complete plan can produce an execution result and receipt. The complete
+result requires the actual after graph and artifact inventory. Validation
+rebuilds the expected after state and refuses orphan artifacts. An incomplete
+plan can produce a separate `FailedBeforeExecution` refusal. The refusal has no
+completed actions, after state, or receipt. A plan or receipt is not proof of
+owner authorization.
 
 ## Capabilities
 

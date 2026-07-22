@@ -32,6 +32,8 @@ export const GRAPH_DELETE_PLAN_SCHEMA_ID = "openagents.ai.graph_delete_plan.v1" 
 export const GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID =
   "openagents.ai.graph_delete_execution_result.v1" as const;
 export const GRAPH_DELETE_RECEIPT_SCHEMA_ID = "openagents.ai.graph_delete_receipt.v1" as const;
+export const GRAPH_DELETE_PRE_EXECUTION_REFUSAL_SCHEMA_ID =
+  "openagents.ai.graph_delete_pre_execution_refusal.v1" as const;
 
 export const GraphDeleteRef = S.String.check(
   S.isMinLength(1),
@@ -230,7 +232,7 @@ export const GraphDerivedArtifactAction = S.Union([
   S.Struct({ ...artifactActionFields, _tag: S.Literal("Remove") }),
   S.Struct({
     ...artifactActionFields,
-    _tag: S.Literal("RekeyOwner"),
+    _tag: S.Literal("RebuildRequired"),
     newOwnerElementRef: GraphElementRef,
   }),
 ]);
@@ -317,20 +319,9 @@ export const GraphCompleteDeleteExecutionResult = S.Struct({
 });
 export type GraphCompleteDeleteExecutionResult = typeof GraphCompleteDeleteExecutionResult.Type;
 
-export const GraphIncompleteDeleteExecutionResult = S.Struct({
-  ...executionResultFields,
-  _tag: S.Literal("Incomplete"),
-  failedActionRefs: S.Array(GraphDeleteRef),
-  graphDigestAfter: GraphDigest,
-  manifestDigestAfter: GraphDigest,
-  artifactInventoryDigestAfter: GraphDigest,
-  failureRef: S.optionalKey(S.Never),
-});
-export type GraphIncompleteDeleteExecutionResult = typeof GraphIncompleteDeleteExecutionResult.Type;
-
-export const GraphFailedDeleteExecutionResult = S.Struct({
-  schemaId: S.Literal(GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID),
-  _tag: S.Literal("Failed"),
+export const GraphDeletePreExecutionRefusal = S.Struct({
+  schemaId: S.Literal(GRAPH_DELETE_PRE_EXECUTION_REFUSAL_SCHEMA_ID),
+  _tag: S.Literal("FailedBeforeExecution"),
   planDigest: GraphDigest,
   idempotencyKey: GraphDeleteRef,
   graphDigestBefore: GraphDigest,
@@ -338,19 +329,15 @@ export const GraphFailedDeleteExecutionResult = S.Struct({
   artifactInventoryDigestBefore: GraphDigest,
   failureRef: GraphDeleteRef,
   completedActionRefs: S.optionalKey(S.Never),
-  failedActionRefs: S.optionalKey(S.Never),
   graphDigestAfter: S.optionalKey(S.Never),
   manifestDigestAfter: S.optionalKey(S.Never),
   artifactInventoryDigestAfter: S.optionalKey(S.Never),
-  resultDigest: GraphDigest,
+  refusalRef: GraphDeleteRef,
+  refusalDigest: GraphDigest,
 });
-export type GraphFailedDeleteExecutionResult = typeof GraphFailedDeleteExecutionResult.Type;
+export type GraphDeletePreExecutionRefusal = typeof GraphDeletePreExecutionRefusal.Type;
 
-export const GraphDeleteExecutionResult = S.Union([
-  GraphCompleteDeleteExecutionResult,
-  GraphIncompleteDeleteExecutionResult,
-  GraphFailedDeleteExecutionResult,
-]);
+export const GraphDeleteExecutionResult = GraphCompleteDeleteExecutionResult;
 export type GraphDeleteExecutionResult = typeof GraphDeleteExecutionResult.Type;
 
 const receiptFields = {
@@ -375,37 +362,14 @@ export const GraphCompleteDeleteReceipt = S.Struct({
 });
 export type GraphCompleteDeleteReceipt = typeof GraphCompleteDeleteReceipt.Type;
 
-export const GraphIncompleteDeleteReceipt = S.Struct({
-  ...receiptFields,
-  _tag: S.Literal("Incomplete"),
-  graphDigestAfter: GraphDigest,
-  manifestDigestAfter: GraphDigest,
-  artifactInventoryDigestAfter: GraphDigest,
-  failureRef: S.optionalKey(S.Never),
-});
-export type GraphIncompleteDeleteReceipt = typeof GraphIncompleteDeleteReceipt.Type;
-
-export const GraphFailedDeleteReceipt = S.Struct({
-  ...receiptFields,
-  _tag: S.Literal("Failed"),
-  failureRef: GraphDeleteRef,
-  graphDigestAfter: S.optionalKey(S.Never),
-  manifestDigestAfter: S.optionalKey(S.Never),
-  artifactInventoryDigestAfter: S.optionalKey(S.Never),
-});
-export type GraphFailedDeleteReceipt = typeof GraphFailedDeleteReceipt.Type;
-
-export const GraphDeleteReceipt = S.Union([
-  GraphCompleteDeleteReceipt,
-  GraphIncompleteDeleteReceipt,
-  GraphFailedDeleteReceipt,
-]);
+export const GraphDeleteReceipt = GraphCompleteDeleteReceipt;
 export type GraphDeleteReceipt = typeof GraphDeleteReceipt.Type;
 
 const decodeInventory = S.decodeUnknownSync(GraphArtifactInventory);
 const decodePlan = S.decodeUnknownSync(GraphDeletePlan);
 const decodeExecutionResult = S.decodeUnknownSync(GraphDeleteExecutionResult);
 const decodeReceipt = S.decodeUnknownSync(GraphDeleteReceipt);
+const decodePreExecutionRefusal = S.decodeUnknownSync(GraphDeletePreExecutionRefusal);
 
 const digest = (value: unknown): GraphDigest => graphDigest(sha256Hex(canonicalJson(value)));
 const byRef = <A>(values: ReadonlyArray<A>, ref: (value: A) => string): ReadonlyArray<A> =>
@@ -626,13 +590,13 @@ const artifactActions = (
     const newOwnerElementRef = rekeyed.get(artifact.ownerElementRef);
     if (newOwnerElementRef === undefined) continue;
     const value = {
-      _tag: "RekeyOwner" as const,
+      _tag: "RebuildRequired" as const,
       artifactRef: artifact.artifactRef,
       artifactDigest: artifact.artifactDigest,
       oldOwnerElementRef: artifact.ownerElementRef,
       newOwnerElementRef,
     };
-    actions.push({ actionRef: actionRef("rekey-artifact-owner", value), ...value });
+    actions.push({ actionRef: actionRef("rebuild-artifact", value), ...value });
   }
   return byRef(actions, (item) => item.actionRef);
 };
@@ -1090,12 +1054,8 @@ const applyArtifactActions = <
   return byRef(
     artifacts.flatMap((artifact) => {
       const action = byArtifact.get(artifact.artifactRef);
-      if (action?._tag === "Remove") return [];
-      return [
-        action?._tag === "RekeyOwner"
-          ? ({ ...artifact, ownerElementRef: action.newOwnerElementRef } as A)
-          : artifact,
-      ];
+      if (action !== undefined) return [];
+      return [artifact];
     }),
     (item) => item.artifactRef,
   );
@@ -1204,60 +1164,12 @@ export const makeCompleteGraphDeleteExecutionResult = Effect.fn(
   });
 });
 
-export const makeIncompleteGraphDeleteExecutionResult = Effect.fn(
-  "GraphCorpus.makeIncompleteDeleteExecutionResult",
-)(function* (
-  plan: GraphDeletePlan,
-  context: Required<GraphDeleteExecutionValidationContext>,
-  completedActionRefs: ReadonlyArray<GraphDeleteRef>,
-  failedActionRefs: ReadonlyArray<GraphDeleteRef>,
-) {
-  yield* validateExactPlan(plan, context.before, context.beforeInventory);
-  yield* verifyBuiltGraphCorpus(context.after).pipe(
-    Effect.mapError(
-      () =>
-        new GraphDeletePlanningError({
-          reason: "invalid_execution_result",
-          detailSafe: "The partial after graph is invalid.",
-        }),
-    ),
-  );
-  yield* validateInventory(context.after, context.afterInventory);
-  const completed = [...new Set(completedActionRefs)].sort(compareCanonicalText);
-  const failed = [...new Set(failedActionRefs)].sort(compareCanonicalText);
-  const accounted = [...completed, ...failed].sort(compareCanonicalText);
-  if (
-    failed.length === 0 ||
-    canonicalJson(accounted) !== canonicalJson(allActionRefs(plan.actions)) ||
-    new Set(accounted).size !== accounted.length
-  ) {
-    return yield* new GraphDeletePlanningError({
-      reason: "invalid_execution_result",
-      detailSafe: "An incomplete result must account for each planned action.",
-    });
-  }
-  const withoutDigest = {
-    schemaId: GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID,
-    _tag: "Incomplete" as const,
-    planDigest: plan.planDigest,
-    idempotencyKey: plan.idempotencyKey,
-    graphDigestBefore: plan.graphDigest,
-    manifestDigestBefore: plan.manifestDigest,
-    artifactInventoryDigestBefore: context.beforeInventory.inventoryDigest,
-    completedActionRefs: completed,
-    failedActionRefs: failed,
-    graphDigestAfter: context.after.snapshot.graphDigest,
-    manifestDigestAfter: context.after.manifest.manifestDigest,
-    artifactInventoryDigestAfter: context.afterInventory.inventoryDigest,
-  };
-  return decodeExecutionResult({
-    ...withoutDigest,
-    resultDigest: digest(resultContent(withoutDigest)),
-  });
-});
+const refusalContent = (
+  refusal: Omit<GraphDeletePreExecutionRefusal, "refusalDigest" | "refusalRef">,
+): unknown => refusal;
 
-export const makeFailedGraphDeleteExecutionResult = Effect.fn(
-  "GraphCorpus.makeFailedDeleteExecutionResult",
+export const makeGraphDeletePreExecutionRefusal = Effect.fn(
+  "GraphCorpus.makeDeletePreExecutionRefusal",
 )(function* (
   plan: GraphDeletePlan,
   before: BuiltGraphCorpus,
@@ -1265,9 +1177,9 @@ export const makeFailedGraphDeleteExecutionResult = Effect.fn(
   failureRef: GraphDeleteRef,
 ) {
   yield* validateExactPlan(plan, before, beforeInventory);
-  const withoutDigest = {
-    schemaId: GRAPH_DELETE_EXECUTION_RESULT_SCHEMA_ID,
-    _tag: "Failed" as const,
+  const withoutIdentity = {
+    schemaId: GRAPH_DELETE_PRE_EXECUTION_REFUSAL_SCHEMA_ID,
+    _tag: "FailedBeforeExecution" as const,
     planDigest: plan.planDigest,
     idempotencyKey: plan.idempotencyKey,
     graphDigestBefore: plan.graphDigest,
@@ -1275,11 +1187,51 @@ export const makeFailedGraphDeleteExecutionResult = Effect.fn(
     artifactInventoryDigestBefore: beforeInventory.inventoryDigest,
     failureRef,
   };
-  return decodeExecutionResult({
-    ...withoutDigest,
-    resultDigest: digest(resultContent(withoutDigest)),
+  const refusalDigest = digest(refusalContent(withoutIdentity));
+  return decodePreExecutionRefusal({
+    ...withoutIdentity,
+    refusalDigest,
+    refusalRef: graphDeleteRef(`graph-delete-refusal.${refusalDigest}`),
   });
 });
+
+export const validateGraphDeletePreExecutionRefusal = (
+  plan: GraphDeletePlan,
+  refusal: GraphDeletePreExecutionRefusal,
+  before: BuiltGraphCorpus,
+  beforeInventory: GraphArtifactInventory,
+): Effect.Effect<void, GraphDeletePlanningError> =>
+  validateExactPlan(plan, before, beforeInventory).pipe(
+    Effect.flatMap(() =>
+      Effect.gen(function* () {
+        let decoded: GraphDeletePreExecutionRefusal;
+        try {
+          decoded = decodePreExecutionRefusal(refusal);
+        } catch {
+          return yield* new GraphDeletePlanningError({
+            reason: "invalid_execution_result",
+            detailSafe: "The pre-execution refusal does not match its schema.",
+          });
+        }
+        const { refusalDigest: claimedDigest, refusalRef, ...withoutIdentity } = decoded;
+        const expectedDigest = digest(refusalContent(withoutIdentity));
+        if (
+          decoded.planDigest !== plan.planDigest ||
+          decoded.idempotencyKey !== plan.idempotencyKey ||
+          decoded.graphDigestBefore !== plan.graphDigest ||
+          decoded.manifestDigestBefore !== plan.manifestDigest ||
+          decoded.artifactInventoryDigestBefore !== beforeInventory.inventoryDigest ||
+          claimedDigest !== expectedDigest ||
+          refusalRef !== graphDeleteRef(`graph-delete-refusal.${expectedDigest}`)
+        ) {
+          return yield* new GraphDeletePlanningError({
+            reason: "invalid_execution_result",
+            detailSafe: "The pre-execution refusal does not match its current plan.",
+          });
+        }
+      }),
+    ),
+  );
 
 export const validateGraphDeleteExecutionResult = (
   plan: GraphDeletePlan,
@@ -1287,7 +1239,13 @@ export const validateGraphDeleteExecutionResult = (
   context: GraphDeleteExecutionValidationContext,
 ): Effect.Effect<void, GraphDeletePlanningError> =>
   Effect.gen(function* () {
-    yield* validateExactPlan(plan, context.before, context.beforeInventory);
+    const recomputed = yield* validateExactPlan(plan, context.before, context.beforeInventory);
+    if (plan._tag !== "Complete" || recomputed._tag !== "Complete") {
+      return yield* new GraphDeletePlanningError({
+        reason: "incomplete_plan",
+        detailSafe: "Only a complete delete plan can produce an execution result.",
+      });
+    }
     let decoded: GraphDeleteExecutionResult;
     try {
       decoded = decodeExecutionResult(result);
@@ -1312,26 +1270,20 @@ export const validateGraphDeleteExecutionResult = (
         detailSafe: "The execution result does not match its bound plan.",
       });
     }
-    if (decoded._tag === "Failed") return;
     const completed = [...decoded.completedActionRefs].sort(compareCanonicalText);
-    const failed =
-      decoded._tag === "Incomplete" ? [...decoded.failedActionRefs].sort(compareCanonicalText) : [];
-    const accounted = [...completed, ...failed].sort(compareCanonicalText);
     if (
-      canonicalJson(accounted) !== canonicalJson(allActionRefs(plan.actions)) ||
-      new Set(accounted).size !== accounted.length ||
-      (decoded._tag === "Incomplete" && failed.length === 0) ||
-      (decoded._tag === "Complete" && plan._tag !== "Complete")
+      canonicalJson(completed) !== canonicalJson(allActionRefs(plan.actions)) ||
+      new Set(completed).size !== completed.length
     ) {
       return yield* new GraphDeletePlanningError({
         reason: "invalid_execution_result",
-        detailSafe: "The execution result does not account for each planned action.",
+        detailSafe: "The complete result does not account for each planned action.",
       });
     }
     if (context.after === undefined || context.afterInventory === undefined) {
       return yield* new GraphDeletePlanningError({
         reason: "invalid_execution_result",
-        detailSafe: "A non-failed result requires the exact after state.",
+        detailSafe: "A complete result requires the exact after state.",
       });
     }
     if (
@@ -1344,24 +1296,11 @@ export const validateGraphDeleteExecutionResult = (
         detailSafe: "The result substitutes an after-state digest.",
       });
     }
-    if (decoded._tag === "Complete") {
-      yield* validateCompleteAfter(plan as GraphCompleteDeletePlan, {
-        ...context,
-        after: context.after,
-        afterInventory: context.afterInventory,
-      });
-    } else {
-      yield* verifyBuiltGraphCorpus(context.after).pipe(
-        Effect.mapError(
-          () =>
-            new GraphDeletePlanningError({
-              reason: "invalid_execution_result",
-              detailSafe: "The partial after graph is invalid.",
-            }),
-        ),
-      );
-      yield* validateInventory(context.after, context.afterInventory);
-    }
+    yield* validateCompleteAfter(plan, {
+      ...context,
+      after: context.after,
+      afterInventory: context.afterInventory,
+    });
   });
 
 const receiptContent = (
@@ -1376,20 +1315,16 @@ export const makeGraphDeleteReceipt = Effect.fn("GraphCorpus.makeDeleteReceipt")
   yield* validateGraphDeleteExecutionResult(plan, result, context);
   const withoutIdentity = {
     schemaId: GRAPH_DELETE_RECEIPT_SCHEMA_ID,
-    _tag: result._tag,
+    _tag: "Complete" as const,
     planDigest: plan.planDigest,
     idempotencyKey: plan.idempotencyKey,
     resultDigest: result.resultDigest,
     graphDigestBefore: result.graphDigestBefore,
     manifestDigestBefore: result.manifestDigestBefore,
     artifactInventoryDigestBefore: result.artifactInventoryDigestBefore,
-    ...(result._tag === "Failed"
-      ? { failureRef: result.failureRef }
-      : {
-          graphDigestAfter: result.graphDigestAfter,
-          manifestDigestAfter: result.manifestDigestAfter,
-          artifactInventoryDigestAfter: result.artifactInventoryDigestAfter,
-        }),
+    graphDigestAfter: result.graphDigestAfter,
+    manifestDigestAfter: result.manifestDigestAfter,
+    artifactInventoryDigestAfter: result.artifactInventoryDigestAfter,
   };
   const receiptDigest = digest(receiptContent(withoutIdentity));
   return decodeReceipt({
@@ -1419,23 +1354,17 @@ export const validateGraphDeleteReceipt = (
         }
         const { receiptDigest: claimedDigest, receiptRef, ...withoutIdentity } = decoded;
         const expectedDigest = digest(receiptContent(withoutIdentity));
-        const sameAfter =
-          decoded._tag === "Failed" && result._tag === "Failed"
-            ? decoded.failureRef === result.failureRef
-            : decoded._tag !== "Failed" && result._tag !== "Failed"
-              ? decoded.graphDigestAfter === result.graphDigestAfter &&
-                decoded.manifestDigestAfter === result.manifestDigestAfter &&
-                decoded.artifactInventoryDigestAfter === result.artifactInventoryDigestAfter
-              : false;
         if (
-          decoded._tag !== result._tag ||
+          decoded._tag !== "Complete" ||
           decoded.planDigest !== plan.planDigest ||
           decoded.idempotencyKey !== plan.idempotencyKey ||
           decoded.resultDigest !== result.resultDigest ||
           decoded.graphDigestBefore !== result.graphDigestBefore ||
           decoded.manifestDigestBefore !== result.manifestDigestBefore ||
           decoded.artifactInventoryDigestBefore !== result.artifactInventoryDigestBefore ||
-          !sameAfter ||
+          decoded.graphDigestAfter !== result.graphDigestAfter ||
+          decoded.manifestDigestAfter !== result.manifestDigestAfter ||
+          decoded.artifactInventoryDigestAfter !== result.artifactInventoryDigestAfter ||
           claimedDigest !== expectedDigest ||
           receiptRef !== graphDeleteRef(`graph-delete-receipt.${expectedDigest}`)
         ) {
