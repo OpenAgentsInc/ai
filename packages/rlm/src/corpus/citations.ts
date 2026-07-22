@@ -141,7 +141,9 @@ export const citationFromEntry = (
     entryRef: entry.entryRef,
   };
   const excerpt = entry.text?.slice(0, 512);
-  return {
+  // Two explicit branches so the literal narrows into the citation union's
+  // with-excerpt / without-excerpt arms under exactOptionalPropertyTypes.
+  const base = {
     corpusRef: handle.identity.corpusRef,
     contentDigest: handle.identity.contentDigest,
     scopeRef: entry.scopeRef,
@@ -150,6 +152,6 @@ export const citationFromEntry = (
     sourceOrigin,
     supportingSources: entry.supportingSources ?? [],
     entryRefStart: entry.entryRef,
-    ...(excerpt === undefined ? {} : { excerpt, excerptDigest: excerptDigest(excerpt) }),
   };
+  return excerpt === undefined ? base : { ...base, excerpt, excerptDigest: excerptDigest(excerpt) };
 };
