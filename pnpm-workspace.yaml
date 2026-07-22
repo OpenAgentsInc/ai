@@ -3,13 +3,21 @@ packages:
   - types/*
 
 allowBuilds:
+  "@google/genai": false
   esbuild: true
   msgpackr-extract: true
+  protobufjs: false
 
 catalog:
   "@types/node": 24.13.1
   effect: 4.0.0-beta.94
   typescript: ^6.0.3
+
+minimumReleaseAgeExclude:
+  - "@earendil-works/pi-agent-core@0.81.1"
+  - "@earendil-works/pi-ai@0.81.1"
+  - "@earendil-works/pi-coding-agent@0.81.1"
+  - "@earendil-works/pi-tui@0.81.1"
 
 overrides:
   effect: "catalog:"
