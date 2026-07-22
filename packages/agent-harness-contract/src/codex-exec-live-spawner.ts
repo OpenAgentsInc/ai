@@ -173,8 +173,9 @@ export const makeLiveCodexExecSpawner = (
 ): CodexExecSpawner => ({
   spawn: (params) =>
     Effect.callback<ReadonlyArray<CodexEvent>, CodexTransportError>((resume) => {
+      // exec-level flags come BEFORE the `resume` subcommand; the prompt is
+      // always the final positional.
       const args: string[] = ["exec", "--json", "--skip-git-repo-check"];
-      if (params.resumeThreadId !== undefined) args.push("resume", params.resumeThreadId);
       if (params.model !== undefined) args.push("-m", params.model);
       if (options.reasoningEffort !== undefined) {
         args.push("-c", `model_reasoning_effort="${options.reasoningEffort}"`);
@@ -182,6 +183,7 @@ export const makeLiveCodexExecSpawner = (
       for (const override of options.configOverrides ?? []) args.push("-c", override);
       args.push("-s", options.sandbox ?? "read-only");
       if (params.workingDirectory !== undefined) args.push("--cd", params.workingDirectory);
+      if (params.resumeThreadId !== undefined) args.push("resume", params.resumeThreadId);
       args.push(params.prompt);
 
       const env = { ...process.env };
