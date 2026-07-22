@@ -21,6 +21,7 @@ export * from "./codex-exec-live-spawner.ts";
 export * from "./opencode-live-transport.ts";
 export * from "./grok-acp-live-transport.ts";
 export * from "./cursor-acp-live-transport.ts";
+export * from "./goose-acp-live-transport.ts";
 export * from "./harness-conversation-driver.ts";
 export * from "./claude-code-adapter.ts";
 export * from "./pi-adapter.ts";

@@ -27,7 +27,7 @@ import type { PiCreateSessionOptions, PiSessionSurface } from "./pi-adapter.ts";
 import { makePiHarnessAdapter } from "./pi-adapter.ts";
 
 const live = process.env.PI_LIVE_SMOKE === "1";
-const modelSpec = process.env.PI_LIVE_MODEL ?? "google/gemini-3-flash";
+const modelSpec = process.env.PI_LIVE_MODEL ?? "google/gemini-3.6-flash";
 
 const USER_TURNS: readonly string[] = [
   "My favorite number is 41. Remember it. Also: who are you, in one sentence?",
@@ -63,6 +63,13 @@ describe.skipIf(!live)("pi adapter — LIVE in-process smoke (gemini)", () => {
     };
 
     const agentDir = mkdtempSync(join(tmpdir(), "oa-pi-agent-"));
+    // Pin the default model (owner direction: gemini-3.6-flash) through Pi's
+    // own settings file in the isolated agent dir.
+    const { writeFileSync: writeSettings } = await import("node:fs");
+    writeSettings(
+      join(agentDir, "settings.json"),
+      JSON.stringify({ defaultModel: modelSpec.split("/").slice(1).join("/") }),
+    );
     const workspaceDir = mkdtempSync(join(tmpdir(), "oa-pi-work-"));
 
     const factory = async (options: PiCreateSessionOptions): Promise<PiSessionSurface> => {

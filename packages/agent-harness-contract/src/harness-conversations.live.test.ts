@@ -17,7 +17,7 @@
  */
 
 import { describe, expect, test } from "vite-plus/test";
-import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { Effect } from "effect";
@@ -31,6 +31,7 @@ import { runHarnessConversation } from "./harness-conversation-driver.ts";
 import { makeAcpHarnessAdapter } from "./acp-adapter.ts";
 import { makeCursorHarnessAdapter } from "./cursor-adapter.ts";
 import { makeLiveCursorAcpTransport } from "./cursor-acp-live-transport.ts";
+import { makeLiveGooseAcpTransport } from "./goose-acp-live-transport.ts";
 import { makeLiveGrokAcpTransport } from "./grok-acp-live-transport.ts";
 import { makeOpencodeAdapter } from "./opencode-adapter.ts";
 import { makeLiveOpencodeTransport } from "./opencode-live-transport.ts";
@@ -64,6 +65,12 @@ const grokBinary = [
 const cursorBinary = [
   join(homedir(), ".local", "bin", "cursor-agent"),
   "/opt/homebrew/bin/cursor-agent",
+].find((path) => existsSync(path));
+
+const gooseBinary = [
+  join(homedir(), "Downloads", "Goose.app", "Contents", "Resources", "bin", "goose"),
+  "/Applications/Goose.app/Contents/Resources/bin/goose",
+  join(homedir(), ".local", "bin", "goose"),
 ].find((path) => existsSync(path));
 
 const opencodeBinary = [
@@ -249,6 +256,62 @@ describe.skipIf(!live)("multi-turn LIVE conversations per harness", () => {
         }),
       );
       console.log(`transcript: ${writeTranscript("cursor", result.transcriptLines)}`);
+      report(result);
+      expect(result.turns).toHaveLength(3);
+      expect(result.turns[1].answer).toContain("42");
+      expect(result.turns[2].answer).toContain("51");
+    },
+  );
+
+  test(
+    "goose (ACP): three turns with continuity and correction",
+    { timeout: 900_000 },
+    async () => {
+      expect(gooseBinary).toBeDefined();
+      const workdir = mkdtempSync(join(tmpdir(), "oa-convo-goose-"));
+      const source: KhalaRuntimeSource = {
+        lane: "agent_client_protocol",
+        adapterKind: "agent_client_protocol",
+      };
+      const result = await Effect.runPromise(
+        Effect.gen(function* () {
+          const geminiKey = (() => {
+            try {
+              const auth = JSON.parse(
+                readFileSync(join(homedir(), ".local", "share", "opencode", "auth.json"), "utf8"),
+              ) as Record<string, { key?: string }>;
+              return auth.google?.key ?? "";
+            } catch {
+              return "";
+            }
+          })();
+          const transport = yield* makeLiveGooseAcpTransport({
+            binaryPath: gooseBinary as string,
+            cwd: workdir,
+            env: {
+              GOOSE_PROVIDER: process.env.CONVO_GOOSE_PROVIDER ?? "google",
+              GOOSE_MODEL: process.env.CONVO_GOOSE_MODEL ?? "gemini-3.6-flash",
+              ...(geminiKey === "" ? {} : { GOOGLE_API_KEY: geminiKey }),
+            },
+          });
+          const adapter = makeAcpHarnessAdapter({
+            harnessId: "goose",
+            harnessKind: "custom",
+            transport,
+          });
+          const conversation = yield* runHarnessConversation({
+            adapter,
+            lane: "goose-local",
+            model: "goose-default",
+            source,
+            sessionId: `convo-goose-${process.pid}`,
+            userTurns: USER_TURNS,
+          });
+          yield* transport.shutdown();
+          return conversation;
+        }),
+      );
+      console.log(`transcript: ${writeTranscript("goose", result.transcriptLines)}`);
       report(result);
       expect(result.turns).toHaveLength(3);
       expect(result.turns[1].answer).toContain("42");
